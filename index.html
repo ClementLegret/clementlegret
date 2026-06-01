@@ -203,11 +203,10 @@
   .lb-controls label{display:flex;flex-direction:column;gap:6px;font-size:.7rem;color:var(--faint);font-weight:800;text-transform:uppercase;letter-spacing:.5px}
   .lb-controls select{cursor:pointer}
   .lb-table{display:flex;flex-direction:column;gap:7px;margin-top:10px}
-  .lb-row{display:grid;grid-template-columns:40px 1fr 74px 52px 96px;align-items:center;gap:8px;padding:12px 13px;
+  .lb-row{display:grid;grid-template-columns:44px 1fr 78px 56px;align-items:center;gap:8px;padding:12px 13px;
     border:1px solid var(--line);border-radius:12px;background:var(--glass-2);font-size:.92rem}
   .lb-row span:nth-child(1){font-weight:800;color:var(--cyan)}
   .lb-row span:nth-child(2){font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .lb-row span small{display:block;color:var(--faint);font-weight:500;font-size:.72rem;white-space:nowrap}
   .lb-row.lb-head{background:transparent;border-color:transparent;color:var(--faint);font-size:.66rem;
     text-transform:uppercase;letter-spacing:.5px;font-weight:800;padding:2px 13px}
   .lb-row.lb-head span:nth-child(1){color:var(--faint)}
@@ -1688,8 +1687,8 @@ function buildQuestions(quiz){
    3) Remplace les deux valeurs ci-dessous
    4) Crée la table avec le SQL fourni (voir le message d'accompagnement)
    ============================================================ */
-const SUPABASE_URL      = "https://uxgxxbpjqilbkqlwfpjq.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_4qbJjwGD2NGsUfhMOsicOA_qolJBkYn";
+const SUPABASE_URL      = "https://VOTRE-PROJET.supabase.co";
+const SUPABASE_ANON_KEY = "VOTRE_CLE_ANON_PUBLIC";
 
 let _sb = null;
 function sbReady(){
@@ -1705,14 +1704,10 @@ function setPseudo(p){ localStorage.setItem('ue27_pseudo', String(p).trim().slic
 function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 const MODE_LABEL2 = { examen:'Examen', difficile:'Difficile', entrainement:'Entraînement' };
 
-function getPromo(){ return localStorage.getItem('ue27_promo')||''; }
-function setPromo(p){ localStorage.setItem('ue27_promo', String(p).trim().slice(0,24)); }
-
 const VALID_MODES = ['examen','difficile','entrainement'];
 /* Validation côté client (anti-saisie aberrante). La base applique les mêmes règles via CHECK. */
 function validateRec(rec){
   if(!rec.pseudo || rec.pseudo.length<1 || rec.pseudo.length>24) return 'Pseudo invalide (1 à 24 caractères).';
-  if(rec.promo && rec.promo.length>24) return 'Promo trop longue (24 caractères max).';
   if(VALID_MODES.indexOf(rec.mode)<0) return 'Mode invalide.';
   if(!Number.isInteger(rec.total) || rec.total<1 || rec.total>40) return 'Nombre de questions invalide.';
   if(!Number.isInteger(rec.score) || rec.score<0 || rec.score>rec.total) return 'Score invalide.';
@@ -1725,14 +1720,13 @@ async function submitScore(rec){
   const { error } = await _sb.from('scores').insert(rec);
   if(error) throw error;
 }
-async function fetchScores(quizFilter, modeFilter, promoFilter){
+async function fetchScores(quizFilter, modeFilter){
   if(!sbReady()) throw new Error('Classement non configuré');
-  let q = _sb.from('scores').select('pseudo,promo,quiz,mode,score,total,pct,created_at')
+  let q = _sb.from('scores').select('pseudo,quiz,mode,score,total,pct,created_at')
             .order('pct',{ascending:false}).order('score',{ascending:false})
             .order('created_at',{ascending:true}).limit(100);
   if(quizFilter && quizFilter!=='__all__') q = q.eq('quiz', quizFilter);
   if(modeFilter && modeFilter!=='__all__') q = q.eq('mode', modeFilter);
-  if(promoFilter) q = q.eq('promo', promoFilter);
   const { data, error } = await q;
   if(error) throw error;
   return data||[];
@@ -1760,32 +1754,27 @@ function renderLeaderboard(){
       <p class="lead">${pseudo?('Ton pseudo : <strong>'+escapeHtml(pseudo)+'</strong>. '):''}Compare tes résultats à ceux des autres.</p>
       <div class="lb-controls">
         <label>Épreuve<select id="lb-quiz">${quizzes.map(q=>`<option value="${escapeHtml(q.v)}">${q.l}</option>`).join('')}</select></label>
-        <label>Mode<select id="lb-mode"><option value="examen">Examen</option><option value="difficile">Difficile</option><option value="__all__">Tous</option></select></label>
-        <label>Promo<input id="lb-promo" placeholder="Toutes" maxlength="24" value="${escapeHtml(getPromo())}"></label>
       </div>
     </div>
     <div class="card" id="lb-result"><p class="lead">Chargement…</p></div>`;
   document.getElementById('lb-back').addEventListener('click', renderHome);
-  const reload=()=> loadLeaderboard(document.getElementById('lb-quiz').value, document.getElementById('lb-mode').value, document.getElementById('lb-promo').value.trim());
+  const reload=()=> loadLeaderboard(document.getElementById('lb-quiz').value);
   document.getElementById('lb-quiz').addEventListener('change', reload);
-  document.getElementById('lb-mode').addEventListener('change', reload);
-  document.getElementById('lb-promo').addEventListener('change', reload);
   if(!sbReady()){ document.getElementById('lb-result').innerHTML=lbNotConfiguredHTML(); }
   else { reload(); }
 }
-async function loadLeaderboard(quizFilter, modeFilter, promoFilter){
+async function loadLeaderboard(quizFilter){
   const box=document.getElementById('lb-result'); if(!box) return;
   box.innerHTML='<p class="lead">Chargement…</p>';
   try{
-    const rows=await fetchScores(quizFilter, modeFilter, promoFilter);
-    if(!rows.length){ box.innerHTML='<h2>Top scores</h2><p class="lead">Aucun score publié pour ces critères. Sois le premier à publier le tien ! 🚀</p>'; return; }
+    const rows=await fetchScores(quizFilter);
+    if(!rows.length){ box.innerHTML='<h2>Top scores</h2><p class="lead">Aucun score publié pour cette épreuve. Sois le premier à publier le tien ! 🚀</p>'; return; }
     const me=getPseudo();
-    let html='<h2>Top scores</h2><div class="lb-table"><div class="lb-row lb-head"><span>#</span><span>Pseudo</span><span>Score</span><span>%</span><span>Mode</span></div>';
+    let html='<h2>Top scores</h2><div class="lb-table"><div class="lb-row lb-head"><span>#</span><span>Pseudo</span><span>Score</span><span>%</span></div>';
     rows.forEach((r,i)=>{
       const mine = (me && r.pseudo===me) ? ' lb-me' : '';
       const rank = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
-      const promo = r.promo ? `<small>${escapeHtml(r.promo)}</small>` : '';
-      html+=`<div class="lb-row${mine}"><span>${rank}</span><span>${escapeHtml(r.pseudo)}${promo}</span><span>${r.score}/${r.total}</span><span>${r.pct}%</span><span>${MODE_LABEL2[r.mode]||r.mode}</span></div>`;
+      html+=`<div class="lb-row${mine}"><span>${rank}</span><span>${escapeHtml(r.pseudo)}</span><span>${r.score}/${r.total}</span><span>${r.pct}%</span></div>`;
     });
     html+='</div>';
     box.innerHTML=html;
@@ -1845,7 +1834,6 @@ function renderHome(){
       <p class="lead" style="margin-bottom:14px">Choisis un pseudo, puis publie tes scores en fin de quiz pour te comparer aux autres étudiants.</p>
       <div class="profile-row">
         <input id="home-pseudo" placeholder="Ton pseudo" maxlength="24" value="${escapeHtml(getPseudo())}">
-        <input id="home-promo" placeholder="Ta promo (ex. 2024-2027)" maxlength="24" value="${escapeHtml(getPromo())}">
         <button class="btn btn-ghost" id="home-pseudo-save" style="width:auto">💾 Enregistrer</button>
         <button class="btn btn-primary" id="home-leaderboard" style="width:auto">🏆 Voir le classement</button>
       </div>
@@ -1862,11 +1850,9 @@ function renderHome(){
   document.getElementById('home-leaderboard').addEventListener('click', renderLeaderboard);
   document.getElementById('home-pseudo-save').addEventListener('click', ()=>{
     const v=document.getElementById('home-pseudo').value.trim();
-    const pr=document.getElementById('home-promo').value.trim();
     const msg=document.getElementById('home-pseudo-msg');
     if(!v){ msg.textContent='⚠️ Saisis un pseudo.'; return; }
-    setPseudo(v); setPromo(pr);
-    msg.textContent='✅ Enregistré : '+v+(pr?(' · promo '+pr):'');
+    setPseudo(v); msg.textContent='✅ Pseudo enregistré : '+v;
   });
 }
 
@@ -1926,9 +1912,33 @@ function renderDossier(di){
 /* -------------------- ÉCRAN : CHOIX DU MODE -------------------- */
 function renderModeChoice(quiz){
   btnHome.style.display='flex'; window.scrollTo(0,0);
+
+  /* ---- Examens blancs : un seul mode (épreuve chronométrée en réponses libres) ---- */
+  if(quiz.exam){
+    app.innerHTML = `
+    <div class="card">
+      <span class="pill">🏆 Examen blanc</span>
+      <h1>${quiz.nom}</h1>
+      <p class="lead">${quiz.desc}</p>
+    </div>
+    <div class="card">
+      <h2>Épreuve unique</h2>
+      <div class="mode-grid">
+        <div class="mode-card exam" data-mode="examen">
+          <div class="ic">⏱️🧠</div>
+          <h3>Épreuve chronométrée</h3>
+          <p>10 minutes, <strong>tout en réponse libre</strong> : aucun choix proposé, tu dois tout écrire de mémoire. Aucune correction pendant l'épreuve ; auto-évaluation et corrigé complet à la fin. C'est ce score qui compte pour le classement.</p>
+        </div>
+      </div>
+    </div>`;
+    document.querySelector('[data-mode]').addEventListener('click', ()=> startQuiz(quiz, 'examen'));
+    return;
+  }
+
+  /* ---- Quiz thématiques : 3 modes ---- */
   app.innerHTML = `
     <div class="card">
-      <span class="pill">${quiz.exam?'🏆 Examen blanc':'📘 Quiz thématique'}</span>
+      <span class="pill">📘 Quiz thématique</span>
       <h1>${quiz.nom}</h1>
       <p class="lead">${quiz.desc}</p>
     </div>
@@ -1951,7 +1961,6 @@ function renderModeChoice(quiz){
           <p>Les mêmes questions, mais TOUT en réponse libre : aucun choix proposé, tu dois tout retrouver de mémoire puis t'auto-évaluer.</p>
         </div>
       </div>
-      ${quiz.exam?'<p class="lead" style="margin-top:14px;font-size:.82rem">💡 L\'examen blanc est conçu pour le mode Examen, mais tu peux aussi t\'entraîner.</p>':''}
     </div>`;
   document.querySelectorAll('[data-mode]').forEach(c=>{
     c.addEventListener('click', ()=> startQuiz(quiz, c.dataset.mode));
@@ -1969,10 +1978,15 @@ function toLibre(q){
 }
 const MODE_LABEL = { examen:'Examen', entrainement:'Entraînement', difficile:'Difficile' };
 function startQuiz(quiz, mode){
+  const isExam = !!quiz.exam;
+  // Examens blancs : un seul mode = épreuve chronométrée en réponses libres
+  if(isExam) mode='examen';
+  const libre = (mode==='difficile') || isExam;
   let questions = buildQuestions(quiz);
-  if(mode==='difficile'){ questions = questions.map(toLibre); }
+  if(libre){ questions = questions.map(toLibre); }
   state = { quiz, mode, questions, idx:0, answers:[], revealed:false, finished:false };
-  brandSub.textContent = quiz.nom + ' · ' + (MODE_LABEL[mode]||'Entraînement');
+  const label = isExam ? 'Épreuve' : (MODE_LABEL[mode]||'Entraînement');
+  brandSub.textContent = quiz.nom + ' · ' + label;
   btnHome.style.display='flex';
   if(mode==='examen'){ startTimer(10*60); } else { timerEl.style.display='none'; }
   renderQuestion();
@@ -2204,6 +2218,7 @@ function renderResults(byTimeout){
   const pubZone=document.getElementById('publish-zone');
   function drawPublish(){
     if(!pubZone) return;
+    if(!s.quiz.exam){ pubZone.innerHTML='<p class="lead" style="font-size:.8rem">🏆 Le classement ne concerne que les examens blancs.</p>'; return; }
     if(!sbReady()){ pubZone.innerHTML='<p class="lead" style="font-size:.8rem">🏆 Classement en ligne non activé.</p>'; return; }
     const pseudo=getPseudo();
     pubZone.innerHTML = pseudo
@@ -2217,7 +2232,7 @@ function renderResults(byTimeout){
       go.disabled=true; go.textContent='Publication…';
       const r=computeScore(); const p=r.gradable?Math.round(r.score/r.gradable*100):0;
       try{
-        await submitScore({ pseudo, promo:getPromo(), quiz:s.quiz.nom, mode:s.mode, score:r.score, total:r.gradable, pct:p });
+        await submitScore({ pseudo, quiz:s.quiz.nom, mode:s.mode, score:r.score, total:r.gradable, pct:p });
         pubZone.innerHTML=`<p class="lead" style="color:var(--ok);font-weight:700">✅ Score publié au classement !</p><button class="btn btn-ghost" id="pub-see" style="width:auto;margin-top:8px">🏆 Voir le classement</button>`;
         document.getElementById('pub-see').addEventListener('click', renderLeaderboard);
       }catch(e){
