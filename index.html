@@ -1,0 +1,1949 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Révisions UE 2.7 — Défaillances organiques & processus dégénératifs</title>
+<style>
+  :root{
+    --bg:#060b16; --bg2:#0a1224; --glass:rgba(17,28,51,.55); --glass-2:rgba(13,22,42,.75);
+    --line:rgba(120,170,255,.14); --line-2:rgba(120,170,255,.28);
+    --ink:#eaf2ff; --muted:#8aa0c6; --faint:#5d719b;
+    --cyan:#22d3ee; --teal:#2dd4bf; --blue:#5b8cff; --violet:#a78bfa;
+    --ok:#34d399; --ok-bg:rgba(52,211,153,.12); --bad:#fb7185; --bad-bg:rgba(251,113,133,.12);
+    --warn:#fbbf24; --warn-bg:rgba(251,191,36,.12);
+    --radius:20px; --shadow:0 18px 50px rgba(0,0,0,.45);
+    --glow:0 0 0 1px rgba(34,211,238,.35), 0 12px 40px rgba(34,211,238,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:"Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink); min-height:100vh; -webkit-font-smoothing:antialiased; line-height:1.55;
+    background:
+      radial-gradient(1200px 700px at 12% -8%, rgba(34,211,238,.16), transparent 60%),
+      radial-gradient(1000px 600px at 95% 8%, rgba(167,139,250,.14), transparent 55%),
+      radial-gradient(900px 700px at 50% 120%, rgba(45,212,191,.12), transparent 60%),
+      linear-gradient(180deg,#060b16 0%,#070d1c 100%);
+    background-attachment:fixed;
+  }
+  /* subtle grid overlay */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.4;
+    background-image:linear-gradient(rgba(120,170,255,.04) 1px,transparent 1px),
+                     linear-gradient(90deg,rgba(120,170,255,.04) 1px,transparent 1px);
+    background-size:48px 48px;mask-image:radial-gradient(circle at 50% 30%,#000 30%,transparent 80%);
+  }
+  .app{position:relative;z-index:1;width:100%;max-width:1040px;margin:0 auto;padding:18px 16px 40px;}
+
+  /* ---------- Header ---------- */
+  header.bar{position:sticky;top:0;z-index:50;background:rgba(6,11,22,.72);backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);}
+  .bar-in{width:100%;max-width:1040px;margin:0 auto;display:flex;align-items:center;gap:10px;padding:12px 16px;}
+  .brand{font-weight:800;font-size:1rem;letter-spacing:.2px;display:flex;align-items:center;gap:11px;flex:1;min-width:0}
+  .brand .logo{width:34px;height:34px;border-radius:10px;flex:none;display:grid;place-items:center;
+    background:linear-gradient(135deg,var(--cyan),var(--blue));box-shadow:0 0 18px rgba(34,211,238,.5);
+    font-size:1.05rem;color:#04121a;font-weight:900;position:relative}
+  .brand .logo::after{content:"";position:absolute;inset:0;border-radius:10px;border:1px solid rgba(255,255,255,.35)}
+  .brand small{display:block;font-weight:500;color:var(--faint);font-size:.7rem;letter-spacing:.4px;text-transform:uppercase}
+  .timer{display:none;align-items:center;gap:7px;background:var(--glass-2);border:1px solid var(--line-2);
+    border-radius:999px;padding:8px 14px;font-weight:800;color:var(--bad);font-variant-numeric:tabular-nums;
+    box-shadow:0 0 18px rgba(251,113,133,.25)}
+  .timer.calm{color:var(--cyan);box-shadow:0 0 18px rgba(34,211,238,.2)}
+  .btn-home{display:none;align-items:center;gap:7px;background:transparent;color:var(--ink);
+    border:1px solid var(--line-2);border-radius:999px;padding:9px 15px;font-weight:700;font-size:.82rem;
+    cursor:pointer;white-space:nowrap;transition:.15s}
+  .btn-home:hover{border-color:var(--cyan);box-shadow:0 0 16px rgba(34,211,238,.25);color:var(--cyan)}
+  .btn-home:active{transform:scale(.97)}
+
+  /* ---------- Cards ---------- */
+  .card{background:var(--glass);backdrop-filter:blur(16px);border:1px solid var(--line);
+    border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;margin-bottom:18px;position:relative;overflow:hidden}
+  .card::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(34,211,238,.6),transparent)}
+  h1{font-size:1.7rem;line-height:1.15;margin-bottom:8px;letter-spacing:.2px;font-weight:700}
+  h2{font-size:1.2rem;margin-bottom:6px;font-weight:700;letter-spacing:.2px}
+  /* Titres : police moderne + couleur claire explicite (lisible sur fond sombre) */
+  h1,h2,.tile .t,.quiz-tile .t,.mode-card h3,.verdict,.dossier-head h1,.brand{
+    font-family:"Bahnschrift","Segoe UI Variable Display","Segoe UI Semibold","Segoe UI",system-ui,sans-serif;
+    color:#eef4ff;text-shadow:0 0 22px rgba(120,170,255,.28);
+  }
+  .lead{color:var(--muted);font-size:.95rem}
+  .pill{display:inline-flex;align-items:center;gap:6px;background:rgba(34,211,238,.1);color:var(--cyan);
+    border:1px solid rgba(34,211,238,.3);border-radius:999px;padding:5px 13px;font-size:.7rem;font-weight:800;
+    letter-spacing:.6px;text-transform:uppercase;margin-bottom:14px}
+
+  /* ---------- Hero ---------- */
+  .hero{text-align:left}
+  .hero .sub{color:var(--muted);max-width:640px;margin-top:6px}
+  .stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+  .stat{background:var(--glass-2);border:1px solid var(--line);border-radius:14px;padding:10px 16px;min-width:96px}
+  .stat .n{font-size:1.4rem;font-weight:900;color:var(--cyan);line-height:1;font-variant-numeric:tabular-nums}
+  .stat .l{font-size:.7rem;color:var(--faint);text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
+
+  /* ---------- Dossier grid ---------- */
+  .grid{display:grid;grid-template-columns:1fr;gap:14px}
+  @media(min-width:620px){.grid{grid-template-columns:1fr 1fr}}
+  @media(min-width:920px){.grid{grid-template-columns:1fr 1fr 1fr}}
+  .tile{position:relative;text-align:left;cursor:pointer;border:1px solid var(--line);border-radius:18px;
+    padding:20px;background:var(--glass);overflow:hidden;transition:.18s;display:flex;flex-direction:column;gap:8px}
+  .tile:hover{transform:translateY(-3px);border-color:var(--line-2);box-shadow:var(--glow)}
+  .tile .ico{width:50px;height:50px;border-radius:14px;display:grid;place-items:center;font-size:1.5rem;
+    background:linear-gradient(135deg,rgba(34,211,238,.18),rgba(91,140,255,.18));border:1px solid var(--line-2)}
+  .tile .t{font-weight:800;font-size:1.05rem;letter-spacing:-.2px}
+  .tile .d{color:var(--muted);font-size:.85rem;flex:1}
+  .tile .meta{font-size:.72rem;color:var(--cyan);font-weight:800;letter-spacing:.4px;display:flex;align-items:center;gap:6px}
+  .tile .arrow{position:absolute;top:20px;right:18px;color:var(--faint);font-size:1.1rem;transition:.18s}
+  .tile:hover .arrow{color:var(--cyan);transform:translateX(3px)}
+
+  /* quiz tiles (2-col) */
+  .quiz-grid{display:grid;grid-template-columns:1fr;gap:13px}
+  @media(min-width:640px){.quiz-grid{grid-template-columns:1fr 1fr}}
+  .quiz-tile{position:relative;text-align:left;cursor:pointer;border:1px solid var(--line);border-radius:16px;
+    padding:18px;background:var(--glass);transition:.16s;display:flex;flex-direction:column;gap:6px}
+  .quiz-tile:hover{border-color:var(--line-2);box-shadow:var(--glow);transform:translateY(-2px)}
+  .quiz-tile .t{font-weight:800;font-size:1rem;display:flex;align-items:center;gap:9px}
+  .quiz-tile .d{color:var(--muted);font-size:.84rem}
+  .quiz-tile .meta{margin-top:3px;font-size:.72rem;color:var(--cyan);font-weight:800;letter-spacing:.3px}
+  .quiz-tile.exam{background:linear-gradient(135deg,rgba(251,191,36,.1),rgba(251,113,133,.06));border-color:rgba(251,191,36,.28)}
+  .quiz-tile.exam:hover{box-shadow:0 0 0 1px rgba(251,191,36,.4),0 12px 40px rgba(251,191,36,.16)}
+  .quiz-tile.exam .meta{color:var(--warn)}
+  .quiz-tile.glob{background:linear-gradient(135deg,rgba(167,139,250,.14),rgba(34,211,238,.08));border-color:rgba(167,139,250,.32)}
+  .quiz-tile.glob .meta{color:var(--violet)}
+
+  .dossier-head{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+  .dossier-ico{width:54px;height:54px;border-radius:15px;display:grid;place-items:center;font-size:1.6rem;flex:none;
+    background:linear-gradient(135deg,var(--cyan),var(--blue));box-shadow:0 0 24px rgba(34,211,238,.4);color:#04121a}
+
+  /* ---------- Mode choice ---------- */
+  .mode-grid{display:grid;grid-template-columns:1fr;gap:15px;margin-top:6px}
+  @media(min-width:760px){.mode-grid{grid-template-columns:1fr 1fr 1fr}}
+  .mode-card.hard:hover{border-color:var(--violet);box-shadow:0 0 0 1px rgba(167,139,250,.4),0 12px 40px rgba(167,139,250,.18)}
+  .mode-card{border:1px solid var(--line);border-radius:16px;padding:22px;cursor:pointer;transition:.16s;
+    text-align:left;background:var(--glass);position:relative;overflow:hidden}
+  .mode-card:hover{border-color:var(--cyan);box-shadow:var(--glow);transform:translateY(-2px)}
+  .mode-card.exam:hover{border-color:var(--warn);box-shadow:0 0 0 1px rgba(251,191,36,.4),0 12px 40px rgba(251,191,36,.16)}
+  .mode-card .ic{font-size:1.9rem;margin-bottom:6px}
+  .mode-card h3{font-size:1.15rem;margin:6px 0;font-weight:800}
+  .mode-card p{color:var(--muted);font-size:.86rem}
+
+  /* ---------- Question ---------- */
+  .progress-wrap{margin-bottom:18px}
+  .progress-row{display:flex;justify-content:space-between;font-size:.76rem;color:var(--muted);font-weight:700;margin-bottom:7px;letter-spacing:.3px}
+  .progress{height:7px;background:rgba(120,170,255,.12);border-radius:999px;overflow:hidden}
+  .progress > i{display:block;height:100%;border-radius:999px;transition:width .35s cubic-bezier(.4,0,.2,1);
+    background:linear-gradient(90deg,var(--cyan),var(--blue));box-shadow:0 0 12px rgba(34,211,238,.6)}
+  .qtype{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--cyan);margin-bottom:8px}
+  .qtext{font-size:1.25rem;font-weight:700;margin-bottom:20px;line-height:1.4;letter-spacing:-.2px}
+  .options{display:flex;flex-direction:column;gap:11px}
+  .opt{display:flex;align-items:center;gap:13px;border:1px solid var(--line);border-radius:13px;padding:15px;
+    cursor:pointer;transition:.13s;background:var(--glass-2);font-size:.97rem;text-align:left;width:100%;color:var(--ink)}
+  .opt:hover{border-color:var(--line-2);background:rgba(34,211,238,.06)}
+  .opt .box{width:23px;height:23px;border:2px solid var(--faint);border-radius:7px;flex:none;display:grid;
+    place-items:center;font-size:.78rem;color:#04121a;transition:.13s}
+  .opt.radio .box{border-radius:50%}
+  .opt.sel{border-color:var(--cyan);background:rgba(34,211,238,.12);box-shadow:inset 0 0 0 1px rgba(34,211,238,.3)}
+  .opt.sel .box{background:var(--cyan);border-color:var(--cyan)}
+  .opt.correct{border-color:var(--ok);background:var(--ok-bg)}
+  .opt.correct .box{background:var(--ok);border-color:var(--ok)}
+  .opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+  .opt.wrong .box{background:var(--bad);border-color:var(--bad)}
+  .opt.disabled{cursor:default;pointer-events:none;opacity:.96}
+
+  textarea{width:100%;border:1px solid var(--line-2);border-radius:13px;padding:15px;font:inherit;font-size:1rem;
+    resize:vertical;min-height:96px;background:var(--glass-2);color:var(--ink)}
+  textarea::placeholder{color:var(--faint)}
+  textarea:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(34,211,238,.15)}
+
+  .btn{border:none;border-radius:13px;padding:15px 18px;font-weight:800;font-size:1rem;cursor:pointer;transition:.13s;width:100%;font-family:inherit}
+  .btn:active{transform:scale(.99)}
+  .btn-primary{background:linear-gradient(135deg,var(--cyan),var(--blue));color:#04121a;box-shadow:0 8px 26px rgba(34,211,238,.3)}
+  .btn-primary:hover{box-shadow:0 10px 32px rgba(34,211,238,.45)}
+  .btn-primary:disabled{background:rgba(120,170,255,.14);color:var(--faint);cursor:not-allowed;box-shadow:none}
+  .btn-ghost{background:var(--glass-2);color:var(--ink);border:1px solid var(--line-2)}
+  .btn-ghost:hover{border-color:var(--cyan);color:var(--cyan)}
+  .btn-ok{background:linear-gradient(135deg,var(--ok),var(--teal));color:#04121a}
+  .btn-bad{background:linear-gradient(135deg,var(--bad),#f43f5e);color:#fff}
+  .row{display:flex;gap:11px;margin-top:18px}
+  .row .btn{width:auto;flex:1}
+
+  .feedback{margin-top:18px;border-radius:13px;padding:16px;border-left:4px solid;background:var(--glass-2)}
+  .feedback.good{border-color:var(--ok);background:var(--ok-bg)}
+  .feedback.bad{border-color:var(--bad);background:var(--bad-bg)}
+  .feedback .fb-t{font-weight:800;margin-bottom:7px;display:flex;align-items:center;gap:8px}
+  .feedback .exp{font-size:.92rem;color:var(--ink);opacity:.92}
+  .answer-reveal{margin-top:16px;background:var(--glass-2);border:1px dashed var(--line-2);border-radius:13px;padding:16px}
+  .answer-reveal .lab{font-size:.7rem;font-weight:800;text-transform:uppercase;color:var(--faint);letter-spacing:.6px}
+  .answer-reveal .val{font-size:1.02rem;font-weight:700;color:var(--cyan);margin-top:5px}
+
+  /* ---------- Results ---------- */
+  .score-hero{text-align:center;padding:12px 0 6px}
+  .score-ring{width:140px;height:140px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;
+    background:conic-gradient(var(--ring-color,#34d399) calc(var(--pct,0)*1%), rgba(120,170,255,.12) 0);
+    box-shadow:0 0 30px rgba(34,211,238,.2)}
+  .score-ring > div{width:112px;height:112px;border-radius:50%;background:var(--bg2);display:grid;place-items:center;flex-direction:column;border:1px solid var(--line)}
+  .score-ring .big{font-size:1.8rem;font-weight:900;line-height:1;font-variant-numeric:tabular-nums}
+  .score-ring .sub{font-size:.7rem;color:var(--faint);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+  .verdict{font-size:1.2rem;font-weight:800;margin-bottom:4px}
+  .rev-item{border:1px solid var(--line);border-radius:13px;padding:16px;margin-bottom:11px;background:var(--glass-2)}
+  .rev-item .q{font-weight:700;margin-bottom:9px;display:flex;gap:9px}
+  .rev-item .q .ic{flex:none}
+  .rev-line{font-size:.9rem;margin:4px 0;color:var(--muted)}
+  .rev-line .k{color:var(--faint);font-weight:700}
+  .tag-ok{color:var(--ok);font-weight:600} .tag-bad{color:var(--bad);font-weight:600}
+  .selfrate{display:flex;gap:9px;margin-top:9px}
+  .selfrate .btn{padding:10px;font-size:.85rem}
+  .hidden{display:none!important}
+  footer{text-align:center;color:var(--faint);font-size:.74rem;padding:18px;position:relative;z-index:1}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-in">
+    <div class="brand">
+      <span class="logo">+</span>
+      <div>Révisions IFSI · UE 2.7<small id="brand-sub">Défaillances organiques</small></div>
+    </div>
+    <div class="timer" id="timer">⏱ <span id="timer-val">10:00</span></div>
+    <button class="btn-home" id="btn-home">↩ Menu principal</button>
+  </div>
+</header>
+
+<div class="app" id="app"></div>
+<footer>UE 2.7 · Défaillances organiques et processus dégénératifs · Application de révision IFSI</footer>
+
+<script>
+/* ============================================================
+   DONNÉES — UE 2.7
+   Types : qcm (choix), vf (vrai/faux), libre (texte + auto-éval)
+   ============================================================ */
+const M = (t,c)=>({t:t,c:!!c}); // option helper
+
+const DATA = { dossiers: [
+/* ====================== DIABÈTE ====================== */
+{
+  id:"diabete", nom:"Diabète", ico:"🩸",
+  desc:"Anatomie pancréatique, DT1/DT2, traitements et complications.",
+  long:"Anatomie et physiologie du pancréas, régulation glycémique, diabète de type 1 et 2, antidiabétiques et insulinothérapie, complications aiguës et chroniques, grossesse.",
+  quizzes:[
+    {
+      id:"physio", nom:"Anatomie & régulation glycémique",
+      desc:"Pancréas, insuline, glucagon, régulation de la glycémie",
+      questions:[
+        {type:"qcm", q:"Où est situé le pancréas ?", o:[
+          M("Organe rétropéritonéal, en arrière de l'estomac, en regard de L1-L2",1),
+          M("Organe intra-thoracique, derrière le cœur"),
+          M("Dans le pelvis, sous la vessie"),
+          M("En avant de l'estomac, sous le diaphragme")],
+          exp:"Le pancréas est un organe rétropéritonéal situé en arrière de l'estomac, en regard de L1-L2."},
+        {type:"qcm", q:"Quelles sont les 4 parties du pancréas ?", o:[
+          M("Tête, col, corps, queue",1),
+          M("Tête, isthme, anse, base"),
+          M("Lobe droit, lobe gauche, hile, capsule"),
+          M("Cortex, médullaire, hile, pôle")],
+          exp:"Le pancréas comprend 4 parties : la tête (encadrée par le duodénum), le col, le corps et la queue (en rapport avec la rate)."},
+        {type:"vf", q:"La queue du pancréas est en rapport avec la rate.", a:true,
+          exp:"Vrai. La queue du pancréas est en rapport avec la rate ; la tête est encadrée par le duodénum."},
+        {type:"qcm", q:"La fonction EXOCRINE du pancréas correspond à :", o:[
+          M("La sécrétion d'enzymes par les acini, transportées par le canal pancréatique vers le tube digestif",1),
+          M("La sécrétion d'hormones dans le sang"),
+          M("La régulation de la glycémie"),
+          M("La production d'insuline par les îlots de Langerhans")],
+          exp:"Fonction exocrine = sécrétion d'enzymes digestives par les acini. Fonction endocrine = sécrétion d'hormones dans le sang."},
+        {type:"qcm", q:"Quelle structure produit les hormones régulant la glycémie ?", o:[
+          M("Les îlots de Langerhans",1),
+          M("Les acini pancréatiques"),
+          M("Le canal de Wirsung"),
+          M("Le duodénum")],
+          exp:"Les hormones (insuline, glucagon...) sont produites par les îlots de Langerhans (fonction endocrine)."},
+        {type:"qcm", q:"Quelle cellule sécrète l'INSULINE ?", o:[
+          M("La cellule bêta",1), M("La cellule alpha"), M("La cellule delta"), M("La cellule PP")],
+          exp:"Cellule β → insuline (hypoglycémiante) · α → glucagon · δ → somatostatine · PP → polypeptide pancréatique."},
+        {type:"qcm", q:"Quelle cellule sécrète le GLUCAGON ?", o:[
+          M("La cellule alpha",1), M("La cellule bêta"), M("La cellule delta"), M("La cellule PP")],
+          exp:"La cellule α sécrète le glucagon, hormone hyperglycémiante."},
+        {type:"vf", q:"L'insuline est la seule hormone hypoglycémiante de l'organisme.", a:true,
+          exp:"Vrai. L'insuline est la SEULE hormone hypoglycémiante de l'organisme."},
+        {type:"qcm", q:"Quel est l'effet de la somatostatine (cellule δ) ?", o:[
+          M("Elle inhibe l'insuline ET le glucagon",1),
+          M("Elle stimule uniquement l'insuline"),
+          M("Elle est hyperglycémiante"),
+          M("Elle régule l'absorption du calcium")],
+          exp:"La somatostatine inhibe à la fois l'insuline et le glucagon."},
+        {type:"libre", q:"Citez les 3 tissus insulino-sensibles dans lesquels l'insuline fait entrer le glucose.",
+          a:"Muscle, foie, tissu adipeux",
+          exp:"Les 3 tissus insulino-sensibles sont : le muscle, le foie et le tissu adipeux."},
+        {type:"vf", q:"L'insuline est sécrétée à 2 niveaux : un niveau basal permanent et des pics au moment des repas.", a:true,
+          exp:"Vrai. Sécrétion basale permanente + pics post-prandiaux → glycémie stable."},
+        {type:"qcm", q:"Sous quelle forme les glucides sont-ils absorbés au niveau intestinal ?", o:[
+          M("Sous forme de monosaccharides",1),
+          M("Sous forme de disaccharides"),
+          M("Sous forme de polysaccharides"),
+          M("Sous forme d'acides gras")],
+          exp:"Les glucides sont exclusivement absorbés sous forme de monosaccharides : glucose, fructose, galactose."},
+        {type:"qcm", q:"La glycogénolyse hépatique correspond à :", o:[
+          M("La libération de glucose à partir du glycogène",1),
+          M("La synthèse de glucose à partir des acides aminés"),
+          M("Le stockage du glucose en glycogène"),
+          M("La transformation du glucose en lipides")],
+          exp:"Glycogénolyse = libération de glucose à partir du glycogène, grâce à la glycogène phosphorylase."},
+        {type:"qcm", q:"La néoglucogenèse correspond à :", o:[
+          M("La synthèse de glucose à partir des acides aminés et des acides gras",1),
+          M("La dégradation du glycogène hépatique"),
+          M("La fabrication de glycogène"),
+          M("L'absorption intestinale du glucose")],
+          exp:"Néoglucogenèse = synthèse de glucose à partir des acides aminés (alanine, glutamine) et acides gras."},
+        {type:"qcm", q:"Quelle(s) hormone(s) stimule(nt) la glycogénolyse et la néoglucogenèse ?", o:[
+          M("Le glucagon",1), M("L'insuline"), M("La somatostatine"), M("Le polypeptide pancréatique")],
+          exp:"Le glucagon et les catécholamines stimulent glycogénolyse, néoglucogenèse et lipolyse. L'insuline fait l'inverse."},
+        {type:"qcm", q:"Après un repas (hyperglycémie), que se passe-t-il ?", o:[
+          M("Les cellules β sont stimulées → insuline → retour à la normoglycémie",1),
+          M("Les cellules α sont stimulées → glucagon"),
+          M("La somatostatine est inhibée"),
+          M("La néoglucogenèse augmente")],
+          exp:"Hyperglycémie post-prandiale → cellules β → insuline → foie/muscles/tissu adipeux → normoglycémie."},
+        {type:"qcm", q:"À jeun (hypoglycémie), que se passe-t-il ?", o:[
+          M("Les cellules α stimulées → glucagon → glycogénolyse + néoglucogenèse",1),
+          M("Les cellules β stimulées → insuline"),
+          M("Arrêt de toute production de glucose"),
+          M("Stockage du glucose en glycogène")],
+          exp:"À jeun → cellules α → glucagon → glycogénolyse + néoglucogenèse → remontée de la glycémie."},
+        {type:"vf", q:"L'insuline stimule la lipogenèse et la glycogénogenèse.", a:true,
+          exp:"Vrai. L'insuline favorise le stockage : glycogénogenèse, lipogenèse, anabolisme protéique."},
+        {type:"libre", q:"Quelle enzyme permet la glycogénogenèse (stockage du glucose en glycogène) ?",
+          a:"La glycogène synthase",
+          exp:"La glycogène synthase permet la glycogénogenèse (sous l'effet de l'insuline)."}
+      ]
+    },
+    {
+      id:"types", nom:"Généralités, DT1 & DT2",
+      desc:"Définitions OMS, épidémiologie, mécanismes, facteurs de risque",
+      questions:[
+        {type:"qcm", q:"Quel est le seuil de glycémie à jeun pour diagnostiquer un diabète ?", o:[
+          M("≥ 1,26 g/L à 2 reprises",1), M("≥ 1,10 g/L à 1 reprise"), M("≥ 2 g/L à jeun"), M("≥ 0,95 g/L")],
+          exp:"Diabète : glycémie à jeun ≥ 1,26 g/L (7,0 mmol/L) vérifiée à 2 reprises."},
+        {type:"qcm", q:"Quel critère de glycémie aléatoire permet de diagnostiquer un diabète ?", o:[
+          M("Glycémie aléatoire ≥ 2 g/L + signes cliniques",1),
+          M("≥ 1,26 g/L"), M("≥ 1,10 g/L"), M("≥ 0,95 g/L")],
+          exp:"Diabète : glycémie aléatoire ≥ 2 g/L (11,1 mmol/L) associée à des signes cliniques."},
+        {type:"qcm", q:"Quel seuil d'HbA1c définit le diabète ?", o:[
+          M("≥ 6,5 %",1), M("≥ 5,7 %"), M("≥ 7 %"), M("≥ 8 %")],
+          exp:"Une HbA1c ≥ 6,5 % définit le diabète. Le pré-diabète correspond à 5,7-6,4 %."},
+        {type:"libre", q:"Citez les éléments du syndrome cardinal du diabète.",
+          a:"Polyurie, polydipsie, amaigrissement (± asthénie / polyphagie)",
+          exp:"Syndrome cardinal : Polyurie, Polydipsie (soif intense), Amaigrissement, ± asthénie/polyphagie."},
+        {type:"vf", q:"Le diabète de type 2 représente environ 90 % des diabètes.", a:true,
+          exp:"Vrai. Le DT2 représente ≈ 90 % des diabètes ; le DT1 < 10 %."},
+        {type:"qcm", q:"Quel est le mécanisme physiopathologique du diabète de type 1 ?", o:[
+          M("Insulinopénie : carence ABSOLUE par destruction auto-immune des cellules β",1),
+          M("Insulinorésistance des tissus périphériques"),
+          M("Hyperinsulinisme compensateur"),
+          M("Excès de sécrétion de glucagon")],
+          exp:"DT1 = insulinopénie : carence absolue, destruction auto-immune des cellules β → insulinothérapie."},
+        {type:"qcm", q:"Quel est le mécanisme physiopathologique du diabète de type 2 ?", o:[
+          M("Insulinorésistance : anomalie de l'action de l'insuline",1),
+          M("Destruction auto-immune des cellules β"),
+          M("Carence absolue en insuline d'emblée"),
+          M("Absence totale de pancréas")],
+          exp:"DT2 = insulinorésistance, avec hyperinsulinisme compensateur puis épuisement des cellules β."},
+        {type:"vf", q:"Dans le diabète de type 1, on retrouve des auto-anticorps (anti-GAD, anti-IA2…).", a:true,
+          exp:"Vrai. Le DT1 est auto-immun : anti-GAD, anti-ZnT8, anti-IA2, anti-insuline, anti-îlots. Pas dans le DT2."},
+        {type:"qcm", q:"Quel est l'âge moyen de survenue du diabète de type 1 ?", o:[
+          M("Environ 12 ans",1), M("Environ 50-60 ans"), M("Après 75 ans"), M("À la naissance uniquement")],
+          exp:"DT1 : âge moyen de survenue ≈ 12 ans, mais tout âge est possible."},
+        {type:"qcm", q:"Parmi ces éléments, lesquels sont des facteurs de risque de DT2 ?", o:[
+          M("Obésité / surpoids",1), M("Sédentarité",1), M("ATCD familiaux de DT2",1), M("Jeune âge")],
+          exp:"FDR du DT2 : âge, obésité androïde, sédentarité, ATCD de diabète gestationnel/macrosomie, ATCD familiaux."},
+        {type:"qcm", q:"Quel est le risque de DT2 si les 2 parents sont atteints ?", o:[
+          M("50 %",1), M("30 %"), M("90 %"), M("10 %")],
+          exp:"ATCD familiaux de DT2 : 1 parent → 30 %, 2 parents → 50 %, jumeau → 90 %."},
+        {type:"vf", q:"Au moment du diagnostic du DT2, des complications sont souvent déjà présentes.", a:true,
+          exp:"Vrai. Le DT2 est insidieux : les complications sont souvent déjà présentes au diagnostic. D'où l'importance du dépistage."},
+        {type:"qcm", q:"Parmi ces critères, lesquels font partie du syndrome métabolique ?", o:[
+          M("Tour de taille élevé",1), M("Hypertriglycéridémie",1), M("HDL-cholestérol bas",1), M("HTA",1)],
+          exp:"Syndrome métabolique : tour de taille élevé, hyperglycémie à jeun, hypertriglycéridémie, HDL bas, HTA."},
+        {type:"qcm", q:"Quel est le traitement du diabète de type 1 ?", o:[
+          M("Insulinothérapie d'emblée et à vie",1), M("Metformine seule"), M("Règles hygiéno-diététiques seules"), M("Sulfamides hypoglycémiants")],
+          exp:"DT1 : insulinothérapie d'emblée et à vie (carence absolue en insuline)."},
+        {type:"libre", q:"Quel type de diabète est dit « maigre » et « du sujet jeune » ?",
+          a:"Le diabète de type 1 (DT1)",
+          exp:"Le diabète de type 1 était dit « insulinodépendant », « maigre », « du sujet jeune »."},
+        {type:"qcm", q:"Le DT2 évolue en 2 phases. Lesquelles ?", o:[
+          M("1) Hyperinsulinisme normoglycémique 2) Hypoinsulinisme hyperglycémique",1),
+          M("1) Carence absolue 2) Récupération"),
+          M("1) Acidocétose 2) Coma"),
+          M("1) Hypoglycémie 2) Hyperglycémie")],
+          exp:"DT2 : 1) hyperinsulinisme compensateur (normoglycémie) puis 2) épuisement des cellules β → hyperglycémie."}
+      ]
+    },
+    {
+      id:"ttt", nom:"Traitements & surveillance",
+      desc:"RHD, antidiabétiques, insulinothérapie, autosurveillance",
+      questions:[
+        {type:"qcm", q:"Quel est l'antidiabétique de PREMIÈRE intention dans le DT2 ?", o:[
+          M("La metformine",1), M("Le gliclazide"), M("L'insuline"), M("L'acarbose")],
+          exp:"La metformine (biguanide) est le traitement de 1re intention du DT2."},
+        {type:"vf", q:"La metformine entraîne fréquemment des hypoglycémies.", a:false,
+          exp:"Faux. La metformine ne stimule PAS l'insulinosécrétion : pas de risque d'hypoglycémie. ES : troubles digestifs."},
+        {type:"qcm", q:"Parmi ces situations, lesquelles sont des contre-indications de la metformine ?", o:[
+          M("Insuffisance rénale",1), M("Insuffisance cardiaque",1), M("Insuffisance hépatocellulaire",1), M("Hypertension artérielle isolée")],
+          exp:"CI metformine : insuffisance rénale, cardiaque, hépatocellulaire, respiratoire (risque d'acidose lactique)."},
+        {type:"qcm", q:"Quel risque principal présentent les sulfamides hypoglycémiants (ex. Diamicron®) ?", o:[
+          M("Le risque d'hypoglycémie",1), M("Les mycoses génitales"), M("La rétention d'eau"), M("L'acidose lactique")],
+          exp:"Les sulfamides stimulent l'insulinosécrétion → risque d'hypoglycémie. CI : insuffisance rénale."},
+        {type:"qcm", q:"Quel est le mécanisme des inhibiteurs de SGLT2 (ex. Jardiance®, Forxiga®) ?", o:[
+          M("Augmentation de l'excrétion urinaire de glucose",1),
+          M("Stimulation directe de l'insuline"),
+          M("Inhibition de la néoglucogenèse"),
+          M("Destruction du GLP1")],
+          exp:"iSGLT2 : glycosurie induite. ES : mycoses génitales. Avantages : perte de poids, protection CV et rénale."},
+        {type:"qcm", q:"Quels avantages présentent les analogues du GLP1 (ex. Ozempic®, Trulicity®) ?", o:[
+          M("Perte de poids",1), M("Protection cardiovasculaire",1), M("Protection hépatique",1), M("Augmentation de l'appétit")],
+          exp:"Analogues GLP1 : injection SC, perte de poids, protection CV et hépatique. ES : nausées. CI : pancréatite."},
+        {type:"qcm", q:"Quand introduit-on l'insuline dans le diabète de type 2 ?", o:[
+          M("En cas d'échec des RHD + ADO, ou de contre-indication aux ADO",1),
+          M("D'emblée à la découverte du DT2"),
+          M("Jamais dans le DT2"),
+          M("Uniquement pendant la grossesse")],
+          exp:"DT2 : insuline si échec des RHD + antidiabétiques oraux, ou en cas de CI aux ADO."},
+        {type:"qcm", q:"En quoi consiste le schéma basal-bolus ?", o:[
+          M("1 analogue lent + 1 analogue rapide à chaque repas",1),
+          M("1 seule injection d'insuline lente le matin"),
+          M("Uniquement des antidiabétiques oraux"),
+          M("2 injections de mélange matin et soir")],
+          exp:"Basal-bolus (3-4 inj./j) : analogue lent (basale) + analogue rapide à chaque repas (bolus)."},
+        {type:"qcm", q:"Par quelle voie l'insuline est-elle administrée en routine ?", o:[
+          M("Voie sous-cutanée",1),
+          M("Voie intramusculaire profonde"), M("Voie orale"), M("Voie intra-rectale")],
+          exp:"Insuline en voie sous-cutanée : abdomen, bras (rapides), cuisses (lentes/semi-lentes)."},
+        {type:"vf", q:"Il faut varier les sites d'injection d'insuline pour éviter les lipodystrophies.", a:true,
+          exp:"Vrai. Varier les sites évite les lipodystrophies qui modifient l'absorption de l'insuline."},
+        {type:"qcm", q:"Comment conserver un stylo d'insuline NON utilisé ?", o:[
+          M("Au réfrigérateur",1), M("Au congélateur"), M("Exposé au soleil"), M("Au bain-marie")],
+          exp:"L'insuline non utilisée se conserve au réfrigérateur."},
+        {type:"qcm", q:"Sur quelle période l'HbA1c reflète-t-elle l'équilibre glycémique ?", o:[
+          M("Les 3 derniers mois",1), M("Les 24 dernières heures"), M("La dernière semaine"), M("La dernière année")],
+          exp:"L'HbA1c (hémoglobine glyquée) reflète les glycémies des 3 derniers mois."},
+        {type:"qcm", q:"Quelle est la cible générale d'HbA1c chez un DT2 standard ?", o:[
+          M("7 %",1), M("≤ 4 %"), M("≥ 10 %"), M("9 %")],
+          exp:"Cible générale : 7 % (voire ≤ 6,5 %), à individualiser selon l'âge et les comorbidités."},
+        {type:"qcm", q:"Parmi ces examens, lesquels font partie du bilan ANNUEL du diabétique ?", o:[
+          M("Fond d'œil",1), M("Microalbuminurie + créatininémie",1), M("ECG de repos",1), M("Coloscopie systématique")],
+          exp:"Bilan annuel : fond d'œil, microalbuminurie + créatininémie, ECG, bilan lipidique, examen des pieds."},
+        {type:"libre", q:"Quelle quantité minimale d'activité physique modérée est recommandée par semaine ?",
+          a:"2 h 30 (2 heures 30) par semaine",
+          exp:"Recommandation : au moins 2 h 30 d'activité physique modérée par semaine (marche, vélo, natation...)."},
+        {type:"vf", q:"L'HbA1c et l'examen clinique (poids, TA, pieds) se contrôlent tous les 3 mois.", a:true,
+          exp:"Vrai. Tous les 3 mois : HbA1c + examen clinique (poids, TA, pieds)."}
+      ]
+    },
+    {
+      id:"compli", nom:"Complications & grossesse",
+      desc:"Micro/macroangiopathie, pied diabétique, urgences, grossesse",
+      questions:[
+        {type:"qcm", q:"La microangiopathie correspond à :", o:[
+          M("L'atteinte des petits vaisseaux, spécifique du diabète",1),
+          M("L'atteinte des grosses artères"),
+          M("Une infection des tissus mous"),
+          M("Une atteinte articulaire")],
+          exp:"Microangiopathie = petits vaisseaux (rétine, rein, nerfs), SPÉCIFIQUE du diabète."},
+        {type:"qcm", q:"La macroangiopathie correspond à :", o:[
+          M("L'atteinte des gros vaisseaux : coronaires, TSA, membres inférieurs",1),
+          M("L'atteinte de la rétine"), M("L'atteinte des nerfs périphériques"), M("L'atteinte des reins")],
+          exp:"Macroangiopathie = gros vaisseaux (coronaires, TSA, membres inférieurs). Aggravée par le diabète."},
+        {type:"qcm", q:"La rétinopathie diabétique est :", o:[
+          M("La 1re cause de cécité avant 50 ans en France",1),
+          M("Une complication exceptionnelle"),
+          M("Sans rapport avec l'équilibre glycémique"),
+          M("Toujours réversible spontanément")],
+          exp:"La rétinopathie diabétique est la 1re cause de cécité avant 50 ans en France."},
+        {type:"qcm", q:"Comment dépiste-t-on la néphropathie diabétique ?", o:[
+          M("Par la recherche annuelle d'albuminurie",1),
+          M("Par un fond d'œil"), M("Par un ECG"), M("Par un monofilament")],
+          exp:"Dépistage annuel de la néphropathie : albuminurie (+ créatininémie / DFG)."},
+        {type:"qcm", q:"Avec quels outils dépiste-t-on la neuropathie périphérique ?", o:[
+          M("Le monofilament, le diapason et le questionnaire DN4",1),
+          M("Le fond d'œil et la rétinographie"),
+          M("L'ECG et l'épreuve d'effort"),
+          M("La microalbuminurie")],
+          exp:"Dépistage de la neuropathie : monofilament 10 g, diapason, questionnaire DN4."},
+        {type:"qcm", q:"Comment se présente typiquement la polyneuropathie diabétique ?", o:[
+          M("Bilatérale, symétrique, « en chaussette », douleurs paroxystiques nocturnes",1),
+          M("Unilatérale et brutale"), M("Limitée au visage"), M("Sans aucun symptôme jamais")],
+          exp:"Polyneuropathie : bilatérale, symétrique, « en chaussette », douleurs nocturnes, abolition des réflexes achilléens."},
+        {type:"qcm", q:"Sur quel terrain survient le pied diabétique, et quelle est sa particularité ?", o:[
+          M("Sur un terrain de neuropathie avec déformations ; les lésions sont INDOLORES",1),
+          M("Uniquement chez les sujets minces, lésions très douloureuses"),
+          M("Sur un terrain infectieux pur sans neuropathie"),
+          M("Chez les patients sans aucun facteur de risque")],
+          exp:"Le pied diabétique survient sur neuropathie + déformations créant des zones d'appui anormal, INDOLORES."},
+        {type:"qcm", q:"Quelle mesure est INDISPENSABLE dans le traitement du pied diabétique ?", o:[
+          M("La décharge absolue",1),
+          M("La marche intensive"), M("Les bains chauds prolongés"), M("Le port de chaussures serrées")],
+          exp:"La décharge absolue est indispensable + éducation et antibiothérapie si infection."},
+        {type:"qcm", q:"Comment définit-on l'hypoglycémie ?", o:[
+          M("Glycémie < 0,7 g/L + symptômes",1),
+          M("Glycémie > 2 g/L"), M("HbA1c > 6,5 %"), M("Glycémie à jeun à 1 g/L")],
+          exp:"Hypoglycémie : glycémie < 0,7 g/L + symptômes, sous insuline ou insulino-sécréteurs (sulfamides, glinides)."},
+        {type:"qcm", q:"Quels sont les signes neuro-végétatifs (précoces) de l'hypoglycémie ?", o:[
+          M("Palpitations",1), M("Tremblements",1), M("Sueurs et pâleur",1), M("Convulsions et coma")],
+          exp:"Signes précoces : palpitations, tremblements, sueurs, pâleur, fringale. (Convulsions/coma = tardifs et graves.)"},
+        {type:"qcm", q:"Comment réaliser le resucrage d'un patient CONSCIENT en hypoglycémie ?", o:[
+          M("≈ 15 g de sucres rapides, puis contrôle glycémique après 15 min",1),
+          M("Injection d'insuline rapide"), M("Perfusion de potassium"), M("Aucun traitement, attendre")],
+          exp:"Patient conscient : ≈ 15 g de sucres rapides, contrôle après 15 min, puis sucres lents si à distance d'un repas."},
+        {type:"qcm", q:"Que faire en cas d'hypoglycémie avec impossibilité d'avaler (coma) ?", o:[
+          M("Injecter du GLUCAGON ou par voie intranasale",1),
+          M("Donner du sucre par la bouche"), M("Injecter de l'insuline"), M("Faire boire de l'eau")],
+          exp:"Si impossibilité d'avaler : glucagon SC/IM/IV (Glucagen®) ou intranasal (Baqsimi®)."},
+        {type:"qcm", q:"Quels signes cliniques évoquent une acido-cétose ?", o:[
+          M("Dyspnée de Kussmaul",1), M("Haleine acétonique",1),
+          M("Douleurs abdominales et vomissements",1), M("Hypothermie profonde isolée")],
+          exp:"Acido-cétose : dyspnée de Kussmaul, haleine acétonique, douleurs abdominales/vomissements, déshydratation."},
+        {type:"qcm", q:"L'acido-cétose diabétique survient surtout :", o:[
+          M("Dans le DT1 — c'est une URGENCE VITALE",1),
+          M("Uniquement chez la personne âgée DT2"),
+          M("Chez les patients non diabétiques"),
+          M("Uniquement pendant le sommeil")],
+          exp:"Acido-cétose : surtout DT1 (carence profonde en insuline) ; urgence vitale."},
+        {type:"qcm", q:"Le coma hyperosmolaire survient surtout :", o:[
+          M("Chez le sujet âgé, DT2 méconnu/sous-traité, avec déshydratation MAJEURE",1),
+          M("Chez le jeune DT1 en acidose"),
+          M("Chez le sujet non diabétique"),
+          M("Après un repas riche en sucres rapides")],
+          exp:"Coma hyperosmolaire : sujet âgé, DT2 méconnu/sous-traité, déshydratation majeure, mortalité importante."},
+        {type:"qcm", q:"Qu'est-ce que le diabète gestationnel ?", o:[
+          M("Un diabète découvert durant la grossesse",1),
+          M("Un diabète présent avant la grossesse"),
+          M("Un diabète de type 1 auto-immun"),
+          M("Une hypoglycémie du nourrisson")],
+          exp:"Diabète gestationnel : diabète découvert durant la grossesse (10-15 %), lié à l'insulinorésistance physiologique."},
+        {type:"qcm", q:"Quel est le mécanisme de la macrosomie fœtale ?", o:[
+          M("Glucose maternel → hyperinsulinisme fœtal → bébé gros",1),
+          M("Carence en glucose chez le fœtus"),
+          M("Excès d'insuline maternelle traversant le placenta"),
+          M("Malformation génétique isolée")],
+          exp:"Macrosomie : le glucose maternel passe le placenta → hyperinsulinisme fœtal → bébé > 4000 g → dystocie des épaules."}
+      ]
+    }
+  ]
+},
+/* ====================== NEUROLOGIE ====================== */
+{
+  id:"neuro", nom:"Neurologie", ico:"🧠",
+  desc:"Maladie de Parkinson, SLA (Charcot) et sclérose en plaques.",
+  long:"Processus dégénératifs du système nerveux : maladie de Parkinson, sclérose latérale amyotrophique (SLA) et sclérose en plaques (SEP) — physiopathologie, clinique, diagnostic, traitements et soins infirmiers.",
+  quizzes:[
+    {
+      id:"parkinson", nom:"Maladie de Parkinson",
+      desc:"Dopamine, triade motrice, L-Dopa, surveillance",
+      questions:[
+        {type:"qcm", q:"Quelle est la lésion à l'origine de la maladie de Parkinson ?", o:[
+          M("Dégénérescence des neurones dopaminergiques de la substance noire",1),
+          M("Démyélinisation des nerfs périphériques"),
+          M("Atteinte auto-immune de la myéline du SNC"),
+          M("Dégénérescence des motoneurones de la corne antérieure")],
+          exp:"Parkinson : dégénérescence des neurones dopaminergiques de la substance noire (substantia nigra / locus niger) → déficit en dopamine."},
+        {type:"qcm", q:"Quelle protéine s'accumule dans les corps de Lewy ?", o:[
+          M("L'alpha-synucléine",1), M("La protéine bêta-amyloïde"), M("La protéine Tau"), M("La myéline")],
+          exp:"L'accumulation d'alpha-synucléine forme les corps de Lewy, marqueurs histologiques de la maladie de Parkinson."},
+        {type:"vf", q:"La maladie de Parkinson est la 2e maladie neurodégénérative la plus fréquente après la maladie d'Alzheimer.", a:true,
+          exp:"Vrai. Parkinson est la 2e maladie neurodégénérative après Alzheimer."},
+        {type:"libre", q:"Citez les 3 signes de la triade parkinsonienne motrice.",
+          a:"Akinésie (bradykinésie), rigidité (hypertonie), tremblement de repos",
+          exp:"Triade : akinésie/bradykinésie, rigidité (hypertonie plastique, roue dentée), tremblement de repos."},
+        {type:"qcm", q:"Le tremblement parkinsonien typique est :", o:[
+          M("Un tremblement de REPOS, qui disparaît lors du mouvement volontaire",1),
+          M("Un tremblement d'action qui s'aggrave au mouvement"),
+          M("Un tremblement présent uniquement la nuit"),
+          M("Un tremblement bilatéral et symétrique d'emblée")],
+          exp:"Le tremblement parkinsonien est un tremblement de REPOS, qui disparaît au mouvement, souvent unilatéral au début."},
+        {type:"qcm", q:"Comment débute le plus souvent la maladie de Parkinson ?", o:[
+          M("De façon asymétrique / unilatérale",1),
+          M("Toujours bilatérale et symétrique"),
+          M("Par une atteinte respiratoire"),
+          M("Par des troubles sphinctériens")],
+          exp:"Les symptômes débutent typiquement de façon asymétrique (un hémicorps)."},
+        {type:"qcm", q:"En quoi consiste la rigidité parkinsonienne ?", o:[
+          M("Une hypertonie plastique avec phénomène de la roue dentée",1),
+          M("Une hypotonie globale"),
+          M("Une spasticité avec signe de Babinski"),
+          M("Une paralysie flasque")],
+          exp:"Rigidité = hypertonie plastique (résistance constante), avec phénomène de la roue dentée."},
+        {type:"qcm", q:"Quel est le traitement médicamenteux de référence (1er choix) ?", o:[
+          M("La L-Dopa",1),
+          M("Le Riluzole"),
+          M("Les corticoïdes IV"),
+          M("L'interféron bêta")],
+          exp:"La L-Dopa (lévodopa, précurseur de la dopamine) est le traitement de référence et le plus efficace."},
+        {type:"vf", q:"On ne doit JAMAIS arrêter brutalement le traitement antiparkinsonien.", a:true,
+          exp:"Vrai. L'arrêt brutal expose à une akinésie aiguë / syndrome de sevrage potentiellement grave."},
+        {type:"qcm", q:"Quels effets indésirables sont liés à la L-Dopa au long cours ?", o:[
+          M("Dyskinésies",1),
+          M("Fluctuations motrices",1),
+          M("Nausées",1),
+          M("Agranulocytose")],
+          exp:"L-Dopa au long cours : dyskinésies, fluctuations motrices (on-off), nausées. L'agranulocytose n'est pas un effet de la L-Dopa."},
+        {type:"qcm", q:"Quelle classe de médicaments est contre-indiquée / à éliminer chez le parkinsonien ?", o:[
+          M("Les neuroleptiques",1),
+          M("Les antalgiques de palier 1"),
+          M("Les bicarbonates"),
+          M("Les laxatifs")],
+          exp:"Les neuroleptiques bloquent les récepteurs dopaminergiques et aggravent le syndrome parkinsonien : à éviter."},
+        {type:"qcm", q:"Quel examen permet de confirmer l'atteinte du système dopaminergique ?", o:[
+          M("Le DAT-scan",1),
+          M("L'électroneuromyogramme"),
+          M("La ponction lombaire"),
+          M("Le fond d'œil")],
+          exp:"Le DAT-scan visualise le déficit de transporteurs de la dopamine. Le diagnostic reste avant tout clinique."},
+        {type:"qcm", q:"Parmi ces signes, lesquels sont des signes NON moteurs de Parkinson ?", o:[
+          M("Constipation",1), M("Dépression / troubles du sommeil",1), M("Hypotension orthostatique",1), M("Fasciculations musculaires")],
+          exp:"Signes non moteurs : constipation, dépression, troubles du sommeil, hyposmie, hypotension orthostatique. Les fasciculations évoquent la SLA."},
+        {type:"qcm", q:"Quels signes témoignent de l'atteinte axiale / de la marche ?", o:[
+          M("Marche à petits pas, festination, freezing, instabilité posturale",1),
+          M("Marche fauchante avec steppage"),
+          M("Marche ataxique cérébelleuse pure"),
+          M("Absence de tout trouble de la marche")],
+          exp:"Atteinte axiale : marche à petits pas, festination, enrayage cinétique (freezing), instabilité posturale (chutes)."},
+        {type:"libre", q:"Comment appelle-t-on le visage figé et inexpressif du patient parkinsonien ?",
+          a:"Amimie (ou hypomimie)",
+          exp:"L'amimie / hypomimie est le visage figé, peu expressif. On note aussi micrographie et hypophonie."}
+      ]
+    },
+    {
+      id:"sla", nom:"SLA (maladie de Charcot)",
+      desc:"Motoneurones, déficit moteur pur, Riluzole, VNI",
+      questions:[
+        {type:"qcm", q:"Quels neurones sont atteints dans la SLA ?", o:[
+          M("Les motoneurones central ET périphérique",1),
+          M("Uniquement les nerfs sensitifs"),
+          M("Les neurones dopaminergiques"),
+          M("La myéline du système nerveux central")],
+          exp:"La SLA atteint à la fois le motoneurone central (cortical) et le motoneurone périphérique (corne antérieure de la moelle)."},
+        {type:"vf", q:"La SLA réalise un déficit moteur PUR, sans troubles sensitifs ni sphinctériens.", a:true,
+          exp:"Vrai. La SLA donne un déficit moteur pur : pas de trouble sensitif, sphinctérien, ni d'oculomotricité au début ; cognition souvent préservée."},
+        {type:"qcm", q:"Quels signes témoignent de l'atteinte du motoneurone PÉRIPHÉRIQUE ?", o:[
+          M("Amyotrophie, fasciculations, crampes",1),
+          M("Spasticité et réflexes vifs"),
+          M("Signe de Babinski"),
+          M("Tremblement de repos")],
+          exp:"Atteinte périphérique : amyotrophie, fasciculations, crampes, déficit moteur. Atteinte centrale : spasticité, ROT vifs, Babinski."},
+        {type:"qcm", q:"Quels signes témoignent de l'atteinte du motoneurone CENTRAL ?", o:[
+          M("Spasticité, réflexes ostéo-tendineux vifs, signe de Babinski",1),
+          M("Fasciculations et amyotrophie"),
+          M("Anesthésie en chaussette"),
+          M("Incontinence urinaire")],
+          exp:"Atteinte centrale : spasticité, ROT vifs, signe de Babinski."},
+        {type:"qcm", q:"Quel examen est l'examen clé du diagnostic de SLA ?", o:[
+          M("L'électroneuromyogramme",1),
+          M("Le DAT-scan"),
+          M("La ponction lombaire avec bandes oligoclonales"),
+          M("Le fond d'œil")],
+          exp:"L'ENMG met en évidence l'atteinte du motoneurone périphérique (dénervation) et oriente le diagnostic."},
+        {type:"qcm", q:"Que caractérise une forme BULBAIRE de SLA ?", o:[
+          M("Des troubles de la déglutition et une dysarthrie",1),
+          M("Une atteinte des membres inférieurs uniquement"),
+          M("Une névrite optique"),
+          M("Une atteinte sensitive")],
+          exp:"La forme bulbaire atteint la déglutition (fausses routes) et la parole (dysarthrie). La forme spinale touche les membres."},
+        {type:"qcm", q:"Quel est le SEUL médicament spécifique de la SLA ?", o:[
+          M("Le Riluzole",1),
+          M("La L-Dopa"),
+          M("L'interféron bêta"),
+          M("Les corticoïdes")],
+          exp:"Le Riluzole est le seul traitement spécifique : il ralentit l'évolution et prolonge la survie d'environ 3 mois."},
+        {type:"vf", q:"Le Riluzole guérit la SLA.", a:false,
+          exp:"Faux. Le Riluzole ne guérit pas : il ralentit l'évolution et prolonge la survie (~+3 mois). La SLA reste de pronostic sombre."},
+        {type:"qcm", q:"Quelle est la principale cause de décès dans la SLA ?", o:[
+          M("L'atteinte respiratoire",1),
+          M("Un AVC"),
+          M("Une infection urinaire"),
+          M("Une hémorragie digestive")],
+          exp:"L'évolution se fait vers l'atteinte des muscles respiratoires → insuffisance respiratoire, principale cause de décès."},
+        {type:"qcm", q:"Quand propose-t-on la ventilation non invasive (VNI) dans la SLA ?", o:[
+          M("Quand la capacité vitale forcée chute ou en cas de troubles respiratoires",1),
+          M("Dès le diagnostic systématiquement"),
+          M("Jamais"),
+          M("Uniquement en fin de vie")],
+          exp:"La VNI est proposée quand la CVF diminue (< 80 %) / signes d'hypoventilation, pour soulager le travail respiratoire."},
+        {type:"qcm", q:"À quel moment pose-t-on une gastrostomie en cas de troubles de déglutition ?", o:[
+          M("Tant que la CVF reste > 50 %",1),
+          M("Toujours en toute fin de vie"),
+          M("Uniquement si la CVF est < 30 %"),
+          M("Jamais en cas de SLA")],
+          exp:"La gastrostomie (alimentation entérale) est posée tant que la CVF est > 50 %, avant que le risque anesthésique/respiratoire ne soit trop élevé."},
+        {type:"libre", q:"Quel document permet au patient SLA d'exprimer ses volontés pour les soins futurs ?",
+          a:"Les directives anticipées",
+          exp:"Les directives anticipées (+ personne de confiance) permettent au patient d'exprimer ses volontés, essentielles dans l'accompagnement de la SLA."}
+      ]
+    },
+    {
+      id:"sep", nom:"Sclérose en plaques (SEP)",
+      desc:"Démyélinisation auto-immune, poussées, traitements",
+      questions:[
+        {type:"qcm", q:"Quelle est la nature de la sclérose en plaques ?", o:[
+          M("Maladie inflammatoire démyélinisante auto-immune du système nerveux central",1),
+          M("Maladie dégénérative des motoneurones"),
+          M("Atteinte dopaminergique"),
+          M("Neuropathie périphérique métabolique")],
+          exp:"La SEP est une maladie inflammatoire, démyélinisante et auto-immune du SNC : destruction de la myéline → plaques."},
+        {type:"qcm", q:"Quel est le terrain typique de la SEP ?", o:[
+          M("Femme jeune, 20-40 ans",1),
+          M("Homme âgé de plus de 70 ans"),
+          M("Nourrisson"),
+          M("Indifféremment, sans prédominance")],
+          exp:"La SEP touche surtout la femme jeune (20-40 ans), avec un sex-ratio d'environ 3 femmes pour 1 homme."},
+        {type:"qcm", q:"Quelle est la forme la plus fréquente au début de la maladie ?", o:[
+          M("La forme rémittente-récurrente, ≈ 85 % des cas",1),
+          M("La forme primaire progressive d'emblée"),
+          M("La forme bulbaire"),
+          M("La forme spinale pure")],
+          exp:"La forme rémittente-récurrente (RR) représente ≈ 85 % des SEP au début (poussées puis récupération)."},
+        {type:"libre", q:"Comment définit-on une poussée de SEP ?",
+          a:"Apparition / aggravation de symptômes > 24h, à distance d'un épisode fébrile",
+          exp:"Poussée = apparition ou aggravation de symptômes neurologiques durant plus de 24 h, à distance de toute fièvre."},
+        {type:"qcm", q:"Le signe de Lhermitte correspond à :", o:[
+          M("Une sensation de décharge électrique le long du rachis lors de la flexion du cou",1),
+          M("Une baisse d'acuité visuelle"),
+          M("Une aggravation des symptômes à la chaleur"),
+          M("Des fasciculations musculaires")],
+          exp:"Signe de Lhermitte : décharge électrique le long de la colonne lors de la flexion du cou (atteinte des cordons postérieurs)."},
+        {type:"qcm", q:"Que désigne la NORB, fréquent mode de révélation de la SEP ?", o:[
+          M("Une névrite optique rétro-bulbaire",1),
+          M("Une neuropathie optique bilatérale brutale"),
+          M("Une atteinte du nerf récurrent"),
+          M("Une rétinopathie")],
+          exp:"La NORB (névrite optique rétro-bulbaire) : baisse d'acuité visuelle unilatérale + douleur à la mobilisation de l'œil. Mode de révélation fréquent."},
+        {type:"qcm", q:"Le phénomène d'Uhthoff correspond à :", o:[
+          M("Une aggravation transitoire des symptômes avec la chaleur / l'effort",1),
+          M("Une décharge électrique à la flexion du cou"),
+          M("Une amélioration au froid définitive"),
+          M("Une atteinte sphinctérienne")],
+          exp:"Phénomène d'Uhthoff : aggravation transitoire des symptômes lors d'une élévation de température (chaleur, effort, fièvre)."},
+        {type:"qcm", q:"Sur quel principe repose le diagnostic de SEP (critères de McDonald) ?", o:[
+          M("La dissémination spatiale ET temporelle des lésions",1),
+          M("Une seule lésion isolée"),
+          M("L'atteinte purement motrice"),
+          M("La présence de fasciculations")],
+          exp:"Diagnostic (critères de McDonald) : dissémination dans l'espace (plusieurs zones) et dans le temps (plusieurs épisodes)."},
+        {type:"qcm", q:"Quels examens contribuent au diagnostic de SEP ?", o:[
+          M("IRM cérébrale/médullaire",1),
+          M("Ponction lombaire",1),
+          M("ENMG"),
+          M("DAT-scan")],
+          exp:"IRM (plaques de démyélinisation) + ponction lombaire (bandes oligoclonales du LCR). L'ENMG et le DAT-scan ne sont pas pertinents ici."},
+        {type:"qcm", q:"Quel est le traitement de la POUSSÉE de SEP ?", o:[
+          M("Corticoïdes IV à forte dose",1),
+          M("Interféron bêta"),
+          M("Riluzole"),
+          M("L-Dopa")],
+          exp:"La poussée se traite par bolus de corticoïdes IV (méthylprednisolone / Solumédrol) : accélère la récupération."},
+        {type:"qcm", q:"Quels traitements correspondent au traitement de FOND de la SEP ?", o:[
+          M("Interféron bêta",1),
+          M("Acétate de glatiramère",1),
+          M("Immunomodulateurs / immunosuppresseurs",1),
+          M("Corticoïdes IV en bolus")],
+          exp:"Traitement de fond : interféron bêta, acétate de glatiramère, autres immunomodulateurs — pour espacer les poussées. Les corticoïdes IV traitent la poussée, pas le fond."},
+        {type:"vf", q:"La fatigue est un symptôme fréquent et invalidant de la SEP.", a:true,
+          exp:"Vrai. La fatigue est très fréquente, souvent au premier plan, avec des troubles moteurs, sensitifs, visuels, cérébelleux et sphinctériens."}
+      ]
+    }
+  ]
+},
+/* ====================== THYROÏDE ====================== */
+{
+  id:"thyroide", nom:"Thyroïde", ico:"🦋",
+  desc:"Anatomie, axe hormonal, hypo/hyperthyroïdie, nodules et cancers.",
+  long:"Anatomie et physiologie de la glande thyroïde, axe TRH-TSH-T3/T4, hypothyroïdie (Hashimoto), hyperthyroïdie (Basedow), traitements et surveillance, nodules et cancers thyroïdiens.",
+  quizzes:[
+    {
+      id:"thyro-anat", nom:"Anatomie & physiologie",
+      desc:"Situation, hormones, iode, axe hypothalamo-hypophysaire",
+      questions:[
+        {type:"qcm", q:"Où se situe la glande thyroïde ?", o:[
+          M("À la face ANTÉRIEURE du cou, en avant de la trachée, sous le larynx",1),
+          M("En arrière de la trachée, dans le médiastin postérieur"),
+          M("Dans la cavité thoracique"),
+          M("Sous la langue")],
+          exp:"La thyroïde est située à la face antérieure du cou, en avant de la trachée, sous le larynx."},
+        {type:"qcm", q:"Quelle est la forme / structure de la thyroïde ?", o:[
+          M("2 lobes réunis par un isthme",1),
+          M("Un seul lobe unique"),
+          M("4 lobes symétriques"),
+          M("Une structure tubulaire")],
+          exp:"La thyroïde comprend 2 lobes (droit et gauche) réunis par un isthme, lui donnant une forme de papillon."},
+        {type:"qcm", q:"Combien de glandes parathyroïdes se trouvent en arrière de la thyroïde, et quel est leur rôle ?", o:[
+          M("4 parathyroïdes ; régulation du calcium",1),
+          M("2 parathyroïdes ; régulation du glucose"),
+          M("4 parathyroïdes ; production d'insuline"),
+          M("1 parathyroïde ; régulation du sodium")],
+          exp:"4 glandes parathyroïdes en arrière de la thyroïde sécrètent la PTH (parathormone) qui régule la calcémie."},
+        {type:"qcm", q:"Quel nerf, en rapport étroit avec la thyroïde, peut être lésé lors d'une chirurgie ?", o:[
+          M("Le nerf récurrent — risque de dysphonie",1),
+          M("Le nerf optique"),
+          M("Le nerf vague abdominal"),
+          M("Le nerf phrénique")],
+          exp:"Le nerf récurrent (laryngé inférieur) chemine près de la thyroïde : sa lésion en chirurgie entraîne une dysphonie (voix bitonale)."},
+        {type:"libre", q:"Citez les 2 principales hormones thyroïdiennes (avec leur abréviation).",
+          a:"T3 (triiodothyronine) et T4 (thyroxine)",
+          exp:"Les hormones thyroïdiennes sont la T3 (triiodothyronine) et la T4 (thyroxine). La calcitonine est aussi sécrétée (cellules C)."},
+        {type:"qcm", q:"Quel rôle joue la calcitonine, sécrétée par les cellules C (parafolliculaires) ?", o:[
+          M("Elle fait BAISSER la calcémie",1),
+          M("Elle fait monter la glycémie"),
+          M("Elle augmente la calcémie"),
+          M("Elle régule le sodium")],
+          exp:"La calcitonine (cellules C parafolliculaires) fait baisser la calcémie."},
+        {type:"qcm", q:"Quel élément est indispensable à la synthèse des hormones T3 et T4 ?", o:[
+          M("L'iode",1), M("Le calcium"), M("Le fer"), M("Le potassium")],
+          exp:"L'iode est indispensable à la synthèse des hormones thyroïdiennes T3 et T4."},
+        {type:"qcm", q:"Quel est le bon enchaînement de l'axe de régulation thyroïdienne ?", o:[
+          M("Hypothalamus → hypophyse → thyroïde",1),
+          M("Hypophyse → thyroïde → hypothalamus"),
+          M("Thyroïde → hypophyse → hypothalamus"),
+          M("Surrénales → thyroïde → hypophyse")],
+          exp:"Axe : hypothalamus (TRH) → hypophyse antérieure (TSH) → thyroïde (T3/T4), avec rétrocontrôle négatif sur l'hypophyse."},
+        {type:"vf", q:"La TSH est le meilleur marqueur biologique de la fonction thyroïdienne.", a:true,
+          exp:"Vrai. La TSH (sécrétée par l'hypophyse) est le marqueur le plus sensible de la fonction thyroïdienne."},
+        {type:"qcm", q:"Quels sont des rôles des hormones thyroïdiennes ?", o:[
+          M("Régulation du métabolisme et thermogenèse",1),
+          M("Croissance et développement du SNC",1),
+          M("Stimulation de l'activité cardiaque",1),
+          M("Production de bile")],
+          exp:"Les hormones thyroïdiennes régulent le métabolisme, la thermogenèse, la croissance, le développement cérébral et stimulent le cœur."},
+        {type:"vf", q:"Un rétrocontrôle négatif des hormones T3/T4 freine la sécrétion de TSH par l'hypophyse.", a:true,
+          exp:"Vrai. Quand T3/T4 augmentent, elles freinent (rétrocontrôle négatif) la sécrétion de TRH et de TSH."}
+      ]
+    },
+    {
+      id:"thyro-patho", nom:"Hypo/hyperthyroïdie, nodules & cancers",
+      desc:"Hashimoto, Basedow, Lévothyrox, ATS, nodules, cancers",
+      questions:[
+        {type:"qcm", q:"Dans l'HYPOthyroïdie périphérique, quel est le profil biologique ?", o:[
+          M("TSH élevée, T4 basse",1),
+          M("TSH basse, T4 élevée"),
+          M("TSH et T4 toutes deux basses"),
+          M("TSH et T4 normales")],
+          exp:"Hypothyroïdie : la thyroïde produit peu de T4 → l'hypophyse augmente la TSH. Donc TSH élevée, T4 basse."},
+        {type:"qcm", q:"Quels signes évoquent une HYPOthyroïdie ?", o:[
+          M("Asthénie, frilosité, prise de poids",1),
+          M("Bradycardie, constipation",1),
+          M("Ralentissement, peau sèche",1),
+          M("Tachycardie et amaigrissement")],
+          exp:"Hypothyroïdie (ralentissement général) : asthénie, frilosité, prise de poids, bradycardie, constipation, peau sèche. La tachycardie/amaigrissement = hyperthyroïdie."},
+        {type:"qcm", q:"Quelle est une cause fréquente d'hypothyroïdie auto-immune, et quel anticorps la signe ?", o:[
+          M("La thyroïdite de Hashimoto — anticorps anti-TPO positifs",1),
+          M("La maladie de Basedow — TRAK positifs"),
+          M("Le cancer papillaire"),
+          M("Le nodule chaud")],
+          exp:"La thyroïdite de Hashimoto est une cause fréquente d'hypothyroïdie ; elle s'accompagne d'anticorps anti-TPO positifs."},
+        {type:"qcm", q:"Dans l'HYPERthyroïdie, quel est le profil biologique ?", o:[
+          M("TSH basse, T4 élevée",1),
+          M("TSH élevée, T4 basse"),
+          M("TSH élevée, T4 élevée"),
+          M("TSH normale, T4 basse")],
+          exp:"Hyperthyroïdie : excès de T4 → freinage de la TSH. Donc TSH basse, T4 élevée."},
+        {type:"qcm", q:"Quels signes évoquent une HYPERthyroïdie ?", o:[
+          M("Amaigrissement malgré appétit conservé",1),
+          M("Tachycardie, nervosité",1),
+          M("Thermophobie, sueurs, diarrhée",1),
+          M("Frilosité et prise de poids")],
+          exp:"Hyperthyroïdie (emballement) : amaigrissement, tachycardie, nervosité, thermophobie, tremblements, diarrhée. La frilosité/prise de poids = hypothyroïdie."},
+        {type:"qcm", q:"Qu'est-ce que la maladie de Basedow ?", o:[
+          M("Une hyperthyroïdie auto-immune avec anticorps anti-récepteur de la TSH",1),
+          M("Une hypothyroïdie par carence en iode"),
+          M("Un cancer médullaire"),
+          M("Une thyroïdite virale bénigne")],
+          exp:"La maladie de Basedow est une hyperthyroïdie auto-immune liée aux anticorps anti-récepteur TSH (TRAK), qui stimulent la thyroïde."},
+        {type:"libre", q:"Citez la triade caractéristique de la maladie de Basedow.",
+          a:"Hyperthyroïdie + goitre (diffus) + orbitopathie (exophtalmie)",
+          exp:"Triade de Basedow : hyperthyroïdie + goitre diffus homogène + orbitopathie / exophtalmie."},
+        {type:"qcm", q:"Comment se prend le Lévothyrox® (lévothyroxine) ?", o:[
+          M("Le matin à jeun",1),
+          M("Le soir au coucher avec un repas"),
+          M("Pendant les repas du midi"),
+          M("Uniquement en cas de symptômes")],
+          exp:"Le Lévothyrox se prend le matin à jeun, à distance des repas, pour une absorption optimale. Surveillance par la TSH."},
+        {type:"qcm", q:"Quel effet indésirable GRAVE faut-il surveiller sous antithyroïdiens de synthèse (ATS) ?", o:[
+          M("L'agranulocytose",1),
+          M("L'acidose lactique"),
+          M("L'hypoglycémie"),
+          M("La lipodystrophie")],
+          exp:"Les ATS exposent au risque d'agranulocytose : devant fièvre/angine, arrêter le traitement et faire une NFS en urgence."},
+        {type:"qcm", q:"À la scintigraphie, quel type de nodule est le plus suspect de malignité ?", o:[
+          M("Le nodule FROID",1),
+          M("Le nodule chaud"),
+          M("Tout nodule de petite taille"),
+          M("Aucun nodule n'est suspect")],
+          exp:"Le nodule froid (hypofixant) est suspect de cancer. Le nodule chaud (hyperfixant) est généralement toxique mais rarement malin."},
+        {type:"qcm", q:"Quel est le cancer thyroïdien le PLUS FRÉQUENT (et de bon pronostic) ?", o:[
+          M("Le carcinome papillaire",1),
+          M("Le carcinome anaplasique"),
+          M("Le carcinome médullaire"),
+          M("Le lymphome thyroïdien")],
+          exp:"Le carcinome papillaire est le cancer thyroïdien le plus fréquent et de bon pronostic. L'anaplasique est rare mais très grave."},
+        {type:"vf", q:"Un goitre désigne une augmentation du volume de la glande thyroïde.", a:true,
+          exp:"Vrai. Le goitre est une augmentation de volume de la thyroïde (diffuse ou nodulaire)."}
+      ]
+    }
+  ]
+},
+/* ====================== FOIE (cirrhose + ponction d'ascite) ====================== */
+{
+  id:"foie", nom:"Foie — Cirrhose & ponction d'ascite", ico:"🫀",
+  desc:"Anatomie hépatique, cirrhose, complications et ponction d'ascite.",
+  long:"Anatomie et fonctions du foie, cirrhose (définition, causes, Child-Pugh), complications (hémorragie, ascite, encéphalopathie, CHC) et soins infirmiers autour de la ponction d'ascite (paracentèse).",
+  quizzes:[
+    {
+      id:"foie-anat", nom:"Anatomie, fonctions & cirrhose",
+      desc:"Vascularisation, fonctions hépatiques, définition de la cirrhose",
+      questions:[
+        {type:"qcm", q:"Où est situé le foie ?", o:[
+          M("Dans l'hypochondre droit, sous le diaphragme",1),
+          M("Dans l'hypochondre gauche"),
+          M("Dans le pelvis"),
+          M("Dans le médiastin")],
+          exp:"Le foie, organe le plus volumineux, occupe l'hypochondre droit, sous la coupole diaphragmatique."},
+        {type:"qcm", q:"Comment se répartit la double vascularisation du foie ?", o:[
+          M("Veine porte ≈ 2/3 + artère hépatique ≈ 1/3",1),
+          M("Artère hépatique 2/3 + veine porte 1/3"),
+          M("Uniquement par la veine porte"),
+          M("Uniquement par l'artère hépatique")],
+          exp:"Le foie reçoit ≈ 2/3 de son sang par la veine porte (sang digestif nutritif) et ≈ 1/3 par l'artère hépatique (sang oxygéné)."},
+        {type:"qcm", q:"Quelle est l'unité fonctionnelle du foie ?", o:[
+          M("Le lobule hépatique",1), M("Le néphron"), M("L'alvéole"), M("L'acinus pancréatique")],
+          exp:"Le lobule hépatique est l'unité fonctionnelle du foie."},
+        {type:"qcm", q:"Quelles cellules, activées, sont responsables de la fibrose hépatique ?", o:[
+          M("Les cellules étoilées",1),
+          M("Les cellules de Kupffer"),
+          M("Les hépatocytes sains"),
+          M("Les cellules bêta")],
+          exp:"Les cellules étoilées (de Ito) stockent la vitamine A ; activées, elles produisent du collagène → fibrose. Les cellules de Kupffer sont des macrophages."},
+        {type:"qcm", q:"Quelles sont les grandes fonctions du foie ?", o:[
+          M("Épuration / détoxification",1),
+          M("Synthèse",1),
+          M("Stockage",1),
+          M("Production d'insuline")],
+          exp:"Le foie assure l'épuration (bilirubine, ammoniac), la synthèse (albumine, facteurs de coagulation, bile) et le stockage (glycogène, vitamines, fer). L'insuline est pancréatique."},
+        {type:"qcm", q:"Quel facteur de coagulation est un bon marqueur de la fonction de SYNTHÈSE hépatique ?", o:[
+          M("Le facteur V",1), M("Le facteur VIII"), M("Le fibrinogène seul"), M("Les D-dimères")],
+          exp:"Le facteur V, non dépendant de la vitamine K, reflète directement la fonction de synthèse hépatique."},
+        {type:"qcm", q:"Quel composé toxique le foie élimine-t-il via le cycle de l'urée ?", o:[
+          M("L'ammoniac",1), M("Le glucose"), M("Le sodium"), M("Le calcium")],
+          exp:"Le foie transforme l'ammoniac (issu des protéines) en urée éliminée par le rein (cycle de l'urée)."},
+        {type:"libre", q:"Donnez la définition histologique de la cirrhose.",
+          a:"Fibrose diffuse + désorganisation de l'architecture + nodules de régénération (irréversible)",
+          exp:"Cirrhose = fibrose diffuse + désorganisation de l'architecture hépatique + nodules de régénération. C'est irréversible."},
+        {type:"vf", q:"La cirrhose est une lésion irréversible.", a:true,
+          exp:"Vrai. La cirrhose est irréversible ; la prise en charge vise à éviter les complications et traiter la cause."},
+        {type:"qcm", q:"Quelle est la première cause de cirrhose en France ?", o:[
+          M("L'alcool",1),
+          M("Les hépatites virales A"),
+          M("Une carence en vitamine D"),
+          M("Le diabète gestationnel")],
+          exp:"L'alcool est la 1re cause (50-75 %). Autres causes : hépatites B/C, stéatohépatite non alcoolique (NASH)."},
+        {type:"qcm", q:"À quoi sert la classification de Child-Pugh ?", o:[
+          M("À évaluer la gravité / le pronostic de la cirrhose",1),
+          M("À mesurer la glycémie"),
+          M("À classer les cancers du sein"),
+          M("À évaluer la fonction rénale")],
+          exp:"Le score de Child-Pugh (bilirubine, albumine, TP, ascite, encéphalopathie) classe la gravité de la cirrhose en stades A, B, C."},
+        {type:"qcm", q:"Quelles anomalies biologiques retrouve-t-on dans la cirrhose évoluée ?", o:[
+          M("TP et facteur V abaissés",1),
+          M("Albumine basse",1),
+          M("Thrombopénie possible",1),
+          M("Hyperalbuminémie franche")],
+          exp:"Cirrhose : baisse du TP et du facteur V (synthèse), hypoalbuminémie, thrombopénie (hypersplénisme). Pas d'hyperalbuminémie."}
+      ]
+    },
+    {
+      id:"foie-compli", nom:"Complications de la cirrhose",
+      desc:"Hémorragie, ascite, encéphalopathie, CHC",
+      questions:[
+        {type:"qcm", q:"L'hypertension portale favorise la formation de :", o:[
+          M("Varices œsophagiennes",1),
+          M("Calculs rénaux"),
+          M("Nodules thyroïdiens"),
+          M("Anévrismes cérébraux")],
+          exp:"L'hypertension portale entraîne le développement de varices œsophagiennes, dont la rupture provoque une hémorragie digestive."},
+        {type:"qcm", q:"Quel est le signe d'une hémorragie digestive par rupture de varices œsophagiennes ?", o:[
+          M("Hématémèse et/ou méléna — urgence vitale",1),
+          M("Toux sèche"),
+          M("Constipation isolée"),
+          M("Polyurie")],
+          exp:"Rupture de VO : hématémèse (vomissement de sang) et/ou méléna (selles noires). C'est une urgence vitale."},
+        {type:"qcm", q:"Qu'est-ce que l'ascite ?", o:[
+          M("Un épanchement liquidien dans la cavité péritonéale",1),
+          M("Un épanchement pleural"),
+          M("Un œdème cérébral"),
+          M("Une rétention urinaire")],
+          exp:"L'ascite est un épanchement de liquide dans la cavité péritonéale, fréquent dans la cirrhose décompensée."},
+        {type:"qcm", q:"Quel seuil de polynucléaires neutrophiles (PNN) dans le liquide d'ascite signe une infection (PBS) ?", o:[
+          M("PNN > 250 /mm³",1), M("PNN > 25 /mm³"), M("PNN > 2500 /mm³"), M("PNN > 10 /mm³")],
+          exp:"Une infection du liquide d'ascite (péritonite bactérienne spontanée) est définie par des PNN > 250/mm³."},
+        {type:"qcm", q:"Quel antibiotique est utilisé en première intention dans la péritonite bactérienne spontanée (PBS) ?", o:[
+          M("Le céfotaxime",1), M("Le métronidazole seul"), M("La pénicilline V orale"), M("Aucun, surveillance simple")],
+          exp:"La PBS (PNN > 250) se traite par céfotaxime (céphalosporine de 3e génération)."},
+        {type:"qcm", q:"Quel composé s'accumule dans l'encéphalopathie hépatique ?", o:[
+          M("L'ammoniac",1),
+          M("Le glucose"),
+          M("Le calcium"),
+          M("Le potassium")],
+          exp:"L'encéphalopathie hépatique est liée à l'accumulation d'ammoniac (non détoxifié par le foie) → troubles de conscience."},
+        {type:"qcm", q:"Quel signe neurologique évoque une encéphalopathie hépatique ?", o:[
+          M("L'astérixis",1),
+          M("Le signe de Lhermitte"),
+          M("L'exophtalmie"),
+          M("Le signe de Babinski isolé")],
+          exp:"L'astérixis (flapping tremor : tremblement à secousses des mains en extension) est caractéristique de l'encéphalopathie hépatique."},
+        {type:"qcm", q:"Quel traitement est utilisé dans l'encéphalopathie hépatique pour diminuer l'ammoniac ?", o:[
+          M("Le lactulose",1), M("L'insuline"), M("Les corticoïdes IV"), M("Le Riluzole")],
+          exp:"Le lactulose (laxatif osmotique) diminue la production et l'absorption intestinale d'ammoniac."},
+        {type:"vf", q:"Le syndrome hépato-rénal est une insuffisance rénale fonctionnelle compliquant la cirrhose.", a:true,
+          exp:"Vrai. Le syndrome hépato-rénal est une insuffisance rénale fonctionnelle survenant sur cirrhose grave, de mauvais pronostic."},
+        {type:"qcm", q:"Quelle est la principale complication tumorale de la cirrhose ?", o:[
+          M("Le carcinome hépatocellulaire",1),
+          M("Le cancer du côlon"),
+          M("Le cancer thyroïdien"),
+          M("Le cancer du sein")],
+          exp:"Le carcinome hépatocellulaire (CHC) est la complication tumorale majeure de la cirrhose."},
+        {type:"qcm", q:"Comment dépiste-t-on le carcinome hépatocellulaire chez un patient cirrhotique ?", o:[
+          M("Échographie hépatique tous les 6 mois",1),
+          M("Coloscopie annuelle"),
+          M("Fond d'œil semestriel"),
+          M("ECG mensuel")],
+          exp:"Dépistage du CHC : échographie hépatique tous les 6 mois, associée au dosage de l'alpha-fœtoprotéine (AFP)."},
+        {type:"libre", q:"Quels critères définissent l'éligibilité d'un CHC à la transplantation hépatique ?",
+          a:"Les critères de Milan",
+          exp:"Les critères de Milan (taille et nombre de nodules) définissent l'éligibilité d'un CHC à la transplantation hépatique."}
+      ]
+    },
+    {
+      id:"foie-ponction", nom:"Ponction d'ascite & soins IDE",
+      desc:"Paracentèse, point de ponction, asepsie, surveillance",
+      questions:[
+        {type:"qcm", q:"La ponction d'ascite (paracentèse) est un geste :", o:[
+          M("Médical",1), M("Infirmier sur rôle propre"), M("Aide-soignant"), M("Réalisable sans prescription")],
+          exp:"La ponction d'ascite est un geste MÉDICAL ; l'IDE prépare le matériel, installe le patient, assiste et surveille."},
+        {type:"qcm", q:"Où se situe le point de ponction d'ascite ?", o:[
+          M("Du côté GAUCHE, à la jonction tiers externe / deux tiers internes de la ligne ombilic – EIAS gauche",1),
+          M("Du côté droit, sous les côtes"),
+          M("Au niveau de l'ombilic"),
+          M("En sus-pubien sur la vessie")],
+          exp:"Point de ponction : côté gauche, à l'union du tiers externe et des deux tiers internes d'une ligne reliant l'ombilic à l'épine iliaque antéro-supérieure (EIAS) gauche."},
+        {type:"qcm", q:"Dans quelle position installe-t-on le patient pour une ponction d'ascite ?", o:[
+          M("Décubitus dorsal légèrement incliné sur le côté gauche",1),
+          M("Debout penché en avant"),
+          M("Décubitus ventral strict"),
+          M("Position assise jambes pendantes")],
+          exp:"Le patient est en décubitus dorsal légèrement incliné (~30°) sur le côté gauche, pour faire affluer le liquide vers le point de ponction."},
+        {type:"qcm", q:"Quelle est la différence entre ponction exploratrice et évacuatrice ?", o:[
+          M("Exploratrice = diagnostic ; évacuatrice = thérapeutique",1),
+          M("Exploratrice = thérapeutique ; évacuatrice = diagnostic"),
+          M("Aucune différence"),
+          M("L'exploratrice retire plusieurs litres")],
+          exp:"La ponction exploratrice prélève un échantillon pour analyse (diagnostic) ; la ponction évacuatrice retire un grand volume pour soulager le patient (thérapeutique)."},
+        {type:"qcm", q:"Quels sont les 4 temps de l'asepsie cutanée avant la ponction ?", o:[
+          M("Détersion, rinçage, séchage, désinfection",1),
+          M("Désinfection, détersion, rinçage, séchage"),
+          M("Rinçage, séchage, détersion, désinfection"),
+          M("Séchage, détersion, désinfection, rinçage")],
+          exp:"Antisepsie en 4 temps : détersion (savon antiseptique), rinçage, séchage, puis désinfection (antiseptique alcoolique)."},
+        {type:"qcm", q:"Quand compense-t-on les pertes par de l'albumine après une ponction évacuatrice ?", o:[
+          M("Lorsque le volume évacué est important",1),
+          M("Jamais"),
+          M("Systématiquement dès 100 mL"),
+          M("Uniquement si le patient est diabétique")],
+          exp:"Au-delà de ~5 L évacués, on compense par de l'albumine pour prévenir la dysfonction circulatoire post-ponction (hypovolémie)."},
+        {type:"vf", q:"Une analyse du liquide montrant des PNN > 250/mm³ impose un traitement par céfotaxime.", a:true,
+          exp:"Vrai. PNN > 250/mm³ = infection du liquide d'ascite (PBS) → antibiothérapie par céfotaxime."},
+        {type:"qcm", q:"Quels éléments de surveillance l'IDE assure-t-elle pour suivre l'ascite ?", o:[
+          M("Pesée régulière",1),
+          M("Mesure du périmètre abdominal",1),
+          M("Surveillance des constantes et du point de ponction",1),
+          M("Glycémie capillaire horaire systématique")],
+          exp:"Surveillance : pesée ~3×/semaine, périmètre abdominal, constantes, état du point de ponction (fuite, saignement, infection)."},
+        {type:"qcm", q:"Quels sont les risques / complications de la ponction d'ascite ?", o:[
+          M("Hémorragie",1), M("Infection",1), M("Brèche / fuite de liquide au point de ponction",1), M("Hyperglycémie majeure")],
+          exp:"Complications : hémorragie, infection (PBS), brèche digestive, fuite de liquide. L'hyperglycémie n'est pas une complication du geste."},
+        {type:"libre", q:"Citez deux éléments de matériel préparés par l'IDE pour une ponction d'ascite.",
+          a:"Champ stérile, aiguille/cathéter de ponction, tubes de prélèvement, système collecteur, antiseptique",
+          exp:"Matériel : champ et compresses stériles, antiseptique, aiguille/cathéter de ponction, tubes de prélèvement, système collecteur, gants stériles."}
+      ]
+    }
+  ]
+},
+/* ====================== INSUFFISANCE RESPIRATOIRE ====================== */
+{
+  id:"resp", nom:"Insuffisance respiratoire", ico:"🫁",
+  desc:"Insuffisance respiratoire chronique (IRC) et aiguë (IRA).",
+  long:"Insuffisance respiratoire chronique (définitions, BPCO, OLD, cœur pulmonaire) et insuffisance respiratoire aiguë (urgence, mécanismes, SDRA, oxygénothérapie, VNI).",
+  quizzes:[
+    {
+      id:"resp-irc", nom:"Insuffisance respiratoire chronique (IRC)",
+      desc:"Définitions, obstructive/restrictive, BPCO, OLD",
+      questions:[
+        {type:"qcm", q:"Comment définit-on l'insuffisance respiratoire chronique ?", o:[
+          M("PaO2 < 70 mmHg au repos, à l'état stable, sur plus de 3 mois",1),
+          M("PaO2 < 90 mmHg pendant 24 h"),
+          M("PaCO2 < 35 mmHg isolée"),
+          M("SpO2 < 99 % à l'effort")],
+          exp:"IRC : hypoxémie chronique avec PaO2 < 70 mmHg au repos, à l'état stable, depuis plus de 3 mois."},
+        {type:"qcm", q:"À partir de quelle valeur parle-t-on d'IRC SÉVÈRE ?", o:[
+          M("PaO2 < 60 mmHg",1), M("PaO2 < 80 mmHg"), M("PaO2 < 90 mmHg"), M("PaO2 < 100 mmHg")],
+          exp:"L'IRC est dite sévère lorsque la PaO2 est < 60 mmHg."},
+        {type:"qcm", q:"Quel rapport définit un trouble ventilatoire OBSTRUCTIF (ex. BPCO) ?", o:[
+          M("VEMS/CVF < 0,70",1),
+          M("CPT < 80 %"),
+          M("PaO2/FiO2 ≤ 300"),
+          M("VEMS/CVF > 0,90")],
+          exp:"Trouble obstructif : rapport VEMS/CVF (Tiffeneau) < 0,70 → BPCO, asthme."},
+        {type:"qcm", q:"Quel critère définit un trouble ventilatoire RESTRICTIF ?", o:[
+          M("Diminution de la capacité pulmonaire totale",1),
+          M("VEMS/CVF < 0,70"),
+          M("Hypercapnie isolée"),
+          M("SpO2 normale à l'effort")],
+          exp:"Trouble restrictif : diminution des volumes pulmonaires (CPT < 80 %) → fibrose, déformations thoraciques, maladies neuromusculaires."},
+        {type:"qcm", q:"Qu'est-ce que le cœur pulmonaire chronique ?", o:[
+          M("Le retentissement cardiaque DROIT de l'IRC",1),
+          M("Un infarctus du ventricule gauche"),
+          M("Une péricardite aiguë"),
+          M("Une valvulopathie mitrale")],
+          exp:"Le cœur pulmonaire chronique = retentissement sur le cœur droit (HTAP → insuffisance ventriculaire droite) de l'hypoxémie chronique."},
+        {type:"qcm", q:"Quelle est la mesure thérapeutique essentielle dans la BPCO ?", o:[
+          M("L'arrêt du tabac",1),
+          M("L'augmentation du tabac"),
+          M("Le repos strict au lit à vie"),
+          M("La restriction hydrique sévère")],
+          exp:"Le tabac est le principal facteur de la BPCO : son arrêt est la mesure essentielle, qui ralentit le déclin respiratoire."},
+        {type:"qcm", q:"Quels sont les critères d'oxygénothérapie de longue durée (OLD) ?", o:[
+          M("PaO2 ≤ 55 mmHg, ≥ 15 h/jour",1),
+          M("PaO2 ≤ 80 mmHg, 2 h/jour"),
+          M("SpO2 < 99 %, en continu"),
+          M("Toute BPCO d'emblée")],
+          exp:"OLD : PaO2 ≤ 55 mmHg (ou ≤ 60 avec retentissement, ex. cœur pulmonaire), prescrite au moins 15 h/jour."},
+        {type:"qcm", q:"Chez un patient BPCO hypercapnique, quelle est la cible de SpO2 sous oxygène ?", o:[
+          M("88 à 92 %",1), M("99 à 100 %"), M("Au-dessus de 95 % systématiquement"), M("Moins de 80 %")],
+          exp:"Chez le BPCO hypercapnique, on vise une SpO2 de 88-92 % : un excès d'O2 risque d'aggraver l'hypercapnie (narcose au CO2)."},
+        {type:"vf", q:"Apporter trop d'oxygène à un BPCO hypercapnique peut entraîner une dépression respiratoire (narcose au CO2).", a:true,
+          exp:"Vrai. Un excès d'O2 peut diminuer la stimulation respiratoire et aggraver l'hypercapnie → narcose. D'où la cible 88-92 %."},
+        {type:"libre", q:"Citez deux mesures de prise en charge non médicamenteuse de l'IRC / BPCO.",
+          a:"Arrêt du tabac, réhabilitation respiratoire, vaccination (grippe/pneumocoque), activité physique",
+          exp:"Mesures : arrêt du tabac, réhabilitation respiratoire, vaccinations (grippe, pneumocoque, COVID), activité physique adaptée."}
+      ]
+    },
+    {
+      id:"resp-ira", nom:"Insuffisance respiratoire aiguë (IRA)",
+      desc:"Urgence, mécanismes, SDRA, oxygénothérapie, VNI",
+      questions:[
+        {type:"qcm", q:"L'insuffisance respiratoire aiguë est :", o:[
+          M("Une urgence vitale",1),
+          M("Une affection bénigne et chronique"),
+          M("Sans gravité si SpO2 > 90 %"),
+          M("Toujours réversible spontanément")],
+          exp:"L'IRA est une urgence vitale : défaillance de la fonction respiratoire mettant en jeu le pronostic vital à court terme."},
+        {type:"qcm", q:"Quel est souvent le PREMIER signe d'alerte d'une IRA ?", o:[
+          M("La polypnée",1),
+          M("La bradycardie"),
+          M("La constipation"),
+          M("L'hypothermie")],
+          exp:"La polypnée (augmentation de la fréquence respiratoire, FR > 20-25/min) est souvent le premier signe d'alerte."},
+        {type:"qcm", q:"Quels signes témoignent de la GRAVITÉ d'une IRA ?", o:[
+          M("Cyanose, sueurs",1),
+          M("Troubles de la conscience",1),
+          M("Signes d'épuisement",1),
+          M("Diurèse normale")],
+          exp:"Signes de gravité : cyanose, sueurs, troubles de conscience, épuisement respiratoire (bradypnée, balancement thoraco-abdominal)."},
+        {type:"qcm", q:"Quels sont les 3 grands mécanismes de l'IRA ?", o:[
+          M("Défaut de pompe",1),
+          M("Défaut d'échange",1),
+          M("Défaut de transport",1),
+          M("Défaut de filtration glomérulaire")],
+          exp:"3 mécanismes : défaut de pompe ventilatoire (neuro/muscle/paroi), défaut d'échange (alvéole) et défaut de transport (transport de l'O2 : anémie, choc)."},
+        {type:"qcm", q:"Quel rapport définit le SDRA selon la définition de Berlin ?", o:[
+          M("PaO2/FiO2 ≤ 300",1),
+          M("PaO2/FiO2 > 500"),
+          M("VEMS/CVF < 0,70"),
+          M("CPT < 80 %")],
+          exp:"SDRA (définition de Berlin) : PaO2/FiO2 ≤ 300 (léger 200-300, modéré 100-200, sévère ≤ 100), œdème lésionnel non cardiogénique."},
+        {type:"libre", q:"Que signifie le moyen mnémotechnique ABCDE de l'évaluation d'urgence ?",
+          a:"Airway, Breathing, Circulation, Disability, Exposure (Voies aériennes, Ventilation, Circulation, Neuro, Exposition)",
+          exp:"ABCDE : Airway (voies aériennes), Breathing (ventilation), Circulation, Disability (neuro), Exposure — démarche d'évaluation systématique de l'urgence."},
+        {type:"qcm", q:"Dans quelle position installe-t-on un patient en détresse respiratoire ?", o:[
+          M("Position demi-assise",1),
+          M("Décubitus dorsal strict à plat"),
+          M("Décubitus ventral systématique"),
+          M("Tête déclive")],
+          exp:"On installe le patient en position demi-assise (~45°) pour faciliter la mécanique ventilatoire."},
+        {type:"qcm", q:"Quel débit délivre un masque à haute concentration (MHC) ?", o:[
+          M("10 à 15 L/min",1), M("1 à 2 L/min"), M("0,5 L/min"), M("30 à 40 L/min")],
+          exp:"Le masque à haute concentration (avec réservoir) délivre un haut débit d'O2, environ 10-15 L/min."},
+        {type:"qcm", q:"Dans quelle situation la VNI est-elle indiquée en 1re intention ?", o:[
+          M("L'œdème aigu du poumon cardiogénique et la BPCO décompensée hypercapnique",1),
+          M("L'arrêt cardio-respiratoire"),
+          M("Le coma profond avec troubles de déglutition"),
+          M("Le pneumothorax non drainé")],
+          exp:"La VNI est indiquée en 1re intention dans l'OAP cardiogénique et la décompensation hypercapnique de BPCO. Elle est contre-indiquée si troubles de conscience/vomissements."},
+        {type:"qcm", q:"Quelle est la pression recommandée du ballonnet d'une sonde d'intubation ?", o:[
+          M("20 à 30 cmH2O",1), M("5 à 10 cmH2O"), M("50 à 60 cmH2O"), M("0 cmH2O")],
+          exp:"La pression du ballonnet doit être maintenue entre 20 et 30 cmH2O : trop basse → micro-inhalations, trop haute → ischémie trachéale."},
+        {type:"libre", q:"Que signifie l'abréviation PAV, complication de la ventilation mécanique ?",
+          a:"Pneumopathie acquise sous ventilation (mécanique)",
+          exp:"PAV = pneumopathie acquise sous ventilation, infection nosocomiale fréquente chez le patient intubé-ventilé."}
+      ]
+    }
+  ]
+},
+/* ====================== HYDRO-ÉLECTROLYTIQUE & ACIDO-BASIQUE ====================== */
+{
+  id:"electro", nom:"Hydro-électrolytique & acido-basique", ico:"⚗️",
+  desc:"Équilibre acido-basique, troubles du K⁺, Ca²⁺ et Na⁺.",
+  long:"Équilibre acido-basique (pH, gazométrie, acidoses/alcaloses) et troubles hydro-électrolytiques : potassium, calcium et sodium — mécanismes, signes, traitements.",
+  quizzes:[
+    {
+      id:"acido", nom:"Équilibre acido-basique",
+      desc:"pH, gazométrie, acidoses et alcaloses",
+      questions:[
+        {type:"qcm", q:"Quelle est la norme du pH artériel ?", o:[
+          M("7,35 – 7,45",1), M("7,00 – 7,20"), M("7,50 – 7,70"), M("6,80 – 7,00")],
+          exp:"pH artériel normal : 7,35 – 7,45. Acidose < 7,35 ; alcalose > 7,45."},
+        {type:"qcm", q:"Une acidose correspond à :", o:[
+          M("Un pH < 7,35",1),
+          M("Un pH > 7,45"),
+          M("Un pH à 7,40"),
+          M("Une PaO2 basse uniquement")],
+          exp:"Acidose : pH < 7,35 (excès d'ions H⁺). Alcalose : pH > 7,45 (diminution des H⁺)."},
+        {type:"libre", q:"Donnez les normes de la PaCO2 et des bicarbonates (HCO3⁻).",
+          a:"PaCO2 : 35-45 mmHg ; HCO3⁻ : 22-26 mmol/L",
+          exp:"Gazométrie : PaCO2 35-45 mmHg, HCO3⁻ 22-26 mmol/L (PaO2 90-100 mmHg, SaO2 95-100 %)."},
+        {type:"qcm", q:"Quels organes assurent la régulation de l'équilibre acido-basique ?", o:[
+          M("Les systèmes tampons",1),
+          M("Le poumon",1),
+          M("Le rein",1),
+          M("La rate")],
+          exp:"Régulation : systèmes tampons (rapides), poumon (élimine le CO2), rein (gère bicarbonates et acide fixe). La rate n'intervient pas."},
+        {type:"qcm", q:"Quel est le mécanisme de l'acidose RESPIRATOIRE ?", o:[
+          M("Baisse du pH par hypercapnie due à une hypoventilation",1),
+          M("Baisse du pH par baisse des bicarbonates"),
+          M("Hausse du pH par hypocapnie"),
+          M("Hausse du pH par hausse des bicarbonates")],
+          exp:"Acidose respiratoire : ↓pH par hypercapnie (↑PaCO2), conséquence d'une hypoventilation alvéolaire (ex. pneumopathie, IRC)."},
+        {type:"qcm", q:"Quel est le mécanisme de l'alcalose RESPIRATOIRE ?", o:[
+          M("Hausse du pH par hypocapnie due à une hyperventilation",1),
+          M("Baisse du pH par hypercapnie"),
+          M("Hausse du pH par hausse des bicarbonates"),
+          M("Baisse du pH par perte de bicarbonates")],
+          exp:"Alcalose respiratoire : ↑pH par hypocapnie (↓PaCO2), conséquence d'une hyperventilation (hypoxémie, salicylés, origine centrale)."},
+        {type:"qcm", q:"Quel est le mécanisme de l'acidose MÉTABOLIQUE ?", o:[
+          M("Baisse du pH par baisse des bicarbonates",1),
+          M("Baisse du pH par hypercapnie"),
+          M("Hausse du pH par hypocapnie"),
+          M("Hausse du pH par hausse des bicarbonates")],
+          exp:"Acidose métabolique : ↓pH par baisse des bicarbonates. Souvent associée à une hyperkaliémie et une hypocapnie compensatoire (hyperventilation)."},
+        {type:"qcm", q:"Quelles causes donnent une acidose métabolique à trou anionique AUGMENTÉ ?", o:[
+          M("Acidocétose",1), M("Acidose lactique",1), M("Insuffisance rénale",1), M("Diarrhées")],
+          exp:"Trou anionique augmenté (excès d'acides) : acidocétose, acide lactique, insuffisance rénale, intoxications. Les diarrhées donnent un trou anionique normal (perte de bicarbonates)."},
+        {type:"qcm", q:"Quel est le mécanisme de l'alcalose MÉTABOLIQUE ?", o:[
+          M("Hausse du pH par augmentation des bicarbonates",1),
+          M("Baisse du pH par baisse des bicarbonates"),
+          M("Hausse du pH par hypocapnie"),
+          M("Baisse du pH par hypercapnie")],
+          exp:"Alcalose métabolique : ↑pH par augmentation des bicarbonates. Causes : vomissements, aspirations gastriques, diurétiques, hyperaldostéronisme."},
+        {type:"vf", q:"L'alcalose métabolique expose à une hypokaliémie, une hypocalcémie et une tétanie.", a:true,
+          exp:"Vrai. L'alcalose métabolique entraîne un risque d'hypokaliémie, d'hypocalcémie et de tétanie."}
+      ]
+    },
+    {
+      id:"ions", nom:"Troubles du K⁺, Ca²⁺ et Na⁺",
+      desc:"Kaliémie, calcémie et natrémie : signes et traitements",
+      questions:[
+        {type:"qcm", q:"À partir de quelle valeur parle-t-on d'hyperkaliémie ?", o:[
+          M("K⁺ > 5,1 mmol/L",1), M("K⁺ > 3,5 mmol/L"), M("K⁺ > 2,5 mmol/L"), M("K⁺ > 7,5 mmol/L")],
+          exp:"Hyperkaliémie : K⁺ > 5,1 mmol/L. Le risque majeur est l'arrêt cardio-respiratoire (ACR)."},
+        {type:"qcm", q:"Quel est le risque principal de l'hyperkaliémie ?", o:[
+          M("L'arrêt cardio-respiratoire",1),
+          M("Une crise de tétanie"),
+          M("Un œdème cérébral"),
+          M("Une constipation isolée")],
+          exp:"L'hyperkaliémie expose à des troubles du rythme cardiaque pouvant aller jusqu'à l'arrêt cardio-respiratoire."},
+        {type:"qcm", q:"En cas d'hyperkaliémie sévère avec signes ECG, quel médicament protège le myocarde ?", o:[
+          M("Le gluconate de calcium",1),
+          M("Le KCl en IVSE"),
+          M("Le furosémide seul"),
+          M("Le lactulose")],
+          exp:"Le gluconate de calcium est un protecteur myocardique administré en cas d'hyperkaliémie sévère / signes ECG."},
+        {type:"qcm", q:"Quels moyens permettent de FAIRE BAISSER la kaliémie ?", o:[
+          M("Insuline + glucose",1),
+          M("Bicarbonates, Salbutamol",1),
+          M("Résine chélatrice, dialyse",1),
+          M("Apport de KCl")],
+          exp:"Pour faire baisser le K⁺ : insuline + glucose, bicarbonates, salbutamol, résine échangeuse (Kayexalate), dialyse. Le KCl, lui, augmente la kaliémie."},
+        {type:"qcm", q:"Quels signes ECG évoquent une HYPOkaliémie ?", o:[
+          M("Aplatissement de l'onde T, apparition d'une onde U",1),
+          M("Allongement du QT, risque de torsades de pointes",1),
+          M("Troubles du rythme ventriculaire",1),
+          M("Onde T ample et pointue")],
+          exp:"Hypokaliémie (K⁺ < 3,5) : onde T plate, onde U, QT long, torsades de pointes. L'onde T ample/pointue oriente vers l'HYPERkaliémie."},
+        {type:"qcm", q:"Quelle est la règle de débit à respecter pour le KCl en IVSE ?", o:[
+          M("Débit maximal de 1 g/h",1),
+          M("Débit maximal de 10 g/h"),
+          M("Aucune limite de débit"),
+          M("Toujours en bolus IV direct")],
+          exp:"Le KCl en IVSE ne doit JAMAIS dépasser 1 g/h (risque de troubles du rythme / arrêt cardiaque). Jamais en IV direct."},
+        {type:"libre", q:"Au-delà de quelle valeur parle-t-on d'hypercalcémie, et quel en est le signe ECG ?",
+          a:"Ca²⁺ > 2,6 mmol/L ; QT raccourci (court)",
+          exp:"Hypercalcémie : Ca²⁺ > 2,6 mmol/L. Signes : asthénie, troubles de la vigilance, tachycardie, QT raccourci. Causes : cancers, IRC."},
+        {type:"qcm", q:"Quels signes évoquent une HYPOcalcémie (Ca²⁺ < 2,25 mmol/L) ?", o:[
+          M("Paresthésies, tétanie",1),
+          M("Convulsions",1),
+          M("QT long, bradycardie",1),
+          M("QT raccourci")],
+          exp:"Hypocalcémie : paresthésies, tétanie, convulsions, QT long, bradycardie. Le QT raccourci évoque l'HYPERcalcémie."},
+        {type:"qcm", q:"Quelle est la conséquence d'une HYPOnatrémie (Na⁺ < 135 mmol/L) ?", o:[
+          M("Une hyperhydratation intracellulaire",1),
+          M("Une déshydratation intracellulaire"),
+          M("Une hyperkaliémie"),
+          M("Une alcalose respiratoire")],
+          exp:"Hyponatrémie : hyperhydratation intracellulaire avec risque d'œdème cérébral (nausées, somnolence, convulsions)."},
+        {type:"qcm", q:"Pourquoi corrige-t-on LENTEMENT une hyponatrémie (0,5 à 1 mmol/h) ?", o:[
+          M("Pour éviter les complications neurologiques",1),
+          M("Pour économiser le NaCl"),
+          M("Parce que c'est sans urgence"),
+          M("Pour éviter une hyperkaliémie")],
+          exp:"On corrige lentement (0,5 à 1 mmol/h) pour éviter des complications neurologiques graves (myélinolyse centro-pontine)."},
+        {type:"qcm", q:"Quelle est la conséquence d'une HYPERnatrémie (Na⁺ > 145 mmol/L) ?", o:[
+          M("Une déshydratation intracellulaire",1),
+          M("Une hyperhydratation intracellulaire"),
+          M("Un œdème cérébral par excès d'eau"),
+          M("Une hypocalcémie")],
+          exp:"Hypernatrémie : déshydratation intracellulaire (soif intense, sécheresse des muqueuses, troubles de conscience). Traitement : apport d'eau."}
+      ]
+    }
+  ]
+},
+/* ====================== TROUBLES DE L'AUDITION ====================== */
+{
+  id:"audition", nom:"Troubles de l'audition", ico:"👂",
+  desc:"Anatomie de l'oreille, surdités de transmission/perception, tests.",
+  long:"Anatomie de l'oreille, mécanisme de l'audition, surdités de transmission et de perception, tests acoumétriques (Weber, Rinne), presbyacousie, ototoxiques et rôle infirmier.",
+  quizzes:[
+    {
+      id:"audition-q", nom:"Anatomie, surdités & tests",
+      desc:"Oreille, osselets, Weber/Rinne, presbyacousie, ototoxiques",
+      questions:[
+        {type:"qcm", q:"Quelles sont les 3 parties de l'oreille ?", o:[
+          M("Oreille externe, oreille moyenne, oreille interne",1),
+          M("Pavillon, cochlée, cerveau"),
+          M("Tympan, marteau, nerf"),
+          M("Conduit, vestibule, larynx")],
+          exp:"L'oreille comprend 3 parties : externe (pavillon, conduit), moyenne (tympan, osselets) et interne (cochlée, vestibule)."},
+        {type:"libre", q:"Citez les 3 osselets de l'oreille moyenne.",
+          a:"Le marteau, l'enclume, l'étrier",
+          exp:"Les 3 osselets sont le marteau (malleus), l'enclume (incus) et l'étrier (stapes)."},
+        {type:"qcm", q:"Quelle structure de l'oreille interne contient les cellules ciliées ?", o:[
+          M("La cochlée",1), M("Le tympan"), M("Le conduit auditif externe"), M("L'étrier")],
+          exp:"La cochlée (oreille interne) contient environ 16 000 cellules ciliées qui transforment l'onde sonore en influx nerveux."},
+        {type:"vf", q:"Les cellules ciliées de la cochlée ne se régénèrent pas : leur destruction est définitive.", a:true,
+          exp:"Vrai. Les cellules ciliées (≈ 16 000) ne se régénèrent pas ; leur destruction entraîne une perte auditive définitive."},
+        {type:"qcm", q:"Quel nerf transmet l'information auditive au cerveau ?", o:[
+          M("Le nerf VIII",1),
+          M("Le nerf VII"),
+          M("Le nerf récurrent"),
+          M("Le nerf optique")],
+          exp:"Le nerf VIII (cochléo-vestibulaire) transmet l'information auditive et vestibulaire au cerveau."},
+        {type:"qcm", q:"Une surdité de TRANSMISSION correspond à une atteinte :", o:[
+          M("De l'oreille externe ou moyenne",1),
+          M("De l'oreille interne"),
+          M("Du nerf auditif"),
+          M("Du cortex auditif")],
+          exp:"Surdité de transmission : atteinte de l'oreille externe ou moyenne (bouchon, otite, atteinte des osselets). La surdité de perception touche l'oreille interne/le nerf."},
+        {type:"qcm", q:"Au test de WEBER (diapason sur le crâne), une surdité de transmission donne :", o:[
+          M("Une latéralisation du son vers l'oreille ATTEINTE",1),
+          M("Une latéralisation vers l'oreille saine"),
+          M("Aucune latéralisation jamais"),
+          M("Une douleur intense")],
+          exp:"Weber : en cas de surdité de transmission, le son est latéralisé du côté ATTEINT. En cas de surdité de perception, il est latéralisé du côté SAIN."},
+        {type:"qcm", q:"Un test de RINNE négatif (conduction osseuse > aérienne) signe :", o:[
+          M("Une surdité de transmission",1),
+          M("Une surdité de perception"),
+          M("Une audition normale"),
+          M("Un acouphène isolé")],
+          exp:"Rinne négatif (CO > CA) = surdité de transmission. Rinne positif (CA > CO) = audition normale ou surdité de perception."},
+        {type:"qcm", q:"À quoi correspond une surdité PROFONDE en décibels ?", o:[
+          M("Perte > 90 dB",1), M("Perte de 20-40 dB"), M("Perte de 40-70 dB"), M("Perte de 70-90 dB")],
+          exp:"Degrés de surdité : légère 20-40 dB, moyenne 40-70 dB, sévère 70-90 dB, profonde > 90 dB."},
+        {type:"qcm", q:"Qu'est-ce que la presbyacousie ?", o:[
+          M("Une surdité de perception liée au vieillissement",1),
+          M("Une surdité de transmission par bouchon de cérumen"),
+          M("Une otite aiguë de l'enfant"),
+          M("Un acouphène passager")],
+          exp:"La presbyacousie est une surdité de perception bilatérale liée à l'âge (atteinte des cellules ciliées)."},
+        {type:"qcm", q:"Quels médicaments sont ototoxiques ?", o:[
+          M("Les aminosides",1),
+          M("Le cisplatine",1),
+          M("Les diurétiques de l'anse",1),
+          M("Le paracétamol")],
+          exp:"Ototoxiques : aminosides, cisplatine, diurétiques de l'anse, salicylés à forte dose. Le paracétamol n'est pas ototoxique."},
+        {type:"qcm", q:"À partir de quel niveau sonore l'exposition prolongée devient-elle dangereuse pour l'audition ?", o:[
+          M("85 dB",1), M("40 dB"), M("20 dB"), M("10 dB")],
+          exp:"Une exposition prolongée au-delà de 85 dB devient dangereuse et peut endommager les cellules ciliées."},
+        {type:"qcm", q:"Quel examen est utilisé pour le dépistage de la surdité chez le nouveau-né ?", o:[
+          M("Les oto-émissions acoustiques provoquées",1),
+          M("L'audiogramme vocal"),
+          M("Le test de Weber"),
+          M("L'IRM cérébrale")],
+          exp:"Les OEAP (oto-émissions acoustiques provoquées) permettent le dépistage de la surdité du nouveau-né."},
+        {type:"libre", q:"Citez deux mesures de communication adaptées par l'IDE face à une personne malentendante.",
+          a:"Se placer face à la personne, articuler sans crier, parler lentement, utiliser l'écrit, réduire le bruit",
+          exp:"Communication : se mettre face à la personne (lecture labiale), articuler sans crier, parler lentement, utiliser l'écrit/gestes, limiter le bruit de fond."}
+      ]
+    }
+  ]
+},
+/* ====================== INCONTINENCES URINAIRES & FÉCALES ====================== */
+{
+  id:"incontinence", nom:"Incontinences urinaires & fécales", ico:"💧",
+  desc:"Continence, types d'incontinence urinaire, fécalome, soins.",
+  long:"Physiologie de la continence (détrusor, sphincters), types d'incontinence urinaire (effort, impériosité, regorgement), incontinence fécale et fécalome, bilan et prise en charge infirmière.",
+  quizzes:[
+    {
+      id:"incontinence-q", nom:"Incontinences urinaires & fécales",
+      desc:"Mécanismes, types, bilan urodynamique, soins IDE",
+      questions:[
+        {type:"qcm", q:"L'incontinence urinaire se définit comme :", o:[
+          M("Un symptôme : perte involontaire d'urine",1),
+          M("Une maladie infectieuse"),
+          M("Une rétention aiguë d'urine"),
+          M("Une malformation congénitale")],
+          exp:"L'incontinence urinaire est définie comme un symptôme : la perte involontaire d'urine."},
+        {type:"qcm", q:"Quel muscle assure la vidange de la vessie par sa contraction ?", o:[
+          M("Le détrusor",1), M("Le sphincter externe"), M("Le muscle releveur de l'anus"), M("Le diaphragme")],
+          exp:"Le détrusor est le muscle de la paroi vésicale : sa contraction permet la vidange (miction)."},
+        {type:"qcm", q:"Quelle est la différence entre les deux sphincters urinaires ?", o:[
+          M("Sphincter interne = lisse, involontaire ; sphincter externe = strié, volontaire",1),
+          M("Les deux sont volontaires"),
+          M("Les deux sont involontaires"),
+          M("Le sphincter interne est strié et volontaire")],
+          exp:"Sphincter interne : muscle lisse, involontaire. Sphincter externe : muscle strié, sous contrôle volontaire (somatique)."},
+        {type:"qcm", q:"Quel système nerveux commande la VIDANGE (miction) ?", o:[
+          M("Le parasympathique + le somatique",1),
+          M("Le sympathique seul"),
+          M("Aucun, c'est passif"),
+          M("Le système endocrinien")],
+          exp:"Miction : parasympathique (contraction du détrusor) + somatique (relâchement volontaire du sphincter externe). Le remplissage est sous contrôle sympathique (continence)."},
+        {type:"libre", q:"Quelle est la capacité urinaire normale d'une miction (en mL) ?",
+          a:"Environ 200 à 350 mL (≈ 6 mictions/jour)",
+          exp:"Une miction normale correspond à environ 200-350 mL, pour ≈ 6 mictions par jour."},
+        {type:"qcm", q:"L'incontinence urinaire d'EFFORT survient :", o:[
+          M("Lors d'un effort — insuffisance sphinctérienne / périnéale",1),
+          M("Par un besoin urgent et impérieux"),
+          M("Par un trop-plein vésical"),
+          M("Uniquement la nuit chez l'enfant")],
+          exp:"Incontinence d'effort : fuites lors des efforts (toux, rire, effort) par insuffisance du soutien périnéal / sphinctérien."},
+        {type:"qcm", q:"L'incontinence par IMPÉRIOSITÉ (urgenturie) est liée à :", o:[
+          M("Une hyperactivité du détrusor",1),
+          M("Une insuffisance sphinctérienne pure"),
+          M("Une rétention chronique"),
+          M("Une fistule")],
+          exp:"L'incontinence par impériosité (urgenturie) est due à une hyperactivité du détrusor : besoin urgent et incontrôlable."},
+        {type:"qcm", q:"L'incontinence par REGORGEMENT correspond à :", o:[
+          M("Des fuites par trop-plein sur une rétention urinaire chronique",1),
+          M("Des fuites à l'effort"),
+          M("Une énurésie nocturne"),
+          M("Une cystite aiguë")],
+          exp:"Incontinence par regorgement : fuites par « trop-plein » lorsque la vessie est en rétention chronique (obstacle, vessie neurologique)."},
+        {type:"qcm", q:"Quel examen explore le fonctionnement vésico-sphinctérien ?", o:[
+          M("Le bilan urodynamique",1),
+          M("Le fond d'œil"),
+          M("La gazométrie"),
+          M("L'ENMG")],
+          exp:"Le bilan urodynamique explore le fonctionnement de la vessie et des sphincters (pressions, débit)."},
+        {type:"qcm", q:"Quelle classe médicamenteuse traite l'hyperactivité vésicale (impériosité) ?", o:[
+          M("Les anticholinergiques",1),
+          M("Les diurétiques"),
+          M("Les biguanides"),
+          M("Les corticoïdes")],
+          exp:"Les anticholinergiques diminuent l'hyperactivité du détrusor (incontinence par impériosité)."},
+        {type:"vf", q:"Le sondage urinaire intermittent est à privilégier par rapport à la sonde à demeure.", a:true,
+          exp:"Vrai. Le sondage intermittent est privilégié : il réduit le risque d'infection urinaire par rapport à la sonde à demeure."},
+        {type:"qcm", q:"Quel traitement est indiqué en première intention dans l'incontinence urinaire d'effort ?", o:[
+          M("La rééducation périnéale",1),
+          M("La pose immédiate d'une sonde à demeure"),
+          M("Les anticholinergiques seuls"),
+          M("La dialyse")],
+          exp:"Incontinence d'effort : la rééducation périnéale (renforcement du plancher pelvien) est le traitement de 1re intention."},
+        {type:"qcm", q:"Un fécalome peut entraîner :", o:[
+          M("Une incontinence fécale par regorgement / fausse diarrhée",1),
+          M("Une hyperkaliémie"),
+          M("Une surdité"),
+          M("Une exophtalmie")],
+          exp:"Le fécalome (impaction de selles) provoque une incontinence fécale par regorgement (fuites de selles liquides autour du bouchon)."},
+        {type:"qcm", q:"Quel examen est réalisé en première intention devant une suspicion de fécalome ?", o:[
+          M("Le toucher rectal",1),
+          M("Le bilan urodynamique"),
+          M("La coloscopie en urgence"),
+          M("Le fond d'œil")],
+          exp:"Le toucher rectal est l'examen de 1re intention pour diagnostiquer un fécalome (ampoule rectale pleine)."},
+        {type:"qcm", q:"Quelles mesures infirmières font partie de la prise en charge de l'incontinence ?", o:[
+          M("Surveillance et prévention cutanée",1),
+          M("Régulation du transit",1),
+          M("Protections adaptées et préservation de la dignité",1),
+          M("Restriction hydrique systématique sévère")],
+          exp:"Soins IDE : protection cutanée (prévention macération/escarres), régulation du transit, protections adaptées, dignité. La restriction hydrique sévère est à éviter (risque d'infection/déshydratation)."}
+      ]
+    }
+  ]
+},
+/*INSERT_DOSSIERS*/
+]};
+
+/* ============================================================
+   MOTEUR
+   ============================================================ */
+const app = document.getElementById('app');
+const btnHome = document.getElementById('btn-home');
+const timerEl = document.getElementById('timer');
+const timerVal = document.getElementById('timer-val');
+const brandSub = document.getElementById('brand-sub');
+let state = null;
+let navContext = null; // {type:'home'} ou {type:'dossier', di}
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+
+function poolFromDossier(d){ let all=[]; d.quizzes.forEach(q=>{ all=all.concat(q.questions); }); return all; }
+function poolGlobal(){ let all=[]; DATA.dossiers.forEach(d=>{ all=all.concat(poolFromDossier(d)); }); return all; }
+
+function buildQuestions(quiz){
+  let pool;
+  if(quiz.exam){
+    const src = quiz.scope==='global' ? poolGlobal() : poolFromDossier(quiz.dossier);
+    pool = shuffle(src).slice(0, quiz.count||40);
+  } else {
+    pool = shuffle(quiz.questions);
+  }
+  return pool.map(q=>{ const nq=Object.assign({},q); if(q.type==='qcm') nq.o=shuffle(q.o); return nq; });
+}
+
+/* -------------------- ÉCRAN : MENU PRINCIPAL -------------------- */
+function renderHome(){
+  state=null; navContext={type:'home'}; stopTimer();
+  btnHome.style.display='none'; timerEl.style.display='none';
+  brandSub.textContent='Menu principal'; window.scrollTo(0,0);
+
+  let tiles='';
+  DATA.dossiers.forEach((d,i)=>{
+    const nbQ = poolFromDossier(d).length;
+    tiles += `
+      <button class="tile" data-dossier="${i}">
+        <span class="arrow">→</span>
+        <div class="ico">${d.ico}</div>
+        <div class="t">${d.nom}</div>
+        <div class="d">${d.desc}</div>
+        <div class="meta">◈ ${d.quizzes.length} quiz · ${nbQ} questions</div>
+      </button>`;
+  });
+
+  const totalQ = poolGlobal().length;
+  app.innerHTML = `
+    <div class="card hero">
+      <span class="pill">◆ UE 2.7 · IFSI</span>
+      <h1>Défaillances organiques &amp; processus dégénératifs</h1>
+      <p class="sub">Choisis un dossier thématique pour réviser par sous-quiz, ou lance directement un examen blanc en conditions réelles.</p>
+      <div class="stats">
+        <div class="stat"><div class="n">${DATA.dossiers.length}</div><div class="l">Dossiers</div></div>
+        <div class="stat"><div class="n">${totalQ}</div><div class="l">Questions</div></div>
+        <div class="stat"><div class="n">2</div><div class="l">Modes</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Dossiers thématiques</h2>
+      <p class="lead" style="margin-bottom:18px">Sélectionne un thème pour accéder à ses quiz et à son examen blanc dédié.</p>
+      <div class="grid">${tiles}</div>
+    </div>
+    <div class="card">
+      <h2>🏆 Examen blanc global UE 2.7</h2>
+      <p class="lead" style="margin-bottom:16px">40 questions tirées au sort dans <strong>tous</strong> les dossiers — l'épreuve la plus complète.</p>
+      <div class="quiz-grid">
+        <button class="quiz-tile glob" id="global-exam">
+          <div class="t">🌐 Examen blanc global</div>
+          <div class="d">Toutes thématiques mélangées · conditions d'examen.</div>
+          <div class="meta">40 questions · minuté 10 min</div>
+        </button>
+      </div>
+    </div>`;
+
+  document.querySelectorAll('[data-dossier]').forEach(b=>{
+    b.addEventListener('click', ()=> renderDossier(+b.dataset.dossier));
+  });
+  document.getElementById('global-exam').addEventListener('click', ()=>{
+    const quiz={ nom:'Examen blanc global UE 2.7', desc:'40 questions tirées dans tous les dossiers.', exam:true, scope:'global', count:40 };
+    renderModeChoice(quiz);
+  });
+}
+
+/* -------------------- ÉCRAN : DOSSIER -------------------- */
+function renderDossier(di){
+  const d = DATA.dossiers[di];
+  navContext={type:'dossier', di};
+  btnHome.style.display='flex'; timerEl.style.display='none';
+  brandSub.textContent=d.nom; window.scrollTo(0,0);
+
+  let tiles='';
+  d.quizzes.forEach((q,qi)=>{
+    tiles += `
+      <button class="quiz-tile" data-quiz="${qi}">
+        <div class="t">📘 ${q.nom}</div>
+        <div class="d">${q.desc}</div>
+        <div class="meta">${q.questions.length} questions</div>
+      </button>`;
+  });
+  // examen blanc du dossier
+  tiles += `
+    <button class="quiz-tile exam" data-exam="1">
+      <div class="t">🏆 Examen blanc — ${d.nom}</div>
+      <div class="d">Questions tirées au sort sur tout le dossier · conditions d'examen.</div>
+      <div class="meta">${Math.min(40, poolFromDossier(d).length)} questions · minuté 10 min</div>
+    </button>`;
+
+  app.innerHTML = `
+    <div class="card">
+      <button class="btn-home" style="display:inline-flex;margin-bottom:16px" id="back-home">↩ Tous les dossiers</button>
+      <div class="dossier-head">
+        <div class="dossier-ico">${d.ico}</div>
+        <div>
+          <span class="pill" style="margin-bottom:6px">Dossier</span>
+          <h1 style="font-size:1.45rem;margin:0">${d.nom}</h1>
+        </div>
+      </div>
+      <p class="lead">${d.long||d.desc}</p>
+    </div>
+    <div class="card">
+      <h2>Quiz du dossier</h2>
+      <p class="lead" style="margin-bottom:18px">Choisis un sous-thème ou tente l'examen blanc du dossier.</p>
+      <div class="quiz-grid">${tiles}</div>
+    </div>`;
+
+  document.getElementById('back-home').addEventListener('click', renderHome);
+  document.querySelectorAll('[data-quiz]').forEach(b=>{
+    b.addEventListener('click', ()=> renderModeChoice(d.quizzes[+b.dataset.quiz]));
+  });
+  const examBtn=document.querySelector('[data-exam]');
+  if(examBtn) examBtn.addEventListener('click', ()=>{
+    const quiz={ nom:'Examen blanc — '+d.nom, desc:'Questions tirées au sort sur tout le dossier '+d.nom+'.', exam:true, scope:'dossier', dossier:d, count:40 };
+    renderModeChoice(quiz);
+  });
+}
+
+/* -------------------- ÉCRAN : CHOIX DU MODE -------------------- */
+function renderModeChoice(quiz){
+  btnHome.style.display='flex'; window.scrollTo(0,0);
+  app.innerHTML = `
+    <div class="card">
+      <span class="pill">${quiz.exam?'🏆 Examen blanc':'📘 Quiz thématique'}</span>
+      <h1>${quiz.nom}</h1>
+      <p class="lead">${quiz.desc}</p>
+    </div>
+    <div class="card">
+      <h2>Choisis ton mode</h2>
+      <div class="mode-grid">
+        <div class="mode-card" data-mode="entrainement">
+          <div class="ic">🎓</div>
+          <h3>Entraînement</h3>
+          <p>Correction immédiate après chaque réponse, avec l'explication pédagogique. Pas de chrono. Idéal pour apprendre.</p>
+        </div>
+        <div class="mode-card exam" data-mode="examen">
+          <div class="ic">⏱️</div>
+          <h3>Examen</h3>
+          <p>Chrono de 10 minutes, aucune correction pendant l'épreuve. Score et corrigé complet à la fin. Conditions réelles.</p>
+        </div>
+        <div class="mode-card hard" data-mode="difficile">
+          <div class="ic">🧠</div>
+          <h3>Difficile</h3>
+          <p>Les mêmes questions, mais TOUT en réponse libre : aucun choix proposé, tu dois tout retrouver de mémoire puis t'auto-évaluer.</p>
+        </div>
+      </div>
+      ${quiz.exam?'<p class="lead" style="margin-top:14px;font-size:.82rem">💡 L\'examen blanc est conçu pour le mode Examen, mais tu peux aussi t\'entraîner.</p>':''}
+    </div>`;
+  document.querySelectorAll('[data-mode]').forEach(c=>{
+    c.addEventListener('click', ()=> startQuiz(quiz, c.dataset.mode));
+  });
+}
+
+/* -------------------- DÉMARRAGE -------------------- */
+/* Convertit n'importe quelle question en réponse libre (mode Difficile) */
+function toLibre(q){
+  if(q.type==='libre') return Object.assign({}, q);
+  let a;
+  if(q.type==='qcm'){ a = q.o.filter(o=>o.c).map(o=>o.t).join(' ; '); }
+  else { a = q.a ? 'Vrai' : 'Faux'; }
+  return { type:'libre', q:q.q, a:a, exp:q.exp };
+}
+const MODE_LABEL = { examen:'Examen', entrainement:'Entraînement', difficile:'Difficile' };
+function startQuiz(quiz, mode){
+  let questions = buildQuestions(quiz);
+  if(mode==='difficile'){ questions = questions.map(toLibre); }
+  state = { quiz, mode, questions, idx:0, answers:[], revealed:false, finished:false };
+  brandSub.textContent = quiz.nom + ' · ' + (MODE_LABEL[mode]||'Entraînement');
+  btnHome.style.display='flex';
+  if(mode==='examen'){ startTimer(10*60); } else { timerEl.style.display='none'; }
+  renderQuestion();
+}
+
+/* -------------------- TIMER -------------------- */
+let timerInt=null;
+function startTimer(seconds){
+  stopTimer(); let remaining=seconds; timerEl.style.display='flex'; updateTimerDisplay(remaining);
+  timerInt=setInterval(()=>{ remaining--; updateTimerDisplay(remaining); if(remaining<=0){ stopTimer(); finishQuiz(true); } },1000);
+}
+function updateTimerDisplay(s){ const m=Math.floor(s/60),sec=s%60; timerVal.textContent=m+':'+String(sec).padStart(2,'0'); timerEl.classList.toggle('calm', s>60); }
+function stopTimer(){ if(timerInt){ clearInterval(timerInt); timerInt=null; } }
+
+/* -------------------- ÉCRAN : QUESTION -------------------- */
+function renderQuestion(){
+  window.scrollTo(0,0);
+  const s=state, q=s.questions[s.idx], total=s.questions.length;
+  const pct=Math.round((s.idx)/total*100); s.revealed=false;
+  const typeLabel={qcm:'Question à choix', vf:'Vrai ou Faux', libre:'Réponse libre'}[q.type];
+
+  let body='';
+  if(q.type==='qcm'){
+    const multi=q.o.filter(o=>o.c).length>1;
+    body=`${multi?'<p class="lead" style="font-size:.82rem;margin-bottom:10px">Plusieurs réponses possibles.</p>':''}
+      <div class="options" id="opts">
+        ${q.o.map((o,i)=>`<button class="opt ${multi?'check':'radio'}" data-i="${i}"><span class="box"></span><span>${o.t}</span></button>`).join('')}
+      </div>`;
+  } else if(q.type==='vf'){
+    body=`<div class="options" id="opts">
+        <button class="opt radio" data-v="true"><span class="box"></span><span>✅ Vrai</span></button>
+        <button class="opt radio" data-v="false"><span class="box"></span><span>❌ Faux</span></button>
+      </div>`;
+  } else {
+    body=`<textarea id="freetext" placeholder="Tape ta réponse ici, puis valide…"></textarea>`;
+  }
+
+  app.innerHTML=`
+    <div class="card">
+      <div class="progress-wrap">
+        <div class="progress-row"><span>Question ${s.idx+1} / ${total}</span><span>${s.mode==='examen'?'⏱ Mode Examen':s.mode==='difficile'?'🧠 Mode Difficile':'🎓 Mode Entraînement'}</span></div>
+        <div class="progress"><i style="width:${pct}%"></i></div>
+      </div>
+      <div class="qtype">${typeLabel}</div>
+      <div class="qtext">${q.q}</div>
+      ${body}
+      <div id="feedback-zone"></div>
+      <div id="action-zone"></div>
+    </div>`;
+
+  let selected = q.type==='qcm'?[]:null;
+
+  if(q.type==='qcm'){
+    const multi=q.o.filter(o=>o.c).length>1;
+    document.querySelectorAll('#opts .opt').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        if(s.revealed) return;
+        const i=+btn.dataset.i;
+        if(multi){ const pos=selected.indexOf(i); if(pos>=0){ selected.splice(pos,1); btn.classList.remove('sel'); } else { selected.push(i); btn.classList.add('sel'); } }
+        else { selected=[i]; document.querySelectorAll('#opts .opt').forEach(b=>b.classList.remove('sel')); btn.classList.add('sel'); }
+        refreshValidate();
+      });
+    });
+  } else if(q.type==='vf'){
+    document.querySelectorAll('#opts .opt').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        if(s.revealed) return;
+        selected=btn.dataset.v==='true';
+        document.querySelectorAll('#opts .opt').forEach(b=>b.classList.remove('sel')); btn.classList.add('sel');
+        refreshValidate();
+      });
+    });
+  } else {
+    document.getElementById('freetext').addEventListener('input', refreshValidate);
+  }
+
+  const actionZone=document.getElementById('action-zone');
+  function refreshValidate(){
+    const v=document.getElementById('validate-btn'); if(!v) return;
+    let ok=false;
+    if(q.type==='qcm') ok=selected.length>0;
+    else if(q.type==='vf') ok=selected!==null;
+    else ok=document.getElementById('freetext').value.trim().length>0;
+    v.disabled=!ok;
+  }
+  function drawAction(){
+    if(s.mode==='examen'){
+      actionZone.innerHTML=`<button class="btn btn-primary" id="validate-btn" disabled>${s.idx===total-1?'Terminer l\'examen':'Valider et continuer'}</button>`;
+      document.getElementById('validate-btn').addEventListener('click', submitExam);
+    } else {
+      actionZone.innerHTML=`<button class="btn btn-primary" id="validate-btn" disabled>Valider ma réponse</button>`;
+      document.getElementById('validate-btn').addEventListener('click', validateTraining);
+    }
+    refreshValidate();
+  }
+  drawAction();
+
+  function submitExam(){
+    let entry;
+    if(q.type==='qcm'){
+      const correctIdx=q.o.map((o,i)=>o.c?i:-1).filter(i=>i>=0);
+      entry={type:'qcm', selected:selected.slice(), correct:arraysEqual(selected.slice().sort(),correctIdx.slice().sort())};
+    } else if(q.type==='vf'){ entry={type:'vf', value:selected, correct:(selected===q.a)}; }
+    else { entry={type:'libre', text:document.getElementById('freetext').value.trim(), correct:null}; }
+    entry.q=q; s.answers[s.idx]=entry; nextOrFinish();
+  }
+
+  function validateTraining(){
+    s.revealed=true; const fb=document.getElementById('feedback-zone');
+    if(q.type==='qcm'){
+      const correctIdx=q.o.map((o,i)=>o.c?i:-1).filter(i=>i>=0);
+      const correct=arraysEqual(selected.slice().sort(),correctIdx.slice().sort());
+      document.querySelectorAll('#opts .opt').forEach(btn=>{
+        const i=+btn.dataset.i; btn.classList.add('disabled'); btn.classList.remove('sel');
+        if(q.o[i].c) btn.classList.add('correct'); else if(selected.includes(i)) btn.classList.add('wrong');
+      });
+      s.answers[s.idx]={type:'qcm', selected:selected.slice(), correct, q}; showFeedback(fb, correct, q.exp); drawNext();
+    } else if(q.type==='vf'){
+      const correct=(selected===q.a);
+      document.querySelectorAll('#opts .opt').forEach(btn=>{
+        btn.classList.add('disabled'); btn.classList.remove('sel'); const v=btn.dataset.v==='true';
+        if(v===q.a) btn.classList.add('correct'); else if(v===selected) btn.classList.add('wrong');
+      });
+      s.answers[s.idx]={type:'vf', value:selected, correct, q}; showFeedback(fb, correct, q.exp); drawNext();
+    } else {
+      const txt=document.getElementById('freetext').value.trim();
+      document.getElementById('freetext').setAttribute('disabled','');
+      fb.innerHTML=`
+        <div class="answer-reveal"><div class="lab">Réponse attendue</div><div class="val">${q.a}</div></div>
+        ${q.exp?`<div class="feedback good" style="margin-top:12px"><div class="exp">💡 ${q.exp}</div></div>`:''}
+        <p class="lead" style="margin-top:14px;font-weight:700;color:var(--ink)">Compare avec ta réponse — t'étais-tu trompé(e) ?</p>
+        <div class="row">
+          <button class="btn btn-ok" id="self-ok">✅ J'avais juste</button>
+          <button class="btn btn-bad" id="self-bad">❌ J'avais faux</button>
+        </div>`;
+      actionZone.innerHTML='';
+      document.getElementById('self-ok').addEventListener('click', ()=>{ s.answers[s.idx]={type:'libre', text:txt, correct:true, q}; nextOrFinish(); });
+      document.getElementById('self-bad').addEventListener('click', ()=>{ s.answers[s.idx]={type:'libre', text:txt, correct:false, q}; nextOrFinish(); });
+    }
+  }
+  function drawNext(){
+    actionZone.innerHTML=`<button class="btn btn-primary" id="next-btn">${s.idx===total-1?'Voir mon résultat':'Question suivante →'}</button>`;
+    document.getElementById('next-btn').addEventListener('click', nextOrFinish);
+  }
+}
+
+function showFeedback(el, correct, exp){
+  el.innerHTML=`<div class="feedback ${correct?'good':'bad'}"><div class="fb-t">${correct?'✅ Bonne réponse !':'❌ Réponse incorrecte'}</div>${exp?`<div class="exp">💡 ${exp}</div>`:''}</div>`;
+}
+function arraysEqual(a,b){ if(a.length!==b.length) return false; for(let i=0;i<a.length;i++) if(a[i]!==b[i]) return false; return true; }
+function nextOrFinish(){ if(state.idx<state.questions.length-1){ state.idx++; renderQuestion(); } else { finishQuiz(false); } }
+
+/* -------------------- RÉSULTATS -------------------- */
+function finishQuiz(byTimeout){ state.finished=true; stopTimer(); timerEl.style.display='none'; window.scrollTo(0,0); renderResults(byTimeout); }
+function computeScore(){ let score=0,gradable=0; state.answers.forEach(a=>{ if(!a) return; if(a.correct===true) score++; if(a.correct!==null) gradable++; }); return {score,gradable}; }
+
+function renderResults(byTimeout){
+  const s=state, total=s.questions.length;
+  for(let i=0;i<total;i++){ if(!s.answers[i]){ const q=s.questions[i]; s.answers[i]={type:q.type, q, correct:false, selected:[], value:null, text:'', noAnswer:true}; } }
+  const {score,gradable}=computeScore();
+  const pct=gradable?Math.round(score/gradable*100):0;
+  const ringColor=pct>=75?'#34d399':pct>=50?'#fbbf24':'#fb7185';
+  const verdict=pct>=75?'Excellent ! 🎉':pct>=50?'Bien, continue ! 💪':'À retravailler 📚';
+
+  let review='';
+  s.answers.forEach((a,i)=>{
+    const q=a.q, num=i+1; let userLine='',expLine=''; const isLibre=q.type==='libre';
+    if(q.type==='qcm'){
+      const userTxt=a.selected&&a.selected.length?a.selected.map(idx=>q.o[idx].t).join(' · '):'— (pas de réponse)';
+      const goodTxt=q.o.filter(o=>o.c).map(o=>o.t).join(' · ');
+      userLine=`<div class="rev-line"><span class="k">Ta réponse :</span> <span class="${a.correct?'tag-ok':'tag-bad'}">${userTxt}</span></div>`;
+      expLine=`<div class="rev-line"><span class="k">Réponse(s) correcte(s) :</span> <span class="tag-ok">${goodTxt}</span></div>`;
+    } else if(q.type==='vf'){
+      const userTxt=a.value===null||a.value===undefined?'— (pas de réponse)':(a.value?'Vrai':'Faux');
+      userLine=`<div class="rev-line"><span class="k">Ta réponse :</span> <span class="${a.correct?'tag-ok':'tag-bad'}">${userTxt}</span></div>`;
+      expLine=`<div class="rev-line"><span class="k">Bonne réponse :</span> <span class="tag-ok">${q.a?'Vrai':'Faux'}</span></div>`;
+    } else {
+      const userTxt=a.text?a.text:'— (pas de réponse)';
+      userLine=`<div class="rev-line"><span class="k">Ta réponse :</span> ${userTxt}</div>`;
+      expLine=`<div class="rev-line"><span class="k">Réponse attendue :</span> <span class="tag-ok">${q.a}</span></div>`;
+    }
+    const statusIco=a.correct===true?'✅':a.correct===false?'❌':'📝';
+    let selfRate='';
+    if(isLibre&&a.correct===null){
+      selfRate=`<div class="selfrate" data-i="${i}"><button class="btn btn-ok" data-rate="ok">✅ J'avais juste</button><button class="btn btn-bad" data-rate="bad">❌ J'avais faux</button></div>`;
+    }
+    review+=`<div class="rev-item" data-rev="${i}">
+        <div class="q"><span class="ic">${statusIco}</span><span>Q${num}. ${q.q}</span></div>
+        ${userLine}${expLine}
+        ${q.exp?`<div class="rev-line" style="margin-top:6px"><span class="k">💡</span> ${q.exp}</div>`:''}
+        ${selfRate}
+      </div>`;
+  });
+
+  app.innerHTML=`
+    <div class="card">
+      ${byTimeout?'<span class="pill" style="background:rgba(251,113,133,.12);color:var(--bad);border-color:rgba(251,113,133,.3)">⏱ Temps écoulé</span>':''}
+      <div class="score-hero">
+        <div class="score-ring" id="ring" style="--pct:${pct};--ring-color:${ringColor}">
+          <div><span class="big" id="score-big">${score}/${gradable}</span><span class="sub">bonnes réponses</span></div>
+        </div>
+        <div class="verdict" id="verdict">${verdict}</div>
+        <p class="lead" id="pct-line">Score : ${pct}% &nbsp;·&nbsp; ${s.quiz.nom}</p>
+      </div>
+      <div class="row">
+        <button class="btn btn-ghost" id="retry">↻ Recommencer</button>
+        <button class="btn btn-primary" id="to-home">Menu principal</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>📋 Corrigé détaillé</h2>
+      <p class="lead" style="margin-bottom:14px">Compare tes réponses aux réponses attendues.</p>
+      ${review}
+    </div>
+    <div class="card">
+      <div class="row">
+        <button class="btn btn-ghost" id="retry2">↻ Recommencer</button>
+        <button class="btn btn-primary" id="to-home2">Menu principal</button>
+      </div>
+    </div>`;
+
+  document.getElementById('retry').addEventListener('click', ()=> startQuiz(s.quiz, s.mode));
+  document.getElementById('retry2').addEventListener('click', ()=> startQuiz(s.quiz, s.mode));
+  document.getElementById('to-home').addEventListener('click', goBack);
+  document.getElementById('to-home2').addEventListener('click', goBack);
+
+  document.querySelectorAll('.selfrate').forEach(div=>{
+    const i=+div.dataset.i;
+    div.querySelectorAll('button').forEach(b=>{
+      b.addEventListener('click', ()=>{
+        const good=b.dataset.rate==='ok'; s.answers[i].correct=good;
+        const item=document.querySelector(`[data-rev="${i}"] .ic`); if(item) item.textContent=good?'✅':'❌';
+        div.innerHTML=`<p class="lead" style="font-weight:700;color:${good?'var(--ok)':'var(--bad)'}">${good?'✅ Comptée juste':'❌ Comptée fausse'}</p>`;
+        const r=computeScore(); const p=r.gradable?Math.round(r.score/r.gradable*100):0;
+        const col=p>=75?'#34d399':p>=50?'#fbbf24':'#fb7185';
+        document.getElementById('score-big').textContent=r.score+'/'+r.gradable;
+        document.getElementById('ring').style.setProperty('--pct',p);
+        document.getElementById('ring').style.setProperty('--ring-color',col);
+        document.getElementById('pct-line').innerHTML=`Score : ${p}% &nbsp;·&nbsp; ${s.quiz.nom}`;
+        document.getElementById('verdict').textContent=p>=75?'Excellent ! 🎉':p>=50?'Bien, continue ! 💪':'À retravailler 📚';
+      });
+    });
+  });
+}
+
+/* -------------------- NAVIGATION -------------------- */
+function goBack(){
+  if(navContext && navContext.type==='dossier') renderDossier(navContext.di);
+  else renderHome();
+}
+btnHome.addEventListener('click', ()=>{
+  if(state && !state.finished){ if(!confirm('Quitter le quiz en cours ? Ta progression sera perdue.')) return; }
+  renderHome();
+});
+
+renderHome();
+</script>
+</body>
+</html>
