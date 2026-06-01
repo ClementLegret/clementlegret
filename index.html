@@ -193,6 +193,26 @@
   .tag-ok{color:var(--ok);font-weight:600} .tag-bad{color:var(--bad);font-weight:600}
   .selfrate{display:flex;gap:9px;margin-top:9px}
   .selfrate .btn{padding:10px;font-size:.85rem}
+  /* ---------- Classement & profil ---------- */
+  .profile-row,.pub-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .profile-row input,.pub-row input,.lb-controls select{background:var(--glass-2);border:1px solid var(--line-2);
+    color:var(--ink);border-radius:11px;padding:11px 13px;font:inherit;font-size:.95rem}
+  .profile-row input{flex:1;min-width:150px}
+  .profile-row input:focus,.pub-row input:focus,.lb-controls select:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(34,211,238,.15)}
+  .lb-controls{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px}
+  .lb-controls label{display:flex;flex-direction:column;gap:6px;font-size:.7rem;color:var(--faint);font-weight:800;text-transform:uppercase;letter-spacing:.5px}
+  .lb-controls select{cursor:pointer}
+  .lb-table{display:flex;flex-direction:column;gap:7px;margin-top:10px}
+  .lb-row{display:grid;grid-template-columns:40px 1fr 74px 52px 96px;align-items:center;gap:8px;padding:12px 13px;
+    border:1px solid var(--line);border-radius:12px;background:var(--glass-2);font-size:.92rem}
+  .lb-row span:nth-child(1){font-weight:800;color:var(--cyan)}
+  .lb-row span:nth-child(2){font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .lb-row span small{display:block;color:var(--faint);font-weight:500;font-size:.72rem;white-space:nowrap}
+  .lb-row.lb-head{background:transparent;border-color:transparent;color:var(--faint);font-size:.66rem;
+    text-transform:uppercase;letter-spacing:.5px;font-weight:800;padding:2px 13px}
+  .lb-row.lb-head span:nth-child(1){color:var(--faint)}
+  .lb-row.lb-me{border-color:var(--cyan);box-shadow:inset 0 0 0 1px rgba(34,211,238,.4)}
+  code{background:rgba(120,170,255,.12);border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:.86em}
   .hidden{display:none!important}
   footer{text-align:center;color:var(--faint);font-size:.74rem;padding:18px;position:relative;z-index:1}
 </style>
@@ -213,6 +233,8 @@
 <div class="app" id="app"></div>
 <footer>UE 2.7 · Défaillances organiques et processus dégénératifs · Application de révision IFSI</footer>
 
+<!-- SDK Supabase (classement en ligne) — chargé depuis un CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ============================================================
    DONNÉES — UE 2.7
@@ -1494,6 +1516,135 @@ const DATA = { dossiers: [
     }
   ]
 },
+/* ====================== ANNALES — ÉVALUATIONS 2.7 ====================== */
+{
+  id:"annales", nom:"Annales — Évaluations 2.7", ico:"📝",
+  desc:"Sujets d'examen 2.7 (2021 & 2022) reconstitués d'après les corrigés.",
+  long:"Annales des évaluations UE 2.7 (sessions 2021 et 2022) : situations cliniques et questions ouvertes posées en examen, avec les réponses attendues issues des corrigés officiels. Idéal pour s'entraîner en conditions réelles.",
+  quizzes:[
+    {
+      id:"eval-2021", nom:"Évaluation 2.7 — Session 2021",
+      desc:"12 questions : cardio/IRC, sclérose en plaques, diabète/pied",
+      questions:[
+        {type:"libre", q:"Situation A — Citez 2 facteurs favorisants de l'insuffisance rénale chronique.",
+          a:"Le diabète et l'hypertension artérielle (HTA)",
+          exp:"Le diabète et l'HTA sont les deux principales causes de maladie rénale chronique."},
+        {type:"libre", q:"Situation A — Patiente de 83 ans ayant fait un OAP : émettez une hypothèse de problème de santé principal en argumentant.",
+          a:"L'OAP (œdème aigu du poumon), décompensation aiguë de l'insuffisance cardiaque gauche",
+          exp:"L'IC gauche augmente les pressions en amont du ventricule gauche → augmentation de la pression hydrostatique capillaire pulmonaire → fuite de liquide vers l'interstitium puis l'alvéole = OAP. Signes : dyspnée, râles crépitants bilatéraux, expectorations mousseuses."},
+        {type:"libre", q:"Situation A — Citez 10 règles hygiéno-diététiques à respecter dans le cadre de l'insuffisance cardiaque.",
+          a:"Régime pauvre en sodium (~3 g/j), restriction hydrique si IC sévère, pesée ≥ 2×/semaine, arrêt du tabac, arrêt de l'alcool, lutte contre l'obésité, vaccination grippe + pneumocoque, éviter altitude/chaleur/humidité, prudence avec les AINS, activité physique adaptée (repos en phase de décompensation)",
+          exp:"L'éducation thérapeutique (reconnaître les signes d'aggravation : prise de poids rapide, dyspnée) complète ces mesures."},
+        {type:"libre", q:"Situation A — Définissez la clairance de la créatinine et donnez-en la norme.",
+          a:"Évaluation de la fonction rénale par la mesure du débit de filtration glomérulaire ; norme ≈ 120 ± 20 mL/min",
+          exp:"Obtenue par la mesure de la créatinine sanguine et urinaire + débit urinaire sur 24 h. Elle diminue d'environ 1 mL/min/an après 40 ans."},
+        {type:"libre", q:"Situation A — Précisez les caractéristiques des douleurs de l'arthrose et de l'arthrite.",
+          a:"Arthrose : douleur mécanique, diurne, augmentée par l'activité, calmée par le repos, répond aux antalgiques. Arthrite : douleur inflammatoire, nocturne, dérouillage matinal, améliorée par l'activité, répond aux AINS",
+          exp:"L'arthrose est dégénérative (mécanique) ; l'arthrite est inflammatoire."},
+        {type:"libre", q:"Situation B — Définissez la sclérose en plaques en précisant la partie spécifiquement touchée.",
+          a:"Maladie auto-immune, inflammatoire, démyélinisante, chronique du système nerveux central ; la cible est la gaine de myéline (et l'axone)",
+          exp:"Les mécanismes auto-immuns attaquent les cellules synthétisant la myéline ; l'axone peut être atteint de façon primitive ou secondaire."},
+        {type:"libre", q:"Situation B — Qu'est-ce que la spasticité ? Citez 3 facteurs susceptibles de l'aggraver.",
+          a:"Raideur excessive des muscles (extenseurs des jambes, fléchisseurs des bras). Facteurs aggravants : infection, fièvre, fatigue, stress",
+          exp:"La spasticité est une hypertonie d'origine centrale, majorée par les épines irritatives (infection, fièvre…)."},
+        {type:"libre", q:"Situation B — Quelles informations donnez-vous à la patiente sur son traitement par interféron bêta (SEP) ?",
+          a:"Immunomodulateur injecté en IM : varier le site, désinfecter, sortir le stylo du réfrigérateur ~30 min avant ; effet indésirable fréquent : syndrome pseudo-grippal ; surveillance NFS + bilan hépatique (mensuelle puis trimestrielle) ; contre-indications : dépression, épilepsie déséquilibrée, allaitement",
+          exp:"L'interféron réduit d'environ 30 % la fréquence des poussées et ~60 % les nouvelles lésions IRM."},
+        {type:"libre", q:"Situation B — SEP : actions IDE (rôle propre) face à l'altération de la mobilité physique.",
+          a:"Adapter les soins de confort et de bien-être, s'assurer de la programmation des séances de kinésithérapie, administrer les antispastiques prescrits, proposer une douche/bain froid",
+          exp:"Le froid peut soulager la spasticité ; la kiné entretient l'autonomie motrice."},
+        {type:"libre", q:"Situation B — SEP : actions IDE face aux troubles de l'élimination urinaire.",
+          a:"Surveillance de la diurèse, administration des traitements prescrits (anticholinergiques, alpha-bloquants), sondage urinaire si besoin et apprentissage de l'auto-sondage, prévenir et repérer les infections urinaires",
+          exp:"L'auto-sondage favorise l'autonomie et limite le risque infectieux par rapport à la sonde à demeure."},
+        {type:"libre", q:"Situation C — Définissez le mal perforant plantaire.",
+          a:"Ulcération peu ou pas douloureuse (anesthésie liée à la neuropathie), souvent nécrosée (ischémie) et surinfectée, atteignant la peau, les tissus mous et éventuellement l'os et les articulations",
+          exp:"Il survient sur un terrain de neuropathie diabétique avec zone d'appui anormale."},
+        {type:"libre", q:"Situation C — Décrivez le rôle infirmier concernant le mal perforant plantaire.",
+          a:"Vérifier le chaussage (origine micro-traumatique), assurer le soin des pieds (lavage, séchage), réaliser un bilan infectieux (CRP, hyperleucocytose) et solliciter le médecin, surveiller les pieds régulièrement, s'assurer du suivi par le pédicure",
+          exp:"Décharge de la zone d'appui + éducation du patient sont essentielles."},
+        {type:"libre", q:"Situation C — Citez 4 signes de l'hypothyroïdie.",
+          a:"Ralentissement psychomoteur, asthénie, frilosité, prise de poids, constipation, troubles de la mémoire, bradycardie",
+          exp:"L'hypothyroïdie correspond à un ralentissement métabolique général."}
+      ]
+    },
+    {
+      id:"eval-2022", nom:"Évaluation 2.7 — Session 2022",
+      desc:"IRC, diabète, insuffisance cardiaque, Alzheimer + série Vrai/Faux",
+      questions:[
+        {type:"libre", q:"Précisez les signes cliniques et biologiques de l'insuffisance rénale chronique.",
+          a:"Apparaissent quand il reste moins de 15 % de néphrons. Syndrome urémique : asthénie, nausées/vomissements, anorexie, céphalées, somnolence. Cardiovasculaire : HTA, anémie, insuffisance ventriculaire gauche. Hématologique : anémie (Hb < 12 g/dL), thrombopathie. Osseux : hyperparathyroïdie (phosphore augmenté, PTH augmentée, calcium normal ou bas), ostéomalacie",
+          exp:"L'IRC associe rétention des toxines urémiques, troubles hydro-électrolytiques et anomalies endocriniennes (baisse de vitamine D et d'EPO)."},
+        {type:"libre", q:"Qu'est-ce que la créatinine et quel est l'intérêt de la clairance de la créatinine ?",
+          a:"La créatinine est un déchet provenant de la dégradation de la créatine musculaire. La clairance évalue la fonction rénale par la mesure du débit de filtration glomérulaire (norme ≈ 120 ± 20 mL/min)",
+          exp:"Elle se calcule à partir de la créatinine sanguine et urinaire et du débit urinaire sur 24 h."},
+        {type:"libre", q:"Précisez les conditions de découverte et les signes cliniques du diabète de type 1.",
+          a:"Maladie auto-immune du sujet jeune (pic 18-24 ans), souvent associée à d'autres maladies auto-immunes. Début aigu et bruyant : syndrome cardinal (polyurie, polydipsie, amaigrissement, polyphagie, asthénie) ou acidocétose (dyspnée ample, haleine acétonique, déshydratation). Biologie : hyperglycémie, glycosurie, cétonurie, pH < 7,35",
+          exp:"On retrouve aussi une hyponatrémie et une hyperkaliémie dans l'acidocétose."},
+        {type:"libre", q:"Indiquez les signes qu'une personne présenterait si elle se trouvait en hypoglycémie.",
+          a:"Faim, asthénie, sueurs, sensation de tête vide, tachycardie, tremblements",
+          exp:"Ce sont les signes neuro-végétatifs précoces de l'hypoglycémie."},
+        {type:"libre", q:"Précisez la conduite à tenir face à une hypoglycémie.",
+          a:"Confirmer par une glycémie capillaire, resucrage par sucres rapides ; si voie orale impossible : resucrage IV (sérum glucosé 30 %) ou glucagon",
+          exp:"Contrôle de la glycémie après 15 minutes, puis sucres lents si nécessaire."},
+        {type:"libre", q:"Citez 3 complications de microangiopathie diabétique.",
+          a:"Rétinopathie diabétique (risque de cécité), néphropathie diabétique, neuropathies diabétiques",
+          exp:"La microangiopathie atteint les petits vaisseaux : œil, rein, nerfs."},
+        {type:"libre", q:"Qu'est-ce que l'insuffisance cardiaque ? Nommez 4 étiologies.",
+          a:"Incapacité du cœur à assurer sa fonction de pompe et à oxygéner correctement les organes. Étiologies : cardiopathies ischémiques/valvulaires (infarctus), HTA, cardiomyopathies, causes toxiques (alcool), causes endocriniennes (diabète, dysthyroïdie)",
+          exp:"On distingue symptômes (dyspnée, fatigue), signes (tachycardie, râles, œdèmes) et preuve objective (échographie, élévation du BNP)."},
+        {type:"libre", q:"Précisez les signes de l'insuffisance cardiaque gauche et de l'insuffisance cardiaque droite.",
+          a:"IC gauche : dyspnée d'effort (classification NYHA), orthopnée, épisodes d'OAP, râles crépitants. IC droite : turgescence jugulaire, reflux hépato-jugulaire, hépatomégalie, œdèmes des membres inférieurs (mous, blancs, indolores, godet, déclives), ascite tardive",
+          exp:"L'IC gauche retentit en amont sur le poumon ; l'IC droite sur la circulation veineuse systémique."},
+        {type:"libre", q:"Citez au moins 10 signes d'alerte pouvant évoquer une maladie d'Alzheimer.",
+          a:"Pertes de mémoire, difficultés dans les tâches familières, désorientation temporo-spatiale, difficultés de langage/expression, troubles de la concentration et du jugement, tendance à égarer des objets, changements de comportement/humeur, retrait des activités sociales, négligence de l'allure personnelle, difficultés de planification",
+          exp:"Les signes débutants sont insidieux et évoluent progressivement."},
+        {type:"libre", q:"Quelles attitudes adopter (savoir-être / savoir-agir) face à une personne atteinte d'Alzheimer débutant ?",
+          a:"Plutôt qu'argumenter → approuver ; raisonner → faire diversion ; sermonner → rassurer ; dire « souviens-toi » → rappeler ; « tu ne peux pas » → « fais ce que tu peux » ; réclamer → guider ; forcer → renforcer ; adopter une attitude encourageante",
+          exp:"On évite la confrontation et on valorise les capacités préservées."},
+        {type:"libre", q:"Définissez l'hypothyroïdie et indiquez ses signes cliniques.",
+          a:"Carence en hormones thyroïdiennes, le plus souvent d'origine auto-immune. Signes : ralentissement psychomoteur, asthénie, troubles de la mémoire, frilosité, constipation, prise de poids modérée, paresthésies/myalgies, troubles de la libido",
+          exp:"Profil biologique : TSH élevée, T4 basse."},
+        {type:"libre", q:"Définissez la sclérose en plaques en précisant son mode d'évolution.",
+          a:"Maladie auto-immune inflammatoire démyélinisante chronique du système nerveux central, atteignant la gaine de myéline. Évolution le plus souvent par poussées (forme rémittente-récurrente), pouvant devenir secondairement progressive",
+          exp:"La poussée = apparition/aggravation de symptômes > 24 h, à distance de toute fièvre."},
+        {type:"vf", q:"V/F — La goutte est un rhumatisme lié à des microcristaux dans les articulations.", a:true,
+          exp:"Vrai. La goutte est liée à des microcristaux d'urate de sodium dans les articulations."},
+        {type:"vf", q:"V/F — Les néphropathies fonctionnelles sont réversibles avec un traitement adapté (réhydratation, rétablissement de la pression artérielle, traitement de l'insuffisance cardiaque).", a:true,
+          exp:"Vrai. Les néphropathies fonctionnelles sont réversibles si la cause est corrigée rapidement."},
+        {type:"vf", q:"V/F — La pression artérielle est le résultat du débit cardiaque × résistances artérielles.", a:true,
+          exp:"Vrai. PA = débit cardiaque × résistances vasculaires périphériques."},
+        {type:"vf", q:"V/F — Le BNP / pro-BNP est un marqueur de l'insuffisance cardiaque.", a:true,
+          exp:"Vrai. Le BNP et le pro-BNP s'élèvent dans l'insuffisance cardiaque."},
+        {type:"vf", q:"V/F — La DMLA est une dégénérescence de la macula entraînant une perception déformée des lignes droites et des images.", a:true,
+          exp:"Vrai. La DMLA atteint la macula (vision centrale) et déforme les lignes droites (métamorphopsies)."},
+        {type:"vf", q:"V/F — Le glaucome est une maladie ophtalmologique associée à la destruction progressive du nerf optique.", a:true,
+          exp:"Vrai. Le glaucome détruit progressivement le nerf optique (souvent par hypertonie oculaire)."},
+        {type:"vf", q:"V/F — L'hypertension portale est une des complications de la cirrhose du foie.", a:true,
+          exp:"Vrai. L'hypertension portale est une complication majeure de la cirrhose."},
+        {type:"vf", q:"V/F — L'ostéoporose augmente la densité osseuse de l'ensemble du squelette.", a:false,
+          exp:"Faux. L'ostéoporose DIMINUE la densité osseuse, fragilisant l'os."},
+        {type:"vf", q:"V/F — Lorsque le débit de filtration glomérulaire diminue, la créatinine baisse.", a:false,
+          exp:"Faux. Quand le DFG diminue, la créatinine sanguine AUGMENTE (mauvaise épuration)."},
+        {type:"vf", q:"V/F — L'hémodialyse est réalisée à domicile, à raison d'au moins 3 séances par semaine d'une durée de quatre heures.", a:false,
+          exp:"Faux. L'hémodialyse classique se réalise en centre (≈ 3 séances/semaine de 4 h). C'est la dialyse péritonéale qui se fait à domicile."},
+        {type:"vf", q:"V/F — Un déséquilibre ionique sanguin peut provoquer des troubles du rythme cardiaque.", a:true,
+          exp:"Vrai. Les dyskaliémies et dyscalcémies peuvent provoquer des troubles du rythme."},
+        {type:"vf", q:"V/F — Un rhumatisme articulaire aigu ou une infection peuvent entraîner une valvulopathie cardiaque.", a:true,
+          exp:"Vrai. Le RAA et certaines infections (endocardite) peuvent léser les valves cardiaques."},
+        {type:"vf", q:"V/F — La cirrhose du foie peut entraîner des troubles de l'hématose.", a:true,
+          exp:"Vrai. La cirrhose peut entraîner un syndrome hépato-pulmonaire avec troubles de l'hématose (échanges gazeux)."},
+        {type:"vf", q:"V/F — L'arthrose se manifeste par une douleur diurne qui augmente avec l'activité physique.", a:true,
+          exp:"Vrai. L'arthrose donne une douleur mécanique, diurne, majorée par l'effort et calmée par le repos."},
+        {type:"vf", q:"V/F — L'arthrite se manifeste par une douleur diurne qui augmente avec l'activité physique.", a:false,
+          exp:"Faux. L'arthrite donne une douleur inflammatoire, plutôt nocturne, avec dérouillage matinal et amélioration par l'activité."},
+        {type:"vf", q:"V/F — Les douleurs de l'arthrose sont calmées par le repos et répondent aux antalgiques de palier 1, 2 et 3.", a:true,
+          exp:"Vrai. La douleur arthrosique (mécanique) est calmée par le repos et répond aux antalgiques."},
+        {type:"vf", q:"V/F — Le vieillissement pulmonaire est indépendant de l'état général de la personne.", a:false,
+          exp:"Faux. Le vieillissement pulmonaire dépend de l'état général, du mode de vie (tabac) et des comorbidités."}
+      ]
+    }
+  ]
+},
 /*INSERT_DOSSIERS*/
 ]};
 
@@ -1529,6 +1680,120 @@ function buildQuestions(quiz){
 }
 
 /* -------------------- ÉCRAN : MENU PRINCIPAL -------------------- */
+/* ============================================================
+   CLASSEMENT EN LIGNE (Supabase + pseudo)
+   ▼▼▼  À CONFIGURER (une seule fois)  ▼▼▼
+   1) Crée un projet gratuit sur https://supabase.com
+   2) Project Settings ▸ API : copie "Project URL" et la clé "anon public"
+   3) Remplace les deux valeurs ci-dessous
+   4) Crée la table avec le SQL fourni (voir le message d'accompagnement)
+   ============================================================ */
+const SUPABASE_URL      = "https://uxgxxbpjqilbkqlwfpjq.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_4qbJjwGD2NGsUfhMOsicOA_qolJBkYn";
+
+let _sb = null;
+function sbReady(){
+  if(_sb) return true;
+  if(typeof window.supabase==='undefined') return false;
+  if(!SUPABASE_URL || SUPABASE_URL.indexOf('VOTRE-PROJET')>=0) return false;
+  if(!SUPABASE_ANON_KEY || SUPABASE_ANON_KEY.indexOf('VOTRE_CLE')>=0) return false;
+  try { _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); return true; }
+  catch(e){ return false; }
+}
+function getPseudo(){ return localStorage.getItem('ue27_pseudo')||''; }
+function setPseudo(p){ localStorage.setItem('ue27_pseudo', String(p).trim().slice(0,24)); }
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+const MODE_LABEL2 = { examen:'Examen', difficile:'Difficile', entrainement:'Entraînement' };
+
+function getPromo(){ return localStorage.getItem('ue27_promo')||''; }
+function setPromo(p){ localStorage.setItem('ue27_promo', String(p).trim().slice(0,24)); }
+
+const VALID_MODES = ['examen','difficile','entrainement'];
+/* Validation côté client (anti-saisie aberrante). La base applique les mêmes règles via CHECK. */
+function validateRec(rec){
+  if(!rec.pseudo || rec.pseudo.length<1 || rec.pseudo.length>24) return 'Pseudo invalide (1 à 24 caractères).';
+  if(rec.promo && rec.promo.length>24) return 'Promo trop longue (24 caractères max).';
+  if(VALID_MODES.indexOf(rec.mode)<0) return 'Mode invalide.';
+  if(!Number.isInteger(rec.total) || rec.total<1 || rec.total>40) return 'Nombre de questions invalide.';
+  if(!Number.isInteger(rec.score) || rec.score<0 || rec.score>rec.total) return 'Score invalide.';
+  if(!Number.isInteger(rec.pct) || rec.pct<0 || rec.pct>100) return 'Pourcentage invalide.';
+  return null;
+}
+async function submitScore(rec){
+  if(!sbReady()) throw new Error('Classement non configuré');
+  const err=validateRec(rec); if(err) throw new Error(err);
+  const { error } = await _sb.from('scores').insert(rec);
+  if(error) throw error;
+}
+async function fetchScores(quizFilter, modeFilter, promoFilter){
+  if(!sbReady()) throw new Error('Classement non configuré');
+  let q = _sb.from('scores').select('pseudo,promo,quiz,mode,score,total,pct,created_at')
+            .order('pct',{ascending:false}).order('score',{ascending:false})
+            .order('created_at',{ascending:true}).limit(100);
+  if(quizFilter && quizFilter!=='__all__') q = q.eq('quiz', quizFilter);
+  if(modeFilter && modeFilter!=='__all__') q = q.eq('mode', modeFilter);
+  if(promoFilter) q = q.eq('promo', promoFilter);
+  const { data, error } = await q;
+  if(error) throw error;
+  return data||[];
+}
+function quizListForFilter(){
+  const list=[{v:'Examen blanc global UE 2.7', l:'🌐 Examen blanc global'}];
+  DATA.dossiers.forEach(d=>{ list.push({v:'Examen blanc — '+d.nom, l:'🏆 Examen — '+d.nom}); });
+  return list;
+}
+function lbNotConfiguredHTML(){
+  return `<h2>Classement non configuré</h2>
+    <p class="lead">Le classement en ligne n'est pas encore activé. Pour l'activer, ouvre <code>index.html</code> et renseigne <code>SUPABASE_URL</code> et <code>SUPABASE_ANON_KEY</code> en haut du script (instructions fournies). En attendant, tous les autres modes fonctionnent normalement.</p>`;
+}
+
+/* -------------------- ÉCRAN : CLASSEMENT -------------------- */
+function renderLeaderboard(){
+  state=null; window.scrollTo(0,0); btnHome.style.display='flex'; timerEl.style.display='none';
+  brandSub.textContent='Classement';
+  const quizzes=quizListForFilter(); const pseudo=getPseudo();
+  app.innerHTML=`
+    <div class="card">
+      <button class="btn-home" style="display:inline-flex;margin-bottom:16px" id="lb-back">↩ Menu principal</button>
+      <span class="pill">🏆 Classement en ligne</span>
+      <h1>Classement</h1>
+      <p class="lead">${pseudo?('Ton pseudo : <strong>'+escapeHtml(pseudo)+'</strong>. '):''}Compare tes résultats à ceux des autres.</p>
+      <div class="lb-controls">
+        <label>Épreuve<select id="lb-quiz">${quizzes.map(q=>`<option value="${escapeHtml(q.v)}">${q.l}</option>`).join('')}</select></label>
+        <label>Mode<select id="lb-mode"><option value="examen">Examen</option><option value="difficile">Difficile</option><option value="__all__">Tous</option></select></label>
+        <label>Promo<input id="lb-promo" placeholder="Toutes" maxlength="24" value="${escapeHtml(getPromo())}"></label>
+      </div>
+    </div>
+    <div class="card" id="lb-result"><p class="lead">Chargement…</p></div>`;
+  document.getElementById('lb-back').addEventListener('click', renderHome);
+  const reload=()=> loadLeaderboard(document.getElementById('lb-quiz').value, document.getElementById('lb-mode').value, document.getElementById('lb-promo').value.trim());
+  document.getElementById('lb-quiz').addEventListener('change', reload);
+  document.getElementById('lb-mode').addEventListener('change', reload);
+  document.getElementById('lb-promo').addEventListener('change', reload);
+  if(!sbReady()){ document.getElementById('lb-result').innerHTML=lbNotConfiguredHTML(); }
+  else { reload(); }
+}
+async function loadLeaderboard(quizFilter, modeFilter, promoFilter){
+  const box=document.getElementById('lb-result'); if(!box) return;
+  box.innerHTML='<p class="lead">Chargement…</p>';
+  try{
+    const rows=await fetchScores(quizFilter, modeFilter, promoFilter);
+    if(!rows.length){ box.innerHTML='<h2>Top scores</h2><p class="lead">Aucun score publié pour ces critères. Sois le premier à publier le tien ! 🚀</p>'; return; }
+    const me=getPseudo();
+    let html='<h2>Top scores</h2><div class="lb-table"><div class="lb-row lb-head"><span>#</span><span>Pseudo</span><span>Score</span><span>%</span><span>Mode</span></div>';
+    rows.forEach((r,i)=>{
+      const mine = (me && r.pseudo===me) ? ' lb-me' : '';
+      const rank = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
+      const promo = r.promo ? `<small>${escapeHtml(r.promo)}</small>` : '';
+      html+=`<div class="lb-row${mine}"><span>${rank}</span><span>${escapeHtml(r.pseudo)}${promo}</span><span>${r.score}/${r.total}</span><span>${r.pct}%</span><span>${MODE_LABEL2[r.mode]||r.mode}</span></div>`;
+    });
+    html+='</div>';
+    box.innerHTML=html;
+  }catch(e){
+    box.innerHTML='<h2>Top scores</h2><p class="lead">Impossible de charger le classement. Vérifie ta connexion internet ou la configuration Supabase.</p>';
+  }
+}
+
 function renderHome(){
   state=null; navContext={type:'home'}; stopTimer();
   btnHome.style.display='none'; timerEl.style.display='none';
@@ -1556,7 +1821,7 @@ function renderHome(){
       <div class="stats">
         <div class="stat"><div class="n">${DATA.dossiers.length}</div><div class="l">Dossiers</div></div>
         <div class="stat"><div class="n">${totalQ}</div><div class="l">Questions</div></div>
-        <div class="stat"><div class="n">2</div><div class="l">Modes</div></div>
+        <div class="stat"><div class="n">3</div><div class="l">Modes</div></div>
       </div>
     </div>
     <div class="card">
@@ -1574,6 +1839,17 @@ function renderHome(){
           <div class="meta">40 questions · minuté 10 min</div>
         </button>
       </div>
+    </div>
+    <div class="card">
+      <h2>🏆 Classement &amp; profil</h2>
+      <p class="lead" style="margin-bottom:14px">Choisis un pseudo, puis publie tes scores en fin de quiz pour te comparer aux autres étudiants.</p>
+      <div class="profile-row">
+        <input id="home-pseudo" placeholder="Ton pseudo" maxlength="24" value="${escapeHtml(getPseudo())}">
+        <input id="home-promo" placeholder="Ta promo (ex. 2024-2027)" maxlength="24" value="${escapeHtml(getPromo())}">
+        <button class="btn btn-ghost" id="home-pseudo-save" style="width:auto">💾 Enregistrer</button>
+        <button class="btn btn-primary" id="home-leaderboard" style="width:auto">🏆 Voir le classement</button>
+      </div>
+      <p class="lead" id="home-pseudo-msg" style="font-size:.78rem;margin-top:10px">${sbReady()?'':'⚙️ Classement en ligne pas encore activé — il suffit de renseigner la config Supabase en haut du fichier.'}</p>
     </div>`;
 
   document.querySelectorAll('[data-dossier]').forEach(b=>{
@@ -1582,6 +1858,15 @@ function renderHome(){
   document.getElementById('global-exam').addEventListener('click', ()=>{
     const quiz={ nom:'Examen blanc global UE 2.7', desc:'40 questions tirées dans tous les dossiers.', exam:true, scope:'global', count:40 };
     renderModeChoice(quiz);
+  });
+  document.getElementById('home-leaderboard').addEventListener('click', renderLeaderboard);
+  document.getElementById('home-pseudo-save').addEventListener('click', ()=>{
+    const v=document.getElementById('home-pseudo').value.trim();
+    const pr=document.getElementById('home-promo').value.trim();
+    const msg=document.getElementById('home-pseudo-msg');
+    if(!v){ msg.textContent='⚠️ Saisis un pseudo.'; return; }
+    setPseudo(v); setPromo(pr);
+    msg.textContent='✅ Enregistré : '+v+(pr?(' · promo '+pr):'');
   });
 }
 
@@ -1896,6 +2181,7 @@ function renderResults(byTimeout){
         <button class="btn btn-ghost" id="retry">↻ Recommencer</button>
         <button class="btn btn-primary" id="to-home">Menu principal</button>
       </div>
+      <div id="publish-zone" style="margin-top:14px"></div>
     </div>
     <div class="card">
       <h2>📋 Corrigé détaillé</h2>
@@ -1913,6 +2199,34 @@ function renderResults(byTimeout){
   document.getElementById('retry2').addEventListener('click', ()=> startQuiz(s.quiz, s.mode));
   document.getElementById('to-home').addEventListener('click', goBack);
   document.getElementById('to-home2').addEventListener('click', goBack);
+
+  /* ---- Publication du score au classement ---- */
+  const pubZone=document.getElementById('publish-zone');
+  function drawPublish(){
+    if(!pubZone) return;
+    if(!sbReady()){ pubZone.innerHTML='<p class="lead" style="font-size:.8rem">🏆 Classement en ligne non activé.</p>'; return; }
+    const pseudo=getPseudo();
+    pubZone.innerHTML = pseudo
+      ? `<button class="btn btn-primary" id="pub-go" style="width:auto">📤 Publier mon score (${escapeHtml(pseudo)})</button>`
+      : `<div class="pub-row"><input id="pub-pseudo" placeholder="Ton pseudo" maxlength="24"><button class="btn btn-primary" id="pub-go" style="width:auto">📤 Publier</button></div>`;
+    const go=document.getElementById('pub-go');
+    if(go) go.addEventListener('click', async ()=>{
+      let pseudo=getPseudo();
+      const inp=document.getElementById('pub-pseudo');
+      if(inp){ pseudo=inp.value.trim(); if(!pseudo){ inp.focus(); return; } setPseudo(pseudo); }
+      go.disabled=true; go.textContent='Publication…';
+      const r=computeScore(); const p=r.gradable?Math.round(r.score/r.gradable*100):0;
+      try{
+        await submitScore({ pseudo, promo:getPromo(), quiz:s.quiz.nom, mode:s.mode, score:r.score, total:r.gradable, pct:p });
+        pubZone.innerHTML=`<p class="lead" style="color:var(--ok);font-weight:700">✅ Score publié au classement !</p><button class="btn btn-ghost" id="pub-see" style="width:auto;margin-top:8px">🏆 Voir le classement</button>`;
+        document.getElementById('pub-see').addEventListener('click', renderLeaderboard);
+      }catch(e){
+        go.disabled=false; go.textContent='📤 Réessayer';
+        if(!document.getElementById('pub-err')) pubZone.insertAdjacentHTML('beforeend','<p class="lead" id="pub-err" style="color:var(--bad);font-size:.8rem;margin-top:8px">Échec de la publication. Vérifie ta connexion.</p>');
+      }
+    });
+  }
+  drawPublish();
 
   document.querySelectorAll('.selfrate').forEach(div=>{
     const i=+div.dataset.i;
