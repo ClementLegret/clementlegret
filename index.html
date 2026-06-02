@@ -134,6 +134,8 @@
   .progress > i{display:block;height:100%;border-radius:999px;transition:width .35s cubic-bezier(.4,0,.2,1);
     background:linear-gradient(90deg,var(--cyan),var(--blue));box-shadow:0 0 12px rgba(34,211,238,.6)}
   .qtype{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--cyan);margin-bottom:8px}
+  .qtheme{display:inline-block;background:rgba(167,139,250,.16);color:var(--violet);border:1px solid rgba(167,139,250,.34);
+    border-radius:999px;padding:1px 9px;font-size:.66rem;font-weight:800;letter-spacing:.4px;text-transform:none;vertical-align:middle}
   .qtext{font-size:1.25rem;font-weight:700;margin-bottom:20px;line-height:1.4;letter-spacing:-.2px}
   .options{display:flex;flex-direction:column;gap:11px}
   .opt{display:flex;align-items:center;gap:13px;border:1px solid var(--line);border-radius:13px;padding:15px;
@@ -1644,6 +1646,523 @@ const DATA = { dossiers: [
     }
   ]
 },
+/* ====================== MORT INATTENDUE DU NOURRISSON ====================== */
+{
+  id:"min", nom:"Mort inattendue du nourrisson", ico:"👶",
+  desc:"MIN : définition, triple risque, prévention et rôle IDE.",
+  long:"Mort inattendue du nourrisson (MIN) : définition, épidémiologie, modèle du triple risque, facteurs de risque et de protection, prévention (couchage, literie, environnement) et rôle infirmier.",
+  quizzes:[
+    {
+      id:"min-q", nom:"MIN — prévention & prise en charge",
+      desc:"Définition, triple risque, couchage, facteurs protecteurs",
+      questions:[
+        {type:"qcm", q:"Comment définit-on la mort inattendue du nourrisson (MIN) ?", o:[
+          M("Le décès subit et inexpliqué d'un nourrisson de moins d'1 an, jusqu'alors bien portant",1),
+          M("Le décès d'un enfant de plus de 2 ans atteint d'une maladie chronique"),
+          M("Un malaise du nourrisson sans décès"),
+          M("Une mort fœtale in utero")],
+          exp:"La MIN est le décès subit et inexpliqué d'un nourrisson de 1 mois à 1 an, jusqu'alors bien portant, survenant le plus souvent pendant le sommeil."},
+        {type:"vf", q:"La MIN est la 1re cause de décès des nourrissons entre 28 jours et 1 an.", a:true,
+          exp:"Vrai. La MIN est la première cause de décès entre 28 jours et 1 an."},
+        {type:"qcm", q:"À quel âge se situe le pic de fréquence de la MIN ?", o:[
+          M("Entre 2 et 4 mois",1), M("Entre 9 et 12 mois"), M("Après 18 mois"), M("À la naissance")],
+          exp:"Le pic se situe entre 2 et 4 mois ; 75 % des cas surviennent avant 6 mois, avec une prédominance masculine."},
+        {type:"qcm", q:"Que désigne la MSN (mort subite du nourrisson / SIDS) ?", o:[
+          M("Le sous-ensemble des MIN qui restent inexpliquées après une enquête complète",1),
+          M("Toutes les morts inattendues, expliquées ou non"),
+          M("Les décès par maladie connue"),
+          M("Les décès accidentels uniquement")],
+          exp:"La MSN/SIDS est le sous-ensemble des MIN restant inexpliquées après enquête complète (environ 50 % des cas)."},
+        {type:"libre", q:"Citez les 3 composantes du modèle du triple risque de la MIN.",
+          a:"Un enfant vulnérable + une période critique du développement (2-4 mois) + un facteur de stress exogène",
+          exp:"Triple risque : enfant vulnérable, période critique (2-4 mois), facteur de stress exogène. Seul ce dernier est modifiable par la prévention."},
+        {type:"qcm", q:"Sur quelle composante du triple risque l'IDE peut-elle agir ?", o:[
+          M("Le facteur de stress exogène",1),
+          M("La vulnérabilité de l'enfant"),
+          M("La période critique du développement"),
+          M("La prédisposition génétique")],
+          exp:"Seul le facteur de stress exogène est modifiable (couchage adapté, absence de tabac…) : c'est tout l'intérêt de la prévention."},
+        {type:"qcm", q:"Quelle est la mesure de prévention LA PLUS EFFICACE de la MIN ?", o:[
+          M("Le couchage sur le dos",1), M("Le couchage sur le ventre"), M("Le couchage sur le côté"), M("Le partage du lit avec les parents")],
+          exp:"Le couchage sur le dos (exclusivement, jusqu'à ce que l'enfant se retourne seul) est la mesure la plus efficace, validée par la HAS."},
+        {type:"vf", q:"Le couchage sur le côté est une position sûre pour prévenir la MIN.", a:false,
+          exp:"Faux. Le couchage latéral est instable (bascule sur le ventre dans ~50 % des cas). Seul le couchage sur le dos est recommandé."},
+        {type:"qcm", q:"Quelles sont les bonnes conditions de couchage du nourrisson ?", o:[
+          M("Gigoteuse / turbulette",1),
+          M("Matelas ferme aux dimensions du lit",1),
+          M("Lit à barreaux dégagé, tête et visage découverts",1),
+          M("Oreiller et couette pour le confort")],
+          exp:"Gigoteuse, matelas ferme, lit à barreaux dégagé. À proscrire : oreiller, couette, couverture, tour de lit, cale-tête, multiples peluches."},
+        {type:"qcm", q:"Quelle est la température recommandée pour la chambre du nourrisson ?", o:[
+          M("18 à 20 °C",1), M("24 à 26 °C"), M("12 à 14 °C"), M("Peu importe")],
+          exp:"18-20 °C : l'enfant se défend mieux contre le froid que contre la chaleur (vigilance surchauffe)."},
+        {type:"qcm", q:"Parmi ces éléments, lesquels sont des facteurs de PROTECTION contre la MIN ?", o:[
+          M("L'allaitement maternel",1),
+          M("Le partage de la chambre jusqu'à 6 mois",1),
+          M("La tétine à l'endormissement",1),
+          M("Le tabagisme passif")],
+          exp:"Facteurs protecteurs : allaitement, partage de la chambre, tétine à l'endormissement, vaccinations à jour. Le tabac est un facteur de risque."},
+        {type:"vf", q:"Le partage du lit (co-sleeping) est un facteur protecteur contre la MIN.", a:false,
+          exp:"Faux. Piège classique : le partage de la CHAMBRE est protecteur, mais le partage du LIT (co-sleeping) est un facteur de RISQUE."},
+        {type:"qcm", q:"Parmi ces éléments, lesquels sont des facteurs de RISQUE de MIN ?", o:[
+          M("Couchage ventral ou latéral",1),
+          M("Tabagisme anté- et postnatal",1),
+          M("Prématurité, hypotrophie",1),
+          M("Couchage sur le dos en gigoteuse")],
+          exp:"FDR : couchage ventral/latéral, literie inadaptée, surchauffe, co-sleeping, tabagisme, prématurité, sexe masculin."},
+        {type:"qcm", q:"Quand le diagnostic de MIN peut-il être posé ?", o:[
+          M("Au terme d'une enquête et d'un bilan post-mortem complet",1),
+          M("Immédiatement, sans examen"),
+          M("Après un simple examen clinique externe"),
+          M("Uniquement après 1 an")],
+          exp:"Le diagnostic n'est posé qu'après une enquête approfondie et un bilan post-mortem complet, incluant l'autopsie réalisée avec autorisation écrite des parents."},
+        {type:"qcm", q:"La plagiocéphalie (« tête plate ») est due à :", o:[
+          M("L'immobilisation et la limitation de la motricité libre du nourrisson",1),
+          M("Le couchage sur le dos, qu'il faut donc abandonner"),
+          M("Une infection virale"),
+          M("L'allaitement maternel")],
+          exp:"La plagiocéphalie est liée à l'immobilisation, PAS au couchage dorsal qui reste impératif. Prévention : motricité libre, éveil sur le ventre supervisé."},
+        {type:"vf", q:"En raison du risque de plagiocéphalie, il faut coucher le nourrisson sur le ventre.", a:false,
+          exp:"Faux. Le couchage sur le dos reste IMPÉRATIF pour prévenir la MIN. La plagiocéphalie se prévient par la motricité libre et l'éveil sur le ventre supervisé."},
+        {type:"libre", q:"Quel a été l'impact de la campagne « Je dors sur le dos » (1994) ?",
+          a:"Une réduction d'environ 76 % du nombre de décès par MIN en une dizaine d'années",
+          exp:"La campagne « Je dors sur le dos » a réduit la MIN d'environ 76 %, une grande victoire de santé publique."}
+      ]
+    }
+  ]
+},
+/* ====================== OPHTALMOLOGIE ====================== */
+{
+  id:"ophtalmo", nom:"Ophtalmologie", ico:"👁️",
+  desc:"Anatomie de l'œil, pathologies dégénératives, soins et urgences.",
+  long:"Soins de base en ophtalmologie : anatomie et fonctions de l'œil, déficience visuelle, pathologies dégénératives (cataracte, DMLA, glaucome, rétinopathie diabétique, décollement de rétine), traumatismes, instillation des collyres et pansements.",
+  quizzes:[
+    {
+      id:"oeil-anat", nom:"Anatomie & pathologies dégénératives",
+      desc:"Œil, acuité visuelle, cataracte, DMLA, glaucome, décollement",
+      questions:[
+        {type:"qcm", q:"Quel est le rôle de la cornée ?", o:[
+          M("Premier dioptre transparent et avasculaire : elle assure l'essentiel de la réfraction",1),
+          M("Capter la lumière grâce aux photorécepteurs"),
+          M("Faire la mise au point en changeant de courbure"),
+          M("Transmettre l'influx nerveux au cerveau")],
+          exp:"La cornée est le premier dioptre, transparent et avasculaire, qui assure l'essentiel de la convergence des rayons lumineux."},
+        {type:"qcm", q:"Quelle structure assure l'accommodation (mise au point) ?", o:[
+          M("Le cristallin",1), M("La cornée"), M("La rétine"), M("Le nerf optique")],
+          exp:"Le cristallin, lentille biconvexe, modifie sa courbure (via le corps ciliaire) pour faire la mise au point : c'est l'accommodation."},
+        {type:"qcm", q:"Quels photorécepteurs assurent la vision des couleurs et des détails ?", o:[
+          M("Les cônes, concentrés dans la macula",1),
+          M("Les bâtonnets"),
+          M("Les cellules ciliées"),
+          M("Les fibres du nerf optique")],
+          exp:"Les cônes (macula) assurent la vision des couleurs et des détails ; les bâtonnets assurent la vision périphérique et nocturne."},
+        {type:"libre", q:"Quel examen mesure la pression intra-oculaire, examen clé du glaucome ?",
+          a:"La tonométrie",
+          exp:"La tonométrie mesure la pression intra-oculaire (PIO), examen clé pour le dépistage et le suivi du glaucome."},
+        {type:"qcm", q:"Qu'est-ce que la cataracte ?", o:[
+          M("Une opacification du cristallin qui perd sa transparence",1),
+          M("Une dégénérescence de la macula"),
+          M("Une atteinte du nerf optique par hypertonie"),
+          M("Un décollement de la rétine")],
+          exp:"La cataracte est l'opacification du cristallin → baisse de vision progressive. C'est la 1re cause de cécité réversible dans le monde."},
+        {type:"qcm", q:"Quel est le traitement de la cataracte ?", o:[
+          M("La chirurgie : phacoémulsification avec pose d'un implant intra-oculaire",1),
+          M("Des collyres hypotonisants à vie"),
+          M("Des injections d'anti-VEGF"),
+          M("Aucun traitement possible")],
+          exp:"Le traitement est exclusivement chirurgical : phacoémulsification (ultrasons) + implant intra-oculaire, en ambulatoire sous anesthésie locale."},
+        {type:"qcm", q:"La DMLA atteint quelle partie de la vision ?", o:[
+          M("La vision centrale",1),
+          M("La vision périphérique"),
+          M("La vision des deux yeux totalement"),
+          M("Uniquement la vision nocturne")],
+          exp:"La DMLA (dégénérescence maculaire liée à l'âge) atteint la macula donc la vision centrale ; la vision périphérique est conservée."},
+        {type:"qcm", q:"Quels signes évoquent une DMLA ?", o:[
+          M("Scotome central",1),
+          M("Métamorphopsies",1),
+          M("Difficulté à lire et à reconnaître les visages",1),
+          M("Vision en tunnel d'emblée")],
+          exp:"DMLA : scotome central, métamorphopsies (grille d'Amsler), gêne à la lecture. Le tabac est le principal facteur de risque modifiable."},
+        {type:"qcm", q:"Quel est le traitement de référence de la DMLA humide ?", o:[
+          M("Les injections intra-vitréennes d'anti-VEGF",1),
+          M("La chirurgie du cristallin"),
+          M("Les collyres bêtabloquants"),
+          M("Aucun, c'est sans traitement")],
+          exp:"La forme humide (exsudative/néovasculaire) se traite par injections intra-vitréennes d'anti-VEGF, en urgence quand la vision baisse."},
+        {type:"qcm", q:"Le glaucome chronique à angle ouvert se caractérise par :", o:[
+          M("Une atteinte longtemps ASYMPTOMATIQUE du champ visuel périphérique",1),
+          M("Une douleur oculaire intense d'emblée"),
+          M("Une atteinte de la vision centrale en premier"),
+          M("Une guérison spontanée")],
+          exp:"Le glaucome chronique est longtemps asymptomatique (« voleur silencieux ») : atteinte insidieuse du champ visuel périphérique (vision en tunnel tardive)."},
+        {type:"qcm", q:"Le glaucome aigu par fermeture de l'angle est :", o:[
+          M("Une urgence : œil rouge et dur, douleur intense, baisse de vision brutale, halos, nausées",1),
+          M("Une affection bénigne sans symptôme"),
+          M("Une simple fatigue visuelle"),
+          M("Une complication de la cataracte opérée")],
+          exp:"Le glaucome aigu est une urgence thérapeutique : œil rouge et dur, douleur intense, BAV brutale, halos colorés, nausées/vomissements."},
+        {type:"libre", q:"Quel est l'objectif du traitement du glaucome, et par quoi débute-t-il ?",
+          a:"Abaisser la pression intra-oculaire ; collyres hypotonisants au long cours (bêtabloquants, analogues des prostaglandines)",
+          exp:"But : abaisser la PIO. Traitement de 1re intention : collyres hypotonisants au long cours, observance essentielle. Laser/chirurgie en cas d'échec."},
+        {type:"qcm", q:"La rétinopathie diabétique est :", o:[
+          M("Une microangiopathie rétinienne, 1re cause de cécité chez les moins de 65 ans",1),
+          M("Une opacification du cristallin"),
+          M("Une atteinte du nerf optique par hypertonie"),
+          M("Une dégénérescence liée à l'âge")],
+          exp:"La rétinopathie diabétique est une microangiopathie (atteinte des petits vaisseaux rétiniens), 1re cause de cécité chez les < 65 ans. Dépistage : fond d'œil."},
+        {type:"vf", q:"Le dépistage de la rétinopathie diabétique repose sur un fond d'œil régulier car elle est longtemps asymptomatique.", a:true,
+          exp:"Vrai. La rétinopathie diabétique est longtemps asymptomatique : le dépistage par fond d'œil (annuel) est essentiel."},
+        {type:"qcm", q:"Quels signes évoquent un décollement de rétine ?", o:[
+          M("Myodésopsies",1),
+          M("Phosphènes",1),
+          M("Voile noir / « rideau qui tombe »",1),
+          M("Œil rouge et douloureux")],
+          exp:"Décollement de rétine (urgence, apparition brutale, indolore) : mouches volantes, phosphènes, voile/rideau, baisse d'acuité. C'est une urgence chirurgicale (24-48 h)."},
+        {type:"libre", q:"Quelle est la définition légale de la cécité en France ?",
+          a:"Acuité visuelle ≤ 1/20 au meilleur œil après correction (ou champ visuel < 10°)",
+          exp:"Cécité légale : AV ≤ 1/20 au meilleur œil après correction, ou champ visuel < 10° même si l'acuité centrale est conservée."}
+      ]
+    },
+    {
+      id:"oeil-soins", nom:"Soins infirmiers & urgences",
+      desc:"Collyres, brûlures, corps étranger, pansements",
+      questions:[
+        {type:"qcm", q:"Devant une projection chimique dans l'œil, quel est le premier geste ?", o:[
+          M("Rincer immédiatement et abondamment à l'eau ou au sérum physiologique",1),
+          M("Appeler les secours puis attendre"),
+          M("Appliquer un collyre antibiotique"),
+          M("Poser un pansement compressif")],
+          exp:"Brûlure chimique = urgence absolue : rinçage immédiat et abondant (≥ 15-30 min), avant même d'appeler les secours, de l'angle interne vers l'externe."},
+        {type:"vf", q:"Les projections de bases (alcalins) sont plus dangereuses que les acides.", a:true,
+          exp:"Vrai. Les bases/alcalins pénètrent plus profondément : elles sont les plus dangereuses et imposent un rinçage encore plus prolongé."},
+        {type:"qcm", q:"Face à un corps étranger ENCLAVÉ / pénétrant dans l'œil, il faut :", o:[
+          M("Ne pas le retirer, ne pas comprimer, protéger l'œil et orienter en urgence",1),
+          M("Le retirer immédiatement à la pince"),
+          M("Frotter l'œil pour le déloger"),
+          M("Poser un pansement compressif serré")],
+          exp:"Corps étranger enclavé : ne jamais retirer ni comprimer (risque de plaie perforante), protéger sans pression, patient à jeun, orientation en urgence."},
+        {type:"qcm", q:"Lors de l'instillation d'un collyre, où dépose-t-on la goutte ?", o:[
+          M("Dans le cul-de-sac conjonctival, après avoir abaissé la paupière inférieure",1),
+          M("Directement sur la cornée"),
+          M("Sur les cils"),
+          M("Au coin externe de l'œil fermé")],
+          exp:"On abaisse la paupière inférieure pour former le cul-de-sac conjonctival et on y dépose la goutte, sans toucher l'œil ni l'embout."},
+        {type:"qcm", q:"Pourquoi comprimer l'angle interne de l'œil après l'instillation d'un collyre ?", o:[
+          M("Pour limiter le passage systémique du produit par les voies lacrymales",1),
+          M("Pour accélérer l'évaporation"),
+          M("Pour ouvrir la pupille"),
+          M("Pour nettoyer l'œil")],
+          exp:"Comprimer l'angle interne 30 s à 1 min limite le passage systémique du collyre par le canal lacrymal."},
+        {type:"qcm", q:"Quel délai et quel ordre respecter pour instiller plusieurs collyres dans le même œil ?", o:[
+          M("10 à 15 min entre deux collyres, du plus fluide au plus épais",1),
+          M("Tous en même temps, sans ordre"),
+          M("1 minute, du plus épais au plus fluide"),
+          M("La pommade en premier")],
+          exp:"Délai de 10-15 min entre 2 collyres (évite que le 2e lave le 1er) ; ordre du plus fluide au plus épais : collyre → gel → pommade en dernier."},
+        {type:"libre", q:"Citez les 5 « B » de l'administration sécurisée d'un médicament.",
+          a:"Bon patient, bon médicament, bonne dose, bonne voie (bon œil), bon moment",
+          exp:"Règle des 5 B : Bon patient, Bon médicament, Bonne dose, Bonne voie (et bon œil), Bon moment."},
+        {type:"qcm", q:"Dans quel cas un pansement COMPRESSIF est-il formellement contre-indiqué ?", o:[
+          M("En cas de suspicion de plaie perforante ou de corps étranger intra-oculaire",1),
+          M("Après une chirurgie de la cataracte simple"),
+          M("En cas d'hémorragie superficielle sur prescription"),
+          M("Pour un strabisme de l'enfant")],
+          exp:"Aucune compression en cas de plaie perforante ou de corps étranger intra-oculaire suspecté : le pansement compressif est proscrit."},
+        {type:"qcm", q:"À quoi sert le pansement OCCLUSIF ?", o:[
+          M("Protéger l'œil, le mettre au repos et limiter les frottements après chirurgie/traumatisme",1),
+          M("Comprimer pour stopper un saignement"),
+          M("Mesurer la pression intra-oculaire"),
+          M("Dilater la pupille")],
+          exp:"Le pansement occlusif protège l'œil, le met au repos et limite les frottements (post-op, ulcère cornéen, traumatisme)."},
+        {type:"qcm", q:"À quoi sert le Mydriasert® ?", o:[
+          M("Un insert ophtalmique provoquant une dilatation pupillaire avant examen ou chirurgie",1),
+          M("Un collyre hypotonisant du glaucome"),
+          M("Un antibiotique local"),
+          M("Un anesthésique de surface")],
+          exp:"Le Mydriasert® (tropicamide + phényléphrine) est un insert déposé dans le cul-de-sac conjonctival pour obtenir une mydriase, posé au maximum 2 h avant la chirurgie."},
+        {type:"qcm", q:"Quels signes après une chirurgie oculaire imposent une consultation en URGENCE ?", o:[
+          M("Douleur brutale et rougeur",1),
+          M("Baisse de l'acuité visuelle",1),
+          M("Vomissements, céphalées",1),
+          M("Légère sensation de grain de sable transitoire")],
+          exp:"Signes d'alerte post-op : douleur brutale, rougeur, sécrétions, vomissements, baisse de vision → consultation ophtalmologique en urgence."},
+        {type:"vf", q:"Devant tout traumatisme oculaire, il ne faut jamais frotter l'œil ni retirer un objet enclavé.", a:true,
+          exp:"Vrai. On ne frotte jamais l'œil, on ne retire pas un objet enclavé et on n'exerce aucune pression en cas de suspicion de plaie perforante."}
+      ]
+    }
+  ]
+},
+/* ====================== INSUFFISANCE CARDIAQUE, VEINEUSE & ARTÉRIELLE ====================== */
+{
+  id:"cardio", nom:"Insuffisance cardiaque, veineuse & artérielle", ico:"❤️",
+  desc:"IC gauche/droite, OAP, insuffisance veineuse et artérielle (AOMI).",
+  long:"Insuffisance cardiaque (gauche/droite, OAP, NYHA, décompensation), insuffisance veineuse (varices, phlébite) et insuffisance artérielle (AOMI, IPS) — physiopathologie, signes, traitements et rôle infirmier.",
+  quizzes:[
+    {
+      id:"ic", nom:"Insuffisance cardiaque",
+      desc:"IC gauche/droite, OAP, NYHA, décompensation, surveillance",
+      questions:[
+        {type:"qcm", q:"Comment définit-on l'insuffisance cardiaque ?", o:[
+          M("Le cœur n'assure plus un débit suffisant pour les besoins de l'organisme",1),
+          M("Une augmentation de la pression artérielle isolée"),
+          M("Une infection du muscle cardiaque"),
+          M("Un arrêt cardiaque")],
+          exp:"L'IC survient quand la contraction ou la dilatation du cœur est inadéquate : le débit ne couvre plus les besoins de l'organisme."},
+        {type:"libre", q:"Nommez les 4 valves cardiaques.",
+          a:"Tricuspide, pulmonaire, mitrale, aortique",
+          exp:"À droite : tricuspide (OD-VD) et pulmonaire (VD-artère pulmonaire). À gauche : mitrale (OG-VG) et aortique (VG-aorte)."},
+        {type:"qcm", q:"L'insuffisance cardiaque GAUCHE se traduit par :", o:[
+          M("Un bas débit avec congestion en amont = retentissement sur le POUMON",1),
+          M("Une congestion de la grande circulation"),
+          M("Une turgescence jugulaire isolée"),
+          M("Une ascite")],
+          exp:"IC gauche = bas débit : congestion pulmonaire en amont (OAP, dyspnée, crépitants) et hypoperfusion des organes en aval."},
+        {type:"qcm", q:"Quels signes caractérisent l'insuffisance cardiaque DROITE ?", o:[
+          M("Œdèmes des membres inférieurs",1),
+          M("Turgescence jugulaire et reflux hépato-jugulaire",1),
+          M("Hépatomégalie",1),
+          M("Râles crépitants pulmonaires")],
+          exp:"IC droite = congestion de la grande circulation : œdèmes, turgescence jugulaire, reflux hépato-jugulaire, hépatomégalie, ascite. Les crépitants évoquent l'IC gauche."},
+        {type:"qcm", q:"Quel symptôme traduit l'œdème aigu du poumon (OAP) ?", o:[
+          M("Une dyspnée intense avec sensation de noyade et râles crépitants",1),
+          M("Des œdèmes des chevilles isolés"),
+          M("Une douleur abdominale"),
+          M("Une simple toux sans dyspnée")],
+          exp:"L'OAP correspond au passage de liquide dans les alvéoles : dyspnée intense, sensation de noyade, orthopnée, râles crépitants."},
+        {type:"qcm", q:"Quelles mesures font partie de la prise en charge d'un OAP ?", o:[
+          M("Oxygénothérapie et position demi-assise",1),
+          M("VNI",1),
+          M("Diurétiques",1),
+          M("Perfusion de sérum salé")],
+          exp:"OAP : O2, position demi-assise, VNI, diurétiques (furosémide), vasodilatateurs si HTA, inotropes si choc. PAS de sérum salé (aggrave la surcharge)."},
+        {type:"vf", q:"En cas d'OAP, on perfuse du sérum salé pour réhydrater le patient.", a:false,
+          exp:"Faux. Le sérum salé aggrave la surcharge hydro-sodée : il est à éviter dans l'OAP."},
+        {type:"qcm", q:"Sur quoi repose la classification NYHA ?", o:[
+          M("La sévérité de l'IC selon la gêne dans les activités quotidiennes",1),
+          M("Le débit de filtration glomérulaire"),
+          M("La pression intra-oculaire"),
+          M("Le taux de glycémie")],
+          exp:"La NYHA classe l'IC en 4 stades selon la gêne : du stade I (aucune limitation) au stade IV (symptômes au repos)."},
+        {type:"qcm", q:"Quel paramètre de surveillance est CENTRAL dans l'insuffisance cardiaque ?", o:[
+          M("Le poids",1),
+          M("La taille"),
+          M("La glycémie capillaire"),
+          M("L'acuité visuelle")],
+          exp:"Le poids est un indicateur central : une prise de poids rapide traduit une rétention hydro-sodée et doit alerter sur une décompensation."},
+        {type:"qcm", q:"Quels facteurs peuvent déclencher une décompensation cardiaque ?", o:[
+          M("Écarts de régime / apports sodés cachés",1),
+          M("Mauvaise observance des traitements",1),
+          M("Infection",1),
+          M("Activité physique adaptée régulière")],
+          exp:"Décompensation : écarts/sel caché, mauvaise observance, infection, troubles du rythme, anémie, insuffisance rénale. D'où l'importance de la vaccination et de l'éducation."},
+        {type:"vf", q:"L'insuffisance cardiaque est le 1er motif d'hospitalisation chez les plus de 65 ans.", a:true,
+          exp:"Vrai. C'est une maladie du sujet âgé, 1er motif d'hospitalisation après 65 ans, de pronostic sérieux."},
+        {type:"libre", q:"Quel régime alimentaire conseille-t-on dans l'insuffisance cardiaque ?",
+          a:"Un régime hyposodé (pauvre en sel)",
+          exp:"Régime hyposodé/normosodé contrôlé : éviter les apports sodés cachés (certains médicaments effervescents, etc.). Surveiller le poids."}
+      ]
+    },
+    {
+      id:"veine-artere", nom:"Insuffisances veineuse & artérielle",
+      desc:"Varices, phlébite, AOMI, IPS, compression",
+      questions:[
+        {type:"qcm", q:"Quel est le mécanisme de l'insuffisance veineuse ?", o:[
+          M("Un mauvais retour veineux par perte de tonicité et dysfonction des valvules",1),
+          M("Un rétrécissement des artères par athérosclérose"),
+          M("Une défaillance de la pompe cardiaque"),
+          M("Une obstruction des voies urinaires")],
+          exp:"L'insuffisance veineuse = mauvais retour veineux : perte d'élasticité des veines + dysfonction des valvules → reflux."},
+        {type:"qcm", q:"Quels signes évoquent une insuffisance veineuse ?", o:[
+          M("Jambes lourdes, surtout en fin de journée",1),
+          M("Varices et œdèmes des chevilles",1),
+          M("Crampes nocturnes, ulcère variqueux",1),
+          M("Claudication artérielle à l'effort")],
+          exp:"Insuffisance veineuse : jambes lourdes, crampes nocturnes, œdèmes, varices, eczéma, ulcère variqueux. La claudication évoque l'atteinte artérielle."},
+        {type:"qcm", q:"Quelle est la complication GRAVE de l'insuffisance veineuse à connaître ?", o:[
+          M("La thrombose veineuse pouvant entraîner une embolie pulmonaire",1),
+          M("La gangrène des orteils"),
+          M("Le décollement de rétine"),
+          M("L'acidocétose")],
+          exp:"La thrombose veineuse (phlébite) peut se compliquer d'embolie pulmonaire (le caillot migre vers l'artère pulmonaire) = urgence vitale."},
+        {type:"libre", q:"Citez le traitement de base de l'insuffisance veineuse.",
+          a:"La contention / compression veineuse (bas ou bandes élastiques)",
+          exp:"La compression veineuse améliore le retour veineux ; autres options : sclérothérapie, chirurgie. Conseils : éviter la station debout, marche/natation."},
+        {type:"qcm", q:"Quel est le mécanisme de l'insuffisance artérielle ?", o:[
+          M("Un rétrécissement ou une occlusion des artères réduisant le débit sanguin",1),
+          M("Un reflux veineux"),
+          M("Une défaillance de la pompe cardiaque"),
+          M("Un excès de retour veineux")],
+          exp:"L'insuffisance artérielle = rétrécissement/occlusion des artères → baisse du débit, touchant surtout les organes à forts besoins (cerveau, cœur, reins, muscles)."},
+        {type:"qcm", q:"Comment diagnostique-t-on une AOMI grâce à l'IPS ?", o:[
+          M("Un index de pression systolique < 0,9 pose le diagnostic",1),
+          M("Un IPS > 1,3 pose le diagnostic"),
+          M("Un IPS = 1 pose le diagnostic"),
+          M("L'IPS n'a aucun intérêt")],
+          exp:"IPS = pression systolique à la cheville / pression systolique humérale. Un IPS < 0,9 pose le diagnostic d'AOMI (artériopathie oblitérante des membres inférieurs)."},
+        {type:"qcm", q:"Quelle est la 1re cause d'AOMI après 50 ans ?", o:[
+          M("L'athérosclérose",1), M("Une infection"), M("Une carence en fer"), M("Une maladie auto-immune")],
+          exp:"L'athérosclérose est la 1re cause après 50 ans. FDR : tabac, HTA, diabète, hypercholestérolémie, hérédité, âge."},
+        {type:"qcm", q:"Quel symptôme typique évoque une AOMI ?", o:[
+          M("Une claudication : douleur des jambes à l'effort, puis au repos",1),
+          M("Des jambes lourdes en fin de journée"),
+          M("Des varices"),
+          M("Un œdème mou prenant le godet")],
+          exp:"AOMI : claudication intermittente (douleur à la marche cédant au repos), puis douleur de repos ; au stade avancé, ulcérations et gangrène. Peau froide et pâle."},
+        {type:"qcm", q:"En quoi consiste la trithérapie médicamenteuse de l'AOMI ?", o:[
+          M("Un antiagrégant plaquettaire + une statine + un IEC",1),
+          M("Trois antibiotiques"),
+          M("Trois diurétiques"),
+          M("Trois anticoagulants")],
+          exp:"AOMI : antiagrégant/fluidifiant (ex. clopidogrel, aspirine) + statine (anticholestérol) + IEC, associés aux RHD et à l'arrêt du tabac."},
+        {type:"vf", q:"La compression veineuse est contre-indiquée en cas d'AOMI sévère.", a:true,
+          exp:"Vrai. Piège classique : la compression est bénéfique dans l'insuffisance VEINEUSE mais CONTRE-INDIQUÉE dans l'AOMI sévère (elle aggrave l'ischémie). Vérifier l'IPS avant toute contention."},
+        {type:"qcm", q:"Quelle mesure est commune à la prise en charge veineuse ET artérielle ?", o:[
+          M("L'arrêt du tabac et l'activité physique adaptée",1),
+          M("La pose systématique d'une sonde urinaire"),
+          M("La perfusion de sérum salé"),
+          M("Le repos strict au lit à vie")],
+          exp:"L'arrêt du tabac, l'activité physique adaptée et la lutte contre le surpoids sont bénéfiques dans les deux atteintes."}
+      ]
+    }
+  ]
+},
+/* ====================== INSUFFISANCES RÉNALES ====================== */
+{
+  id:"renal", nom:"Insuffisances rénales", ico:"🫘",
+  desc:"IRA et IRC : mécanismes, complications, dialyse et rôle IDE.",
+  long:"Insuffisance rénale aiguë (IRA : 3 mécanismes, hyperkaliémie) et insuffisance rénale chronique (IRC/MRC : stades, complications, néphroprotection, suppléance) — physiologie du rein, signes, traitements et surveillances infirmières.",
+  quizzes:[
+    {
+      id:"ira", nom:"Insuffisance rénale aiguë (IRA)",
+      desc:"3 mécanismes, hyperkaliémie, surveillances IDE",
+      questions:[
+        {type:"qcm", q:"Quelles sont les deux grandes fonctions du rein ?", o:[
+          M("Exocrine et endocrine",1),
+          M("Digestive et respiratoire"),
+          M("Uniquement la filtration du sang"),
+          M("Production d'insuline et de glucagon")],
+          exp:"Le rein a une fonction exocrine (épuration, formation de l'urine) et endocrine (EPO, vitamine D active, rénine)."},
+        {type:"qcm", q:"Comment définit-on l'insuffisance rénale aiguë (IRA) ?", o:[
+          M("Une perte brutale, souvent réversible, de la filtration glomérulaire",1),
+          M("Une baisse progressive et irréversible sur plus de 3 mois"),
+          M("Un trouble de l'évacuation de l'urine"),
+          M("Une infection urinaire simple")],
+          exp:"L'IRA est une perte brutale, en général réversible, de la fonction de filtration : chute du DFG (oligo-anurie) + rétention azotée (↑ urée et créatinine). C'est une urgence."},
+        {type:"qcm", q:"Quelle est la différence entre IRA et rétention aiguë d'urine ?", o:[
+          M("IRA = trouble de la FORMATION de l'urine ; rétention = trouble de l'ÉVACUATION",1),
+          M("Ce sont deux termes synonymes"),
+          M("L'IRA touche la vessie, la rétention touche le rein"),
+          M("Aucune des deux n'est grave")],
+          exp:"IRA = le rein ne filtre plus (formation). Rétention aiguë d'urine = l'urine est fabriquée mais ne s'évacue pas (globe vésical)."},
+        {type:"libre", q:"Citez les 3 mécanismes étiologiques de l'IRA.",
+          a:"Pré-rénale (hypoperfusion), rénale/organique (lésion du parenchyme), post-rénale (obstacle)",
+          exp:"IRA pré-rénale (hypoperfusion : déshydratation, choc, AINS/IEC), rénale/organique (nécrose tubulaire, toxiques, glomérulonéphrite), post-rénale (obstacle : lithiase, tumeur)."},
+        {type:"qcm", q:"Quelle est la forme d'IRA la plus fréquente ?", o:[
+          M("L'IRA pré-rénale",1),
+          M("L'IRA post-rénale"),
+          M("L'IRA glomérulaire"),
+          M("L'IRA vasculaire")],
+          exp:"L'IRA pré-rénale (hypoperfusion) est la plus fréquente ; si l'hypoperfusion se prolonge, elle évolue vers une nécrose tubulaire (IRA organique)."},
+        {type:"qcm", q:"Quelles causes donnent une IRA pré-rénale ?", o:[
+          M("Déshydratation, choc",1),
+          M("Médicaments : AINS, IEC, diurétiques",1),
+          M("Insuffisance cardiaque, cirrhose décompensée",1),
+          M("Lithiase obstruant l'uretère")],
+          exp:"IRA pré-rénale : hypoperfusion rénale (déshydratation, choc, AINS/IEC/diurétiques, IC, cirrhose). La lithiase obstructive donne une IRA post-rénale."},
+        {type:"qcm", q:"La créatinine est :", o:[
+          M("Un déchet issu de la dégradation de la créatine musculaire, bon reflet de la fonction rénale",1),
+          M("Une hormone sécrétée par le rein"),
+          M("Un sucre filtré par le glomérule"),
+          M("Une protéine de l'alimentation")],
+          exp:"La créatinine provient de la dégradation de la créatine musculaire ; filtrée et non réabsorbée, elle est un bon reflet de la fonction rénale (DFG estimé par CKD-EPI)."},
+        {type:"qcm", q:"Quelle est la complication AIGUË mettant en jeu le pronostic vital dans l'IRA ?", o:[
+          M("L'hyperkaliémie",1),
+          M("La constipation"),
+          M("L'hypoglycémie"),
+          M("L'anémie chronique")],
+          exp:"L'hyperkaliémie expose à des troubles du rythme cardiaque : c'est l'urgence vitale → surveillance ECG."},
+        {type:"qcm", q:"Quels traitements corrigent une hyperkaliémie ?", o:[
+          M("Résine échangeuse d'ions",1),
+          M("Soluté glucosé + insuline",1),
+          M("Gluconate de calcium en protection cardiaque",1),
+          M("Apport de potassium IV")],
+          exp:"Hyperkaliémie : Kayexalate®, soluté glucosé + insuline (fait entrer le K⁺ dans la cellule), ± gluconate de calcium (protection myocardique). Jamais d'apport de potassium."},
+        {type:"qcm", q:"Quelles surveillances IDE sont prioritaires dans l'IRA ?", o:[
+          M("Diurèse et bilan entrées/sorties",1),
+          M("Poids quotidien, TA, FC, signes de surcharge",1),
+          M("Kaliémie et ECG",1),
+          M("Acuité visuelle quotidienne")],
+          exp:"Surveillances : diurèse + bilan entrées/sorties, poids, TA/FC, signes de surcharge, kaliémie + ECG. Éviter les néphrotoxiques (AINS, produits de contraste, aminosides)."},
+        {type:"vf", q:"La majorité des IRA évolue vers une récupération de la fonction rénale.", a:true,
+          exp:"Vrai. L'IRA est souvent réversible (récupération en quelques semaines) ; environ 5 % des cas évoluent vers des lésions irréversibles."}
+      ]
+    },
+    {
+      id:"irc", nom:"Insuffisance rénale chronique (IRC)",
+      desc:"Stades, complications, néphroprotection, suppléance",
+      questions:[
+        {type:"qcm", q:"Comment définit-on l'insuffisance rénale chronique (IRC) ?", o:[
+          M("Une diminution permanente et irréversible des fonctions rénales par réduction du nombre de néphrons",1),
+          M("Une perte brutale et réversible de la filtration"),
+          M("Une infection aiguë du rein"),
+          M("Un obstacle sur les voies urinaires")],
+          exp:"L'IRC est une baisse permanente et irréversible des fonctions rénales (exocrine ET endocrine), évoluant sur des années. Touche les deux reins."},
+        {type:"qcm", q:"Comment définit-on la maladie rénale chronique (MRC) ?", o:[
+          M("Un DFG < 60 mL/min/1,73 m² et/ou des marqueurs d'atteinte rénale, persistant plus de 3 mois",1),
+          M("Un DFG normal sur 24 h"),
+          M("Une protéinurie isolée d'un jour"),
+          M("Une hématurie transitoire")],
+          exp:"MRC = DFG < 60 mL/min/1,73 m² et/ou marqueurs d'atteinte (albuminurie, hématurie…) persistant > 3 mois."},
+        {type:"qcm", q:"Quelle est la 1re cause d'insuffisance rénale chronique ?", o:[
+          M("La néphropathie diabétique",1),
+          M("La polykystose rénale"),
+          M("La maladie de Berger"),
+          M("Les néphropathies toxiques")],
+          exp:"La néphropathie diabétique est la 1re cause (~30 %), suivie de la néphropathie hypertensive/vasculaire (~25 %)."},
+        {type:"qcm", q:"Quels sont les facteurs de risque de l'IRC ?", o:[
+          M("Diabète",1), M("HTA",1), M("Âge, tabac, dyslipidémie",1), M("Allaitement maternel")],
+          exp:"FDR de l'IRC : diabète, HTA, âge, tabac, dyslipidémie."},
+        {type:"vf", q:"L'IRC est souvent silencieuse au début et son diagnostic est principalement biologique.", a:true,
+          exp:"Vrai. L'installation est insidieuse et silencieuse ; quand les signes apparaissent, les lésions sont déjà évoluées. Diagnostic biologique (DFG, créatinine)."},
+        {type:"qcm", q:"Comment l'IRC explique-t-elle l'anémie ?", o:[
+          M("Par la baisse de production d'EPO",1),
+          M("Par un excès de globules rouges"),
+          M("Par une carence en sodium"),
+          M("Par l'hyperkaliémie")],
+          exp:"Le rein malade produit moins d'EPO → anémie. Traitement : fer, folates, B12 puis EPO."},
+        {type:"qcm", q:"Comment l'IRC explique-t-elle les troubles phosphocalciques et osseux ?", o:[
+          M("Par la baisse de vitamine D active → hypocalcémie + hyperphosphorémie → hyperparathyroïdie secondaire",1),
+          M("Par un excès de vitamine D"),
+          M("Par une hypercalcémie isolée"),
+          M("Par une carence en fer")],
+          exp:"Baisse de la vitamine D active → hypocalcémie ; hyperphosphorémie → hyperparathyroïdie secondaire, ostéodystrophie et calcifications vasculaires."},
+        {type:"qcm", q:"Quels signes cliniques retrouve-t-on dans l'IRC ?", o:[
+          M("HTA et œdèmes",1),
+          M("Pâleur et asthénie",1),
+          M("Prurit, nausées",1),
+          M("Amaigrissement avec thermophobie")],
+          exp:"IRC : HTA, œdèmes, polyurie puis oligo-anurie terminale, pâleur, asthénie, prurit, nausées, crampes. (L'amaigrissement avec thermophobie évoque l'hyperthyroïdie.)"},
+        {type:"libre", q:"Citez deux mesures de néphroprotection (qui ralentissent l'évolution de l'IRC).",
+          a:"Contrôle du diabète, de l'HTA et du cholestérol, arrêt du tabac, éviter les néphrotoxiques, IEC/ARA2",
+          exp:"Néphroprotection : contrôler diabète/HTA/cholestérol, arrêt du tabac, éviter les néphrotoxiques (AINS, produits de contraste, aminosides), IEC/ARA2, iSGLT2."},
+        {type:"vf", q:"Chez un patient IRC, il faut protéger le capital veineux des membres supérieurs en vue d'une future fistule artério-veineuse.", a:true,
+          exp:"Vrai. On limite les ponctions/perfusions aux membres supérieurs (préférer la main) pour préserver le réseau veineux nécessaire à une future fistule (FAV) de dialyse."},
+        {type:"qcm", q:"Quels sont les traitements de suppléance au stade terminal de l'IRC ?", o:[
+          M("L'épuration extra-rénale",1),
+          M("La greffe rénale",1),
+          M("La transfusion sanguine systématique"),
+          M("La chirurgie de la cataracte")],
+          exp:"Stade terminal : suppléance par épuration extra-rénale (hémodialyse ou dialyse péritonéale) ou greffe rénale (meilleur traitement lorsqu'elle est possible)."},
+        {type:"qcm", q:"Quelle est la différence fondamentale entre IRA et IRC ?", o:[
+          M("IRA = brutale et souvent réversible ; IRC = progressive et irréversible",1),
+          M("IRA = irréversible ; IRC = réversible"),
+          M("Elles sont identiques"),
+          M("L'IRA touche les deux reins, pas l'IRC")],
+          exp:"IRA : installation brutale, souvent réversible. IRC : installation progressive (> 3 mois), irréversible."}
+      ]
+    }
+  ]
+},
 /*INSERT_DOSSIERS*/
 ]};
 
@@ -1664,7 +2183,7 @@ function shuffle(arr){
   return a;
 }
 
-function poolFromDossier(d){ let all=[]; d.quizzes.forEach(q=>{ all=all.concat(q.questions); }); return all; }
+function poolFromDossier(d){ let all=[]; d.quizzes.forEach(q=>{ q.questions.forEach(qq=>{ all.push(Object.assign({theme:d.nom}, qq)); }); }); return all; }
 function poolGlobal(){ let all=[]; DATA.dossiers.forEach(d=>{ all=all.concat(poolFromDossier(d)); }); return all; }
 
 function buildQuestions(quiz){
@@ -1788,10 +2307,10 @@ function renderHome(){
   btnHome.style.display='none'; timerEl.style.display='none';
   brandSub.textContent='Menu principal'; window.scrollTo(0,0);
 
-  let tiles='';
+  let tiles='', annalesTile='';
   DATA.dossiers.forEach((d,i)=>{
     const nbQ = poolFromDossier(d).length;
-    tiles += `
+    const tile = `
       <button class="tile" data-dossier="${i}">
         <span class="arrow">→</span>
         <div class="ico">${d.ico}</div>
@@ -1799,7 +2318,9 @@ function renderHome(){
         <div class="d">${d.desc}</div>
         <div class="meta">◈ ${d.quizzes.length} quiz · ${nbQ} questions</div>
       </button>`;
+    if(d.id==='annales'){ annalesTile = tile; } else { tiles += tile; }
   });
+  const nbThematiques = DATA.dossiers.filter(d=>d.id!=='annales').length;
 
   const totalQ = poolGlobal().length;
   app.innerHTML = `
@@ -1808,7 +2329,7 @@ function renderHome(){
       <h1>Défaillances organiques &amp; processus dégénératifs</h1>
       <p class="sub">Choisis un dossier thématique pour réviser par sous-quiz, ou lance directement un examen blanc en conditions réelles.</p>
       <div class="stats">
-        <div class="stat"><div class="n">${DATA.dossiers.length}</div><div class="l">Dossiers</div></div>
+        <div class="stat"><div class="n">${nbThematiques}</div><div class="l">Dossiers</div></div>
         <div class="stat"><div class="n">${totalQ}</div><div class="l">Questions</div></div>
         <div class="stat"><div class="n">3</div><div class="l">Modes</div></div>
       </div>
@@ -1818,6 +2339,11 @@ function renderHome(){
       <p class="lead" style="margin-bottom:18px">Sélectionne un thème pour accéder à ses quiz et à son examen blanc dédié.</p>
       <div class="grid">${tiles}</div>
     </div>
+    ${annalesTile?`<div class="card">
+      <h2>📝 Annales — Examens </h2>
+      <p class="lead" style="margin-bottom:18px">Sujets d'examen 2.7 IFSI Dunkerque.</p>
+      <div class="grid">${annalesTile}</div>
+    </div>`:''}
     <div class="card">
       <h2>🏆 Examen blanc global UE 2.7</h2>
       <p class="lead" style="margin-bottom:16px">40 questions tirées au sort dans <strong>tous</strong> les dossiers — l'épreuve la plus complète.</p>
@@ -1974,7 +2500,7 @@ function toLibre(q){
   let a;
   if(q.type==='qcm'){ a = q.o.filter(o=>o.c).map(o=>o.t).join(' ; '); }
   else { a = q.a ? 'Vrai' : 'Faux'; }
-  return { type:'libre', q:q.q, a:a, exp:q.exp };
+  return { type:'libre', q:q.q, a:a, exp:q.exp, theme:q.theme };
 }
 const MODE_LABEL = { examen:'Examen', entrainement:'Entraînement', difficile:'Difficile' };
 function startQuiz(quiz, mode){
@@ -2030,7 +2556,7 @@ function renderQuestion(){
         <div class="progress-row"><span>Question ${s.idx+1} / ${total}</span><span>${s.mode==='examen'?'⏱ Mode Examen':s.mode==='difficile'?'🧠 Mode Difficile':'🎓 Mode Entraînement'}</span></div>
         <div class="progress"><i style="width:${pct}%"></i></div>
       </div>
-      <div class="qtype">${typeLabel}</div>
+      <div class="qtype">${typeLabel}${q.theme?` · <span class="qtheme">${q.theme}</span>`:''}</div>
       <div class="qtext">${q.q}</div>
       ${body}
       <div id="feedback-zone"></div>
@@ -2174,7 +2700,7 @@ function renderResults(byTimeout){
       selfRate=`<div class="selfrate" data-i="${i}"><button class="btn btn-ok" data-rate="ok">✅ J'avais juste</button><button class="btn btn-bad" data-rate="bad">❌ J'avais faux</button></div>`;
     }
     review+=`<div class="rev-item" data-rev="${i}">
-        <div class="q"><span class="ic">${statusIco}</span><span>Q${num}. ${q.q}</span></div>
+        <div class="q"><span class="ic">${statusIco}</span><span>${q.theme?`<span class="qtheme">${escapeHtml(q.theme)}</span> `:''}Q${num}. ${q.q}</span></div>
         ${userLine}${expLine}
         ${q.exp?`<div class="rev-line" style="margin-top:6px"><span class="k">💡</span> ${q.exp}</div>`:''}
         ${selfRate}
