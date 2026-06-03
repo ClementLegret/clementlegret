@@ -375,7 +375,7 @@ const DATA = { dossiers: [
         {type:"qcm", q:"Quel est l'âge moyen de survenue du diabète de type 1 ?", o:[
           M("Environ 12 ans",1), M("Environ 50-60 ans"), M("Après 75 ans"), M("À la naissance uniquement")],
           exp:"DT1 : âge moyen de survenue ≈ 12 ans, mais tout âge est possible."},
-        {type:"qcm", q:"Parmi ces éléments, lesquels sont des facteurs de risque de DT2 ?", o:[
+        {type:"qcm", q:"Quels sont les principaux facteurs de risque du diabète de type 2 ?", o:[
           M("Obésité / surpoids",1), M("Sédentarité",1), M("ATCD familiaux de DT2",1), M("Jeune âge")],
           exp:"FDR du DT2 : âge, obésité androïde, sédentarité, ATCD de diabète gestationnel/macrosomie, ATCD familiaux."},
         {type:"qcm", q:"Quel est le risque de DT2 si les 2 parents sont atteints ?", o:[
@@ -383,7 +383,7 @@ const DATA = { dossiers: [
           exp:"ATCD familiaux de DT2 : 1 parent → 30 %, 2 parents → 50 %, jumeau → 90 %."},
         {type:"vf", q:"Au moment du diagnostic du DT2, des complications sont souvent déjà présentes.", a:true,
           exp:"Vrai. Le DT2 est insidieux : les complications sont souvent déjà présentes au diagnostic. D'où l'importance du dépistage."},
-        {type:"qcm", q:"Parmi ces critères, lesquels font partie du syndrome métabolique ?", o:[
+        {type:"qcm", q:"Quels critères font partie du syndrome métabolique ?", o:[
           M("Tour de taille élevé",1), M("Hypertriglycéridémie",1), M("HDL-cholestérol bas",1), M("HTA",1)],
           exp:"Syndrome métabolique : tour de taille élevé, hyperglycémie à jeun, hypertriglycéridémie, HDL bas, HTA."},
         {type:"qcm", q:"Quel est le traitement du diabète de type 1 ?", o:[
@@ -409,7 +409,7 @@ const DATA = { dossiers: [
           exp:"La metformine (biguanide) est le traitement de 1re intention du DT2."},
         {type:"vf", q:"La metformine entraîne fréquemment des hypoglycémies.", a:false,
           exp:"Faux. La metformine ne stimule PAS l'insulinosécrétion : pas de risque d'hypoglycémie. ES : troubles digestifs."},
-        {type:"qcm", q:"Parmi ces situations, lesquelles sont des contre-indications de la metformine ?", o:[
+        {type:"qcm", q:"Quelles sont les principales contre-indications de la metformine ?", o:[
           M("Insuffisance rénale",1), M("Insuffisance cardiaque",1), M("Insuffisance hépatocellulaire",1), M("Hypertension artérielle isolée")],
           exp:"CI metformine : insuffisance rénale, cardiaque, hépatocellulaire, respiratoire (risque d'acidose lactique)."},
         {type:"qcm", q:"Quel risque principal présentent les sulfamides hypoglycémiants (ex. Diamicron®) ?", o:[
@@ -451,7 +451,7 @@ const DATA = { dossiers: [
         {type:"qcm", q:"Quelle est la cible générale d'HbA1c chez un DT2 standard ?", o:[
           M("7 %",1), M("≤ 4 %"), M("≥ 10 %"), M("9 %")],
           exp:"Cible générale : 7 % (voire ≤ 6,5 %), à individualiser selon l'âge et les comorbidités."},
-        {type:"qcm", q:"Parmi ces examens, lesquels font partie du bilan ANNUEL du diabétique ?", o:[
+        {type:"qcm", q:"Quels examens font partie du bilan ANNUEL du diabétique ?", o:[
           M("Fond d'œil",1), M("Microalbuminurie + créatininémie",1), M("ECG de repos",1), M("Coloscopie systématique")],
           exp:"Bilan annuel : fond d'œil, microalbuminurie + créatininémie, ECG, bilan lipidique, examen des pieds."},
         {type:"libre", q:"Quelle quantité minimale d'activité physique modérée est recommandée par semaine ?",
@@ -620,7 +620,7 @@ const DATA = { dossiers: [
           M("La ponction lombaire"),
           M("Le fond d'œil")],
           exp:"Le DAT-scan visualise le déficit de transporteurs de la dopamine. Le diagnostic reste avant tout clinique."},
-        {type:"qcm", q:"Parmi ces signes, lesquels sont des signes NON moteurs de Parkinson ?", o:[
+        {type:"qcm", q:"Quels sont les signes NON moteurs de la maladie de Parkinson ?", o:[
           M("Constipation",1), M("Dépression / troubles du sommeil",1), M("Hypotension orthostatique",1), M("Fasciculations musculaires")],
           exp:"Signes non moteurs : constipation, dépression, troubles du sommeil, hyposmie, hypotension orthostatique. Les fasciculations évoquent la SLA."},
         {type:"qcm", q:"Quels signes témoignent de l'atteinte axiale / de la marche ?", o:[
@@ -638,6 +638,23 @@ const DATA = { dossiers: [
       id:"sla", nom:"SLA (maladie de Charcot)",
       desc:"Motoneurones, déficit moteur pur, Riluzole, VNI",
       questions:[
+        {type:"qcm", q:"Quel autre nom porte la SLA ?", o:[
+          M("La maladie de Charcot",1),
+          M("La maladie de Parkinson"),
+          M("La chorée de Huntington"),
+          M("La maladie d'Alzheimer")],
+          exp:"La sclérose latérale amyotrophique (SLA) est aussi appelée maladie de Charcot."},
+        {type:"vf", q:"Dans la SLA, les fonctions cognitives et la sensibilité sont le plus souvent préservées.", a:true,
+          exp:"Vrai. La SLA réalise un déficit moteur pur : sensibilité, fonctions cognitives, oculomotricité et sphincters sont en général respectés."},
+        {type:"qcm", q:"Quel est le pronostic global de la SLA ?", o:[
+          M("Sombre : aggravation progressive vers l'insuffisance respiratoire",1),
+          M("Bénin, avec guérison spontanée"),
+          M("Réversible sous corticoïdes"),
+          M("Stable, sans aggravation")],
+          exp:"Le pronostic est sombre : l'évolution se fait vers l'atteinte des muscles respiratoires, principale cause de décès."},
+        {type:"libre", q:"Citez deux signes d'atteinte du motoneurone périphérique dans la SLA.",
+          a:"Amyotrophie et fasciculations (aussi : crampes, déficit moteur)",
+          exp:"L'atteinte périphérique donne amyotrophie, fasciculations, crampes et déficit moteur ; l'atteinte centrale donne spasticité, réflexes vifs et Babinski."},
         {type:"qcm", q:"Quels neurones sont atteints dans la SLA ?", o:[
           M("Les motoneurones central ET périphérique",1),
           M("Uniquement les nerfs sensitifs"),
@@ -705,6 +722,26 @@ const DATA = { dossiers: [
       id:"sep", nom:"Sclérose en plaques (SEP)",
       desc:"Démyélinisation auto-immune, poussées, traitements",
       questions:[
+        {type:"qcm", q:"Quelle structure est la cible de la sclérose en plaques ?", o:[
+          M("La gaine de myéline du système nerveux central",1),
+          M("Les motoneurones de la moelle"),
+          M("Le cartilage articulaire"),
+          M("Les cellules bêta du pancréas")],
+          exp:"La SEP est une maladie démyélinisante : elle détruit la gaine de myéline du système nerveux central."},
+        {type:"vf", q:"La sclérose en plaques atteint le système nerveux périphérique.", a:false,
+          exp:"Faux. La SEP atteint le système nerveux CENTRAL : cerveau, moelle épinière et nerfs optiques."},
+        {type:"qcm", q:"Quels types de troubles peut-on observer au cours d'une SEP ?", o:[
+          M("Troubles moteurs",1),
+          M("Troubles sensitifs",1),
+          M("Troubles visuels et cérébelleux",1),
+          M("Fasciculations avec amyotrophie pure")],
+          exp:"La SEP donne des troubles moteurs, sensitifs, visuels, cérébelleux, sphinctériens et une fatigue. Fasciculations et amyotrophie évoquent plutôt la SLA."},
+        {type:"qcm", q:"L'interféron bêta dans la SEP correspond à :", o:[
+          M("Un traitement de fond immunomodulateur",1),
+          M("Un traitement de la poussée"),
+          M("Un antibiotique"),
+          M("Un antalgique")],
+          exp:"L'interféron bêta est un traitement de fond destiné à espacer les poussées. La poussée, elle, se traite par corticoïdes IV."},
         {type:"qcm", q:"Quelle est la nature de la sclérose en plaques ?", o:[
           M("Maladie inflammatoire démyélinisante auto-immune du système nerveux central",1),
           M("Maladie dégénérative des motoneurones"),
@@ -784,6 +821,22 @@ const DATA = { dossiers: [
       id:"thyro-anat", nom:"Anatomie & physiologie",
       desc:"Situation, hormones, iode, axe hypothalamo-hypophysaire",
       questions:[
+        {type:"qcm", q:"Quelle hormone l'hypophyse sécrète-t-elle pour stimuler la thyroïde ?", o:[
+          M("La TSH",1),
+          M("La TRH"),
+          M("La T4"),
+          M("La calcitonine")],
+          exp:"L'hypophyse sécrète la TSH, qui stimule la thyroïde. La TRH est sécrétée par l'hypothalamus."},
+        {type:"vf", q:"La thyroïde est située en arrière de la trachée.", a:false,
+          exp:"Faux. La thyroïde est située en AVANT de la trachée, à la face antérieure du cou."},
+        {type:"qcm", q:"Globalement, les hormones thyroïdiennes :", o:[
+          M("Accélèrent le métabolisme et la thermogenèse",1),
+          M("Font baisser la glycémie"),
+          M("Augmentent la calcémie"),
+          M("Ralentissent l'ensemble des organes")],
+          exp:"Les hormones thyroïdiennes stimulent le métabolisme, la thermogenèse, la fréquence cardiaque et le développement."},
+        {type:"vf", q:"La calcitonine fait baisser la calcémie.", a:true,
+          exp:"Vrai. La calcitonine, sécrétée par les cellules C de la thyroïde, fait baisser la calcémie."},
         {type:"qcm", q:"Où se situe la glande thyroïde ?", o:[
           M("À la face ANTÉRIEURE du cou, en avant de la trachée, sous le larynx",1),
           M("En arrière de la trachée, dans le médiastin postérieur"),
@@ -842,6 +895,23 @@ const DATA = { dossiers: [
       id:"thyro-patho", nom:"Hypo/hyperthyroïdie, nodules & cancers",
       desc:"Hashimoto, Basedow, Lévothyrox, ATS, nodules, cancers",
       questions:[
+        {type:"vf", q:"Dans l'hyperthyroïdie, la TSH est élevée.", a:false,
+          exp:"Faux. Dans l'hyperthyroïdie, la TSH est BASSE (freinée par l'excès d'hormones T4)."},
+        {type:"qcm", q:"Comment surveille-t-on l'efficacité d'un traitement par Lévothyrox ?", o:[
+          M("Par le dosage de la TSH",1),
+          M("Par la glycémie capillaire"),
+          M("Par la calcémie"),
+          M("Par la NFS uniquement")],
+          exp:"L'équilibre du traitement par lévothyroxine se surveille par la TSH."},
+        {type:"qcm", q:"Devant une fièvre ou une angine sous antithyroïdiens de synthèse (ATS), que faut-il craindre et faire ?", o:[
+          M("Une agranulocytose : arrêter le traitement et faire une NFS en urgence",1),
+          M("Une simple grippe : continuer le traitement"),
+          M("Une hypoglycémie : resucrer"),
+          M("Une allergie bénigne sans gravité")],
+          exp:"Fièvre ou angine sous ATS = suspicion d'agranulocytose : arrêt immédiat du traitement et NFS en urgence."},
+        {type:"libre", q:"Quel examen permet de classer un nodule thyroïdien en « chaud » ou « froid » ?",
+          a:"La scintigraphie thyroïdienne",
+          exp:"La scintigraphie distingue le nodule chaud (hyperfixant, souvent toxique) du nodule froid (hypofixant, suspect de cancer)."},
         {type:"qcm", q:"Dans l'HYPOthyroïdie périphérique, quel est le profil biologique ?", o:[
           M("TSH élevée, T4 basse",1),
           M("TSH basse, T4 élevée"),
@@ -921,6 +991,20 @@ const DATA = { dossiers: [
       id:"foie-anat", nom:"Anatomie, fonctions & cirrhose",
       desc:"Vascularisation, fonctions hépatiques, définition de la cirrhose",
       questions:[
+        {type:"qcm", q:"Quelles cellules du foie jouent le rôle de macrophages ?", o:[
+          M("Les cellules de Kupffer",1),
+          M("Les cellules étoilées de Ito"),
+          M("Les hépatocytes"),
+          M("Les cellules bêta")],
+          exp:"Les cellules de Kupffer sont les macrophages du foie ; les cellules étoilées (de Ito), une fois activées, produisent la fibrose."},
+        {type:"vf", q:"Le foie participe à la synthèse des facteurs de la coagulation.", a:true,
+          exp:"Vrai. Le foie synthétise l'albumine et les facteurs de coagulation, dont le facteur V (marqueur de la fonction de synthèse)."},
+        {type:"qcm", q:"Quelles sont les principales causes de cirrhose ?", o:[
+          M("L'alcool",1),
+          M("Les hépatites virales B et C",1),
+          M("La stéatohépatite non alcoolique",1),
+          M("Une carence isolée en fer")],
+          exp:"Causes de cirrhose : alcool (1re cause, 50-75 %), hépatites virales B/C, stéatohépatite non alcoolique (NASH)."},
         {type:"qcm", q:"Où est situé le foie ?", o:[
           M("Dans l'hypochondre droit, sous le diaphragme",1),
           M("Dans l'hypochondre gauche"),
@@ -983,6 +1067,17 @@ const DATA = { dossiers: [
       id:"foie-compli", nom:"Complications de la cirrhose",
       desc:"Hémorragie, ascite, encéphalopathie, CHC",
       questions:[
+        {type:"qcm", q:"Quel est le mécanisme de l'hémorragie digestive au cours de la cirrhose ?", o:[
+          M("Rupture de varices œsophagiennes liée à l'hypertension portale",1),
+          M("Un ulcère gastrique isolé sans rapport"),
+          M("Une carence en vitamine C"),
+          M("Une allergie alimentaire")],
+          exp:"L'hypertension portale entraîne des varices œsophagiennes dont la rupture provoque une hémorragie digestive : urgence vitale."},
+        {type:"libre", q:"Quel examen biologique du liquide d'ascite affirme une infection (péritonite bactérienne spontanée) ?",
+          a:"Une numération des polynucléaires neutrophiles (PNN) supérieure à 250/mm³",
+          exp:"Des PNN > 250/mm³ dans le liquide d'ascite signent une péritonite bactérienne spontanée, traitée par céfotaxime."},
+        {type:"vf", q:"L'encéphalopathie hépatique est liée à l'accumulation d'ammoniac.", a:true,
+          exp:"Vrai. Le foie n'épure plus l'ammoniac → encéphalopathie (astérixis, troubles de la conscience). Traitement : lactulose."},
         {type:"qcm", q:"L'hypertension portale favorise la formation de :", o:[
           M("Varices œsophagiennes",1),
           M("Calculs rénaux"),
@@ -1045,6 +1140,29 @@ const DATA = { dossiers: [
       id:"foie-ponction", nom:"Ponction d'ascite & soins IDE",
       desc:"Paracentèse, point de ponction, asepsie, surveillance",
       questions:[
+        {type:"vf", q:"La ponction d'ascite peut être réalisée par l'infirmier seul, sans prescription médicale.", a:false,
+          exp:"Faux. C'est un geste MÉDICAL ; l'IDE prépare le matériel, installe le patient, assiste et surveille, sur prescription."},
+        {type:"qcm", q:"Quel est le but d'une ponction d'ascite ÉVACUATRICE ?", o:[
+          M("Soulager le patient en retirant un grand volume de liquide",1),
+          M("Prélever un échantillon pour analyse"),
+          M("Injecter un médicament dans le péritoine"),
+          M("Mesurer la pression abdominale")],
+          exp:"La ponction évacuatrice retire un grand volume (visée thérapeutique) ; l'exploratrice prélève un échantillon pour analyse (visée diagnostique)."},
+        {type:"qcm", q:"Pourquoi compense-t-on par de l'albumine après l'évacuation d'un grand volume d'ascite ?", o:[
+          M("Pour prévenir la dysfonction circulatoire et l'hypovolémie post-ponction",1),
+          M("Pour stopper une hémorragie"),
+          M("Pour désinfecter le point de ponction"),
+          M("Pour diminuer l'ammoniac")],
+          exp:"Au-delà d'environ 5 L évacués, l'albumine prévient la dysfonction circulatoire post-ponction (chute de la volémie efficace)."},
+        {type:"libre", q:"Sur quel côté de l'abdomen réalise-t-on le point de ponction d'ascite ?",
+          a:"Du côté gauche (jonction tiers externe / deux tiers internes de la ligne ombilic – EIAS gauche)",
+          exp:"Le point de ponction est situé à gauche, sur la ligne reliant l'ombilic à l'épine iliaque antéro-supérieure gauche."},
+        {type:"qcm", q:"Quelle surveillance permet de suivre l'évolution de l'ascite chez un cirrhotique ?", o:[
+          M("La pesée régulière et la mesure du périmètre abdominal",1),
+          M("La glycémie capillaire horaire"),
+          M("L'audiogramme"),
+          M("La pression intra-oculaire")],
+          exp:"On suit l'ascite par la pesée (environ 3×/semaine) et le périmètre abdominal, en plus des constantes et du point de ponction."},
         {type:"qcm", q:"La ponction d'ascite (paracentèse) est un geste :", o:[
           M("Médical",1), M("Infirmier sur rôle propre"), M("Aide-soignant"), M("Réalisable sans prescription")],
           exp:"La ponction d'ascite est un geste MÉDICAL ; l'IDE prépare le matériel, installe le patient, assiste et surveille."},
@@ -1106,6 +1224,29 @@ const DATA = { dossiers: [
       id:"resp-irc", nom:"Insuffisance respiratoire chronique (IRC)",
       desc:"Définitions, obstructive/restrictive, BPCO, OLD",
       questions:[
+        {type:"libre", q:"Que signifie le sigle BPCO ?",
+          a:"Bronchopneumopathie chronique obstructive",
+          exp:"La BPCO est la principale cause d'insuffisance respiratoire chronique obstructive, liée surtout au tabac."},
+        {type:"qcm", q:"Quel est le principal facteur de risque de la BPCO ?", o:[
+          M("Le tabac",1),
+          M("Une carence en vitamine D"),
+          M("L'hypertension artérielle"),
+          M("Le diabète")],
+          exp:"Le tabac est le principal facteur de risque de la BPCO ; son arrêt est la mesure essentielle."},
+        {type:"vf", q:"Une insuffisance respiratoire chronique peut retentir sur le cœur droit (cœur pulmonaire chronique).", a:true,
+          exp:"Vrai. L'hypoxémie chronique entraîne une HTAP puis une insuffisance ventriculaire droite : le cœur pulmonaire chronique."},
+        {type:"qcm", q:"Quel examen mesure les volumes et débits pulmonaires pour caractériser le trouble ventilatoire ?", o:[
+          M("Les épreuves fonctionnelles respiratoires, ou spirométrie",1),
+          M("L'électrocardiogramme"),
+          M("La gazométrie veineuse"),
+          M("La radiographie du genou")],
+          exp:"Les EFR (spirométrie) mesurent VEMS, CVF et CPT et distinguent trouble obstructif (VEMS/CVF < 0,70) et restrictif (CPT < 80 %)."},
+        {type:"qcm", q:"Quelles mesures sont recommandées dans la prise en charge de la BPCO ?", o:[
+          M("Arrêt du tabac",1),
+          M("Vaccination contre la grippe et le pneumocoque",1),
+          M("Réhabilitation respiratoire et activité physique adaptée",1),
+          M("Oxygène à fort débit sans aucune surveillance")],
+          exp:"Prévention : arrêt du tabac, vaccinations, réhabilitation respiratoire, activité physique. Chez le BPCO hypercapnique, l'O2 est surveillé (cible SpO2 88-92 %)."},
         {type:"qcm", q:"Comment définit-on l'insuffisance respiratoire chronique ?", o:[
           M("PaO2 < 70 mmHg au repos, à l'état stable, sur plus de 3 mois",1),
           M("PaO2 < 90 mmHg pendant 24 h"),
@@ -1159,6 +1300,20 @@ const DATA = { dossiers: [
       id:"resp-ira", nom:"Insuffisance respiratoire aiguë (IRA)",
       desc:"Urgence, mécanismes, SDRA, oxygénothérapie, VNI",
       questions:[
+        {type:"libre", q:"Que signifie le sigle OAP ?",
+          a:"Œdème aigu du poumon",
+          exp:"L'OAP cardiogénique est une cause fréquente d'insuffisance respiratoire aiguë, traitée notamment par VNI."},
+        {type:"vf", q:"Chez un patient en détresse respiratoire, une bradypnée est un signe de gravité (épuisement).", a:true,
+          exp:"Vrai. Après la polypnée initiale, une bradypnée traduit l'épuisement respiratoire : c'est un signe de gravité."},
+        {type:"qcm", q:"Quelle est la ventilation de première intention dans l'OAP cardiogénique ?", o:[
+          M("La ventilation non invasive (VNI)",1),
+          M("L'intubation systématique d'emblée"),
+          M("L'oxygène à 1 L/min aux lunettes"),
+          M("Aucune assistance ventilatoire")],
+          exp:"La VNI est indiquée en 1re intention dans l'OAP cardiogénique et dans la décompensation hypercapnique de BPCO."},
+        {type:"libre", q:"Citez les 3 grands mécanismes physiopathologiques de l'insuffisance respiratoire aiguë.",
+          a:"Défaut de pompe (ventilation), défaut d'échange (membrane alvéolo-capillaire), défaut de transport (anémie, choc)",
+          exp:"3 mécanismes : défaut de pompe ventilatoire, défaut d'échange alvéolaire, défaut de transport de l'oxygène."},
         {type:"qcm", q:"L'insuffisance respiratoire aiguë est :", o:[
           M("Une urgence vitale",1),
           M("Une affection bénigne et chronique"),
@@ -1227,6 +1382,29 @@ const DATA = { dossiers: [
       id:"acido", nom:"Équilibre acido-basique",
       desc:"pH, gazométrie, acidoses et alcaloses",
       questions:[
+        {type:"qcm", q:"Une alcalose correspond à :", o:[
+          M("Un pH supérieur à 7,45",1),
+          M("Un pH inférieur à 7,35"),
+          M("Un pH à 7,40"),
+          M("Une PaO2 basse")],
+          exp:"Alcalose : pH > 7,45 (diminution des ions H⁺). Acidose : pH < 7,35."},
+        {type:"libre", q:"Quelle est la norme de la PaO2 et de la saturation artérielle en oxygène ?",
+          a:"PaO2 : 90-100 mmHg ; SaO2 : 95-100 %",
+          exp:"Gazométrie normale : pH 7,35-7,45, PaCO2 35-45 mmHg, HCO3⁻ 22-26 mmol/L, PaO2 90-100 mmHg, SaO2 95-100 %."},
+        {type:"qcm", q:"Dans une acidose respiratoire CHRONIQUE (ex. BPCO), les bicarbonates sont :", o:[
+          M("Élevés, car le rein a eu le temps de compenser",1),
+          M("Effondrés"),
+          M("Toujours strictement normaux"),
+          M("Nuls")],
+          exp:"Dans l'acidose respiratoire chronique, la compensation rénale augmente les bicarbonates."},
+        {type:"vf", q:"L'acidose métabolique est souvent associée à une hyperkaliémie.", a:true,
+          exp:"Vrai. L'acidose métabolique s'accompagne souvent d'une hyperkaliémie et d'une hypocapnie compensatoire (hyperventilation)."},
+        {type:"qcm", q:"Quelles causes peuvent entraîner une alcalose métabolique ?", o:[
+          M("Vomissements",1),
+          M("Aspirations gastriques",1),
+          M("Diurétiques",1),
+          M("Acidocétose diabétique")],
+          exp:"Alcalose métabolique : vomissements, aspirations gastriques, diurétiques, hyperaldostéronisme. L'acidocétose, elle, donne une acidose métabolique."},
         {type:"qcm", q:"Quelle est la norme du pH artériel ?", o:[
           M("7,35 – 7,45",1), M("7,00 – 7,20"), M("7,50 – 7,70"), M("6,80 – 7,00")],
           exp:"pH artériel normal : 7,35 – 7,45. Acidose < 7,35 ; alcalose > 7,45."},
@@ -1280,6 +1458,23 @@ const DATA = { dossiers: [
       id:"ions", nom:"Troubles du K⁺, Ca²⁺ et Na⁺",
       desc:"Kaliémie, calcémie et natrémie : signes et traitements",
       questions:[
+        {type:"libre", q:"Quelles sont les bornes normales de la kaliémie ?",
+          a:"Environ 3,5 à 5,1 mmol/L",
+          exp:"Kaliémie normale ≈ 3,5-5,1 mmol/L. 98 % du potassium est intracellulaire."},
+        {type:"qcm", q:"Quels signes cliniques évoquent une hypokaliémie ?", o:[
+          M("Crampes",1),
+          M("Asthénie et myalgies",1),
+          M("Constipation",1),
+          M("Onde T ample et pointue à l'ECG")],
+          exp:"Hypokaliémie : crampes, asthénie, myalgies, constipation ; à l'ECG onde T plate, onde U, QT long, torsades de pointes. L'onde T ample évoque l'hyperkaliémie."},
+        {type:"vf", q:"L'hyperkaliémie sévère expose à un arrêt cardio-respiratoire.", a:true,
+          exp:"Vrai. L'hyperkaliémie (> 5,1 mmol/L, surtout sévère) peut provoquer des troubles du rythme jusqu'à l'arrêt cardio-respiratoire."},
+        {type:"qcm", q:"Quel trouble du sodium entraîne un risque d'œdème cérébral et impose une correction LENTE ?", o:[
+          M("L'hyponatrémie",1),
+          M("L'hypernatrémie"),
+          M("L'hyperkaliémie"),
+          M("L'hypocalcémie")],
+          exp:"L'hyponatrémie (< 135 mmol/L) provoque une hyperhydratation intracellulaire (œdème cérébral) ; correction lente, 0,5 à 1 mmol/h."},
         {type:"qcm", q:"À partir de quelle valeur parle-t-on d'hyperkaliémie ?", o:[
           M("K⁺ > 5,1 mmol/L",1), M("K⁺ > 3,5 mmol/L"), M("K⁺ > 2,5 mmol/L"), M("K⁺ > 7,5 mmol/L")],
           exp:"Hyperkaliémie : K⁺ > 5,1 mmol/L. Le risque majeur est l'arrêt cardio-respiratoire (ACR)."},
@@ -1696,7 +1891,7 @@ const DATA = { dossiers: [
         {type:"qcm", q:"Quelle est la température recommandée pour la chambre du nourrisson ?", o:[
           M("18 à 20 °C",1), M("24 à 26 °C"), M("12 à 14 °C"), M("Peu importe")],
           exp:"18-20 °C : l'enfant se défend mieux contre le froid que contre la chaleur (vigilance surchauffe)."},
-        {type:"qcm", q:"Parmi ces éléments, lesquels sont des facteurs de PROTECTION contre la MIN ?", o:[
+        {type:"qcm", q:"Quels sont les facteurs de PROTECTION contre la MIN ?", o:[
           M("L'allaitement maternel",1),
           M("Le partage de la chambre jusqu'à 6 mois",1),
           M("La tétine à l'endormissement",1),
@@ -1704,7 +1899,7 @@ const DATA = { dossiers: [
           exp:"Facteurs protecteurs : allaitement, partage de la chambre, tétine à l'endormissement, vaccinations à jour. Le tabac est un facteur de risque."},
         {type:"vf", q:"Le partage du lit (co-sleeping) est un facteur protecteur contre la MIN.", a:false,
           exp:"Faux. Piège classique : le partage de la CHAMBRE est protecteur, mais le partage du LIT (co-sleeping) est un facteur de RISQUE."},
-        {type:"qcm", q:"Parmi ces éléments, lesquels sont des facteurs de RISQUE de MIN ?", o:[
+        {type:"qcm", q:"Quels sont les facteurs de RISQUE de la MIN ?", o:[
           M("Couchage ventral ou latéral",1),
           M("Tabagisme anté- et postnatal",1),
           M("Prématurité, hypotrophie",1),
@@ -1827,6 +2022,20 @@ const DATA = { dossiers: [
       id:"oeil-soins", nom:"Soins infirmiers & urgences",
       desc:"Collyres, brûlures, corps étranger, pansements",
       questions:[
+        {type:"vf", q:"En cas de brûlure chimique de l'œil, il faut appeler les secours AVANT de rincer.", a:false,
+          exp:"Faux. On rince IMMÉDIATEMENT et abondamment (15 à 30 min) avant même d'appeler les secours : chaque seconde compte."},
+        {type:"qcm", q:"Quel délai minimal respecter entre l'instillation de deux collyres dans le même œil ?", o:[
+          M("10 à 15 minutes",1),
+          M("10 à 15 secondes"),
+          M("2 heures"),
+          M("Aucun délai")],
+          exp:"Respecter 10 à 15 min entre deux collyres (sinon le 2e lave le 1er), du plus fluide au plus épais."},
+        {type:"qcm", q:"Que faire devant un corps étranger superficiel NON enclavé ?", o:[
+          M("Tenter un rinçage doux au sérum physiologique sans frotter",1),
+          M("Frotter énergiquement pour le déloger"),
+          M("Comprimer fortement l'œil"),
+          M("Le retirer à la pince sans avis médical")],
+          exp:"Corps étranger superficiel : ne pas frotter, rinçage doux au sérum physiologique ; si échec ou douleur persistante, avis ophtalmologique."},
         {type:"qcm", q:"Devant une projection chimique dans l'œil, quel est le premier geste ?", o:[
           M("Rincer immédiatement et abondamment à l'eau ou au sérum physiologique",1),
           M("Appeler les secours puis attendre"),
@@ -1902,6 +2111,26 @@ const DATA = { dossiers: [
       id:"ic", nom:"Insuffisance cardiaque",
       desc:"IC gauche/droite, OAP, NYHA, décompensation, surveillance",
       questions:[
+        {type:"qcm", q:"Quelles sont les 4 valves cardiaques ?", o:[
+          M("Tricuspide, pulmonaire, mitrale, aortique",1),
+          M("Mitrale, aortique, carotide, fémorale"),
+          M("Cave, porte, rénale, sigmoïde"),
+          M("Sino-auriculaire, His, Purkinje, Bachmann")],
+          exp:"Valves : tricuspide et pulmonaire (cœur droit), mitrale et aortique (cœur gauche)."},
+        {type:"vf", q:"Dans l'œdème aigu du poumon, il faut perfuser du sérum salé pour réhydrater le patient.", a:false,
+          exp:"Faux. Dans l'OAP, PAS de sérum salé (aggrave la surcharge). Traitement : O2, position demi-assise, VNI, diurétiques, vasodilatateurs."},
+        {type:"qcm", q:"Quel paramètre de surveillance est central pour repérer une décompensation cardiaque ?", o:[
+          M("Le poids, dont la prise rapide signe une rétention hydro-sodée",1),
+          M("La pression intra-oculaire"),
+          M("L'audiogramme"),
+          M("La glycémie à jeun")],
+          exp:"Le POIDS est l'indicateur clé : une prise de poids rapide traduit une rétention hydro-sodée et doit alerter sur une décompensation."},
+        {type:"qcm", q:"Quels facteurs peuvent déclencher une décompensation cardiaque ?", o:[
+          M("Écart de régime ou sel caché",1),
+          M("Mauvaise observance du traitement",1),
+          M("Infection, notamment respiratoire",1),
+          M("Pratique d'une activité physique adaptée")],
+          exp:"Déclencheurs de décompensation : écarts sodés, mauvaise observance, infection, troubles du rythme, anémie, insuffisance rénale."},
         {type:"qcm", q:"Comment définit-on l'insuffisance cardiaque ?", o:[
           M("Le cœur n'assure plus un débit suffisant pour les besoins de l'organisme",1),
           M("Une augmentation de la pression artérielle isolée"),
@@ -1966,6 +2195,23 @@ const DATA = { dossiers: [
       id:"veine-artere", nom:"Insuffisances veineuse & artérielle",
       desc:"Varices, phlébite, AOMI, IPS, compression",
       questions:[
+        {type:"libre", q:"Quelle complication grave peut compliquer une thrombose veineuse profonde (phlébite) ?",
+          a:"L'embolie pulmonaire (urgence vitale)",
+          exp:"Le caillot peut se détacher et migrer vers une artère pulmonaire : embolie pulmonaire, urgence vitale."},
+        {type:"qcm", q:"Quel examen et quel seuil permettent de diagnostiquer une AOMI ?", o:[
+          M("L'index de pression systolique inférieur à 0,9",1),
+          M("Une pression intra-oculaire supérieure à 21 mmHg"),
+          M("Un DFG inférieur à 60"),
+          M("Une TSH supérieure à 4")],
+          exp:"AOMI : l'IPS = pression à la cheville / pression humérale ; un IPS < 0,9 pose le diagnostic."},
+        {type:"vf", q:"La compression veineuse est contre-indiquée en cas d'AOMI sévère.", a:true,
+          exp:"Vrai. La compression aggraverait l'ischémie : toujours vérifier l'état artériel (IPS) avant une contention."},
+        {type:"qcm", q:"Quels facteurs favorisent l'insuffisance veineuse ?", o:[
+          M("Surpoids et sédentarité",1),
+          M("Grossesse et estroprogestatifs",1),
+          M("Station debout prolongée",1),
+          M("Pratique régulière de la natation")],
+          exp:"FDR veineux : surpoids, sédentarité, tabac, grossesse, estroprogestatifs, chaleur. La marche et la natation sont au contraire bénéfiques."},
         {type:"qcm", q:"Quel est le mécanisme de l'insuffisance veineuse ?", o:[
           M("Un mauvais retour veineux par perte de tonicité et dysfonction des valvules",1),
           M("Un rétrécissement des artères par athérosclérose"),
@@ -2037,6 +2283,23 @@ const DATA = { dossiers: [
       desc:"3 mécanismes, hyperkaliémie, surveillances IDE",
       questions:[
         {type:"qcm", q:"Quelles sont les deux grandes fonctions du rein ?", o:[
+          M("Une fonction exocrine d'épuration et une fonction endocrine hormonale",1),
+          M("Une fonction digestive et une fonction respiratoire"),
+          M("Une fonction motrice et une fonction sensitive"),
+          M("Une fonction endocrine uniquement")],
+          exp:"Le rein a une fonction exocrine (épuration, formation de l'urine) et une fonction endocrine (EPO, vitamine D active, rénine)."},
+        {type:"libre", q:"Quelle est l'unité fonctionnelle du rein ?",
+          a:"Le néphron",
+          exp:"Le néphron (environ 400 000 à 800 000 par rein) est l'unité fonctionnelle ; le DFG normal est d'environ 120 mL/min."},
+        {type:"qcm", q:"Quelles situations correspondent à une IRA PRÉ-rénale (fonctionnelle) ?", o:[
+          M("Déshydratation ou choc",1),
+          M("Hypotension et hypoperfusion rénale",1),
+          M("Prise d'AINS, d'IEC ou de diurétiques",1),
+          M("Lithiase obstruant les deux uretères")],
+          exp:"L'IRA pré-rénale est due à une hypoperfusion (déshydratation, choc, AINS/IEC). L'obstacle sur les voies urinaires correspond à l'IRA post-rénale."},
+        {type:"vf", q:"L'insuffisance rénale aiguë est le plus souvent réversible si la cause est corrigée rapidement.", a:true,
+          exp:"Vrai. L'IRA est en général réversible ; mais une hypoperfusion prolongée peut évoluer vers une nécrose tubulaire (IRA organique)."},
+        {type:"qcm", q:"Quelles sont les deux grandes fonctions du rein ?", o:[
           M("Exocrine et endocrine",1),
           M("Digestive et respiratoire"),
           M("Uniquement la filtration du sang"),
@@ -2101,6 +2364,26 @@ const DATA = { dossiers: [
       id:"irc", nom:"Insuffisance rénale chronique (IRC)",
       desc:"Stades, complications, néphroprotection, suppléance",
       questions:[
+        {type:"qcm", q:"Quelle est la première cause d'insuffisance rénale chronique ?", o:[
+          M("La néphropathie diabétique",1),
+          M("La polykystose rénale"),
+          M("Le syndrome d'Alport"),
+          M("La maladie de Berger")],
+          exp:"La néphropathie diabétique (environ 30 %) est la 1re cause d'IRC, devant la néphropathie hypertensive/vasculaire (environ 25 %)."},
+        {type:"vf", q:"L'insuffisance rénale chronique est irréversible.", a:true,
+          exp:"Vrai. L'IRC correspond à une perte permanente et irréversible de néphrons, évoluant depuis plus de 3 mois."},
+        {type:"qcm", q:"Comment l'insuffisance rénale chronique explique-t-elle l'anémie ?", o:[
+          M("Par une baisse de la sécrétion rénale d'EPO",1),
+          M("Par un excès de fer"),
+          M("Par une hyperthyroïdie"),
+          M("Par une carence en calcium")],
+          exp:"Le rein malade sécrète moins d'EPO → anémie. Les troubles osseux viennent, eux, de la baisse de vitamine D active."},
+        {type:"qcm", q:"Quels sont les traitements de suppléance au stade terminal de l'IRC ?", o:[
+          M("L'hémodialyse",1),
+          M("La dialyse péritonéale",1),
+          M("La greffe rénale",1),
+          M("La photocoagulation au laser")],
+          exp:"Au stade terminal : épuration extra-rénale (hémodialyse ou dialyse péritonéale) ou greffe rénale, qui est le meilleur traitement de suppléance."},
         {type:"qcm", q:"Comment définit-on l'insuffisance rénale chronique (IRC) ?", o:[
           M("Une diminution permanente et irréversible des fonctions rénales par réduction du nombre de néphrons",1),
           M("Une perte brutale et réversible de la filtration"),
@@ -2340,8 +2623,8 @@ function renderHome(){
       <div class="grid">${tiles}</div>
     </div>
     ${annalesTile?`<div class="card">
-      <h2>📝 Annales — Examens </h2>
-      <p class="lead" style="margin-bottom:18px">Sujets d'examen 2.7 IFSI Dunkerque.</p>
+      <h2>📝 Annales — Examens des années précédentes</h2>
+      <p class="lead" style="margin-bottom:18px">Sujets d'examen 2.7 réellement posés (2021 &amp; 2022), reconstitués d'après les corrigés officiels.</p>
       <div class="grid">${annalesTile}</div>
     </div>`:''}
     <div class="card">
@@ -2497,10 +2780,15 @@ function renderModeChoice(quiz){
 /* Convertit n'importe quelle question en réponse libre (mode Difficile) */
 function toLibre(q){
   if(q.type==='libre') return Object.assign({}, q);
-  let a;
-  if(q.type==='qcm'){ a = q.o.filter(o=>o.c).map(o=>o.t).join(' ; '); }
-  else { a = q.a ? 'Vrai' : 'Faux'; }
-  return { type:'libre', q:q.q, a:a, exp:q.exp, theme:q.theme };
+  let a, qt=q.q;
+  if(q.type==='qcm'){
+    a = q.o.filter(o=>o.c).map(o=>o.t).join(' ; ');
+  } else {
+    // Vrai/Faux : on précise la consigne pour que la question reste claire sans propositions
+    a = q.a ? 'Vrai' : 'Faux';
+    if(!/^\s*(vrai|v\/f)/i.test(q.q)) qt = 'Vrai ou Faux ? ' + q.q;
+  }
+  return { type:'libre', q:qt, a:a, exp:q.exp, theme:q.theme };
 }
 const MODE_LABEL = { examen:'Examen', entrainement:'Entraînement', difficile:'Difficile' };
 function startQuiz(quiz, mode){
