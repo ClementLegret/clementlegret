@@ -195,25 +195,6 @@
   .tag-ok{color:var(--ok);font-weight:600} .tag-bad{color:var(--bad);font-weight:600}
   .selfrate{display:flex;gap:9px;margin-top:9px}
   .selfrate .btn{padding:10px;font-size:.85rem}
-  /* ---------- Classement & profil ---------- */
-  .profile-row,.pub-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-  .profile-row input,.pub-row input,.lb-controls select{background:var(--glass-2);border:1px solid var(--line-2);
-    color:var(--ink);border-radius:11px;padding:11px 13px;font:inherit;font-size:.95rem}
-  .profile-row input{flex:1;min-width:150px}
-  .profile-row input:focus,.pub-row input:focus,.lb-controls select:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(34,211,238,.15)}
-  .lb-controls{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px}
-  .lb-controls label{display:flex;flex-direction:column;gap:6px;font-size:.7rem;color:var(--faint);font-weight:800;text-transform:uppercase;letter-spacing:.5px}
-  .lb-controls select{cursor:pointer}
-  .lb-table{display:flex;flex-direction:column;gap:7px;margin-top:10px}
-  .lb-row{display:grid;grid-template-columns:44px 1fr 78px 56px;align-items:center;gap:8px;padding:12px 13px;
-    border:1px solid var(--line);border-radius:12px;background:var(--glass-2);font-size:.92rem}
-  .lb-row span:nth-child(1){font-weight:800;color:var(--cyan)}
-  .lb-row span:nth-child(2){font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .lb-row.lb-head{background:transparent;border-color:transparent;color:var(--faint);font-size:.66rem;
-    text-transform:uppercase;letter-spacing:.5px;font-weight:800;padding:2px 13px}
-  .lb-row.lb-head span:nth-child(1){color:var(--faint)}
-  .lb-row.lb-me{border-color:var(--cyan);box-shadow:inset 0 0 0 1px rgba(34,211,238,.4)}
-  code{background:rgba(120,170,255,.12);border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:.86em}
   .hidden{display:none!important}
   footer{text-align:center;color:var(--faint);font-size:.74rem;padding:18px;position:relative;z-index:1}
 </style>
@@ -234,8 +215,6 @@
 <div class="app" id="app"></div>
 <footer>UE 2.7 · Défaillances organiques et processus dégénératifs · Application de révision IFSI</footer>
 
-<!-- SDK Supabase (classement en ligne) — chargé depuis un CDN -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ============================================================
    DONNÉES — UE 2.7
@@ -2446,6 +2425,337 @@ const DATA = { dossiers: [
     }
   ]
 },
+/* ====================== PLAIES & CICATRISATION ====================== */
+{
+  id:"plaies", nom:"Plaies & cicatrisation", ico:"🩹",
+  desc:"Cicatrisation, escarres, ulcères, pied diabétique, brûlures, pansements.",
+  long:"Physiologie de la cicatrisation, escarres, ulcères de jambe (veineux/artériel), pied diabétique, brûlures et familles de pansements ; rôle et surveillance infirmiers.",
+  quizzes:[
+    {
+      id:"plaies-cicat", nom:"Cicatrisation, escarres & ulcères",
+      desc:"Phases, stades NPUAP, ulcère veineux vs artériel, IPS",
+      questions:[
+        {type:"libre", q:"Citez, dans l'ordre, les 3 phases de la cicatrisation.",
+          a:"Détersion, bourgeonnement (granulation), épidermisation",
+          exp:"Cicatrisation en 3 phases imbriquées : détersion (J0-J4), bourgeonnement (J4-J21), épidermisation (J21 → mois)."},
+        {type:"qcm", q:"À partir de quand parle-t-on de plaie CHRONIQUE ?", o:[
+          M("Retard de cicatrisation au-delà de 4 à 6 semaines",1),
+          M("Au-delà de 24 heures"),
+          M("Au-delà de 6 mois seulement"),
+          M("Dès la première heure")],
+          exp:"Plaie chronique = retard de cicatrisation au-delà de 4 à 6 semaines (escarre, ulcère, pied diabétique)."},
+        {type:"qcm", q:"Qu'est-ce qu'une escarre ?", o:[
+          M("Une nécrose ischémique des tissus due à une compression prolongée entre un relief osseux et un plan dur",1),
+          M("Une infection virale de la peau"),
+          M("Une brûlure du deuxième degré"),
+          M("Une plaie chirurgicale propre")],
+          exp:"L'escarre résulte d'une compression prolongée : fermeture de la microcirculation → hypoxie → mort cellulaire. Mécanisme : pression + cisaillement + frottement + macération."},
+        {type:"qcm", q:"Quels sont les 2 facteurs prédictifs majeurs d'escarre selon la HAS ?", o:[
+          M("L'immobilité",1),
+          M("La dénutrition",1),
+          M("Une bonne mobilité"),
+          M("Un apport protidique élevé")],
+          exp:"Les 2 facteurs majeurs : l'immobilité (facteur extrinsèque principal) et la dénutrition (facteur intrinsèque principal)."},
+        {type:"qcm", q:"Quelles sont des localisations fréquentes d'escarre ?", o:[
+          M("Sacrum et talons",1),
+          M("Trochanters et ischions",1),
+          M("Occiput et malléoles",1),
+          M("Paume des mains")],
+          exp:"Zones d'appui sur relief osseux : sacrum, talons, trochanters, ischions, occiput, malléoles."},
+        {type:"qcm", q:"À quel stade NPUAP/EPUAP correspond un érythème ne blanchissant pas à la pression, peau intacte ?", o:[
+          M("Stade I",1),
+          M("Stade II"),
+          M("Stade III"),
+          M("Stade IV")],
+          exp:"Stade I : érythème ne blanchissant pas, peau intacte, réversible. Stade IV : atteinte des muscles, os, tendons."},
+        {type:"qcm", q:"Que caractérise une escarre de stade IV ?", o:[
+          M("Une atteinte des muscles, os, tendons ou articulations",1),
+          M("Une simple rougeur réversible"),
+          M("Une phlyctène superficielle"),
+          M("Une abrasion de l'épiderme")],
+          exp:"Stade IV : perte totale d'épaisseur avec os/tendons visibles ; pronostic péjoratif."},
+        {type:"vf", q:"Il faut masser les zones d'appui rouges pour prévenir l'escarre.", a:false,
+          exp:"Faux. Le massage et la friction des zones d'appui sont PROSCRITS (aggravent l'ischémie) — recommandation HAS."},
+        {type:"qcm", q:"Quelle échelle évalue le risque d'escarre ?", o:[
+          M("L'échelle de Braden",1),
+          M("L'échelle de Glasgow"),
+          M("L'échelle EVA"),
+          M("Le score de Child-Pugh")],
+          exp:"Le risque d'escarre s'évalue par l'échelle de Braden (ou Norton, Waterlow), à l'admission puis à chaque changement d'état."},
+        {type:"qcm", q:"Quelle est la fréquence recommandée de changement de position pour prévenir l'escarre ?", o:[
+          M("Toutes les 2 à 3 heures",1),
+          M("Une fois par jour"),
+          M("Toutes les 12 heures"),
+          M("Jamais, pour ne pas déplacer le patient")],
+          exp:"Repositionnement toutes les 2 à 3 heures (lit et fauteuil), avec décharge des talons et supports adaptés."},
+        {type:"qcm", q:"Un ulcère VEINEUX se caractérise typiquement par :", o:[
+          M("Une localisation malléolaire, peu douloureux, suintant, avec œdème et dermite ocre",1),
+          M("Une plaie distale très douloureuse et sèche"),
+          M("Des pouls abolis et un pied froid"),
+          M("Une nécrose des orteils à l'emporte-pièce")],
+          exp:"Ulcère veineux : région malléolaire interne, peu douloureux, fond rouge/fibrineux, œdème, dermite ocre, varices ; compression INDIQUÉE."},
+        {type:"qcm", q:"Un ulcère ARTÉRIEL se caractérise typiquement par :", o:[
+          M("Une plaie distale, sèche, creusante, très douloureuse, avec pouls abolis",1),
+          M("Une plaie malléolaire suintante et indolore"),
+          M("Un œdème avec dermite ocre"),
+          M("Une compression veineuse recommandée")],
+          exp:"Ulcère artériel : ischémie par AOMI, plaie creusante nécrotique à l'emporte-pièce, très douloureuse, peau froide/pâle, pouls abolis ; compression CONTRE-INDIQUÉE."},
+        {type:"libre", q:"Quel examen oriente le type d'ulcère et conditionne la pose d'une compression ?",
+          a:"L'IPS (index de pression systolique)",
+          exp:"L'IPS (pression cheville / pression bras) oriente le diagnostic : IPS bas = ne pas comprimer (artériel)."},
+        {type:"vf", q:"La compression veineuse est contre-indiquée si l'ulcère est artériel pur (IPS bas).", a:true,
+          exp:"Vrai. En cas d'artériel pur (IPS < 0,7), la compression aggraverait l'ischémie : elle est contre-indiquée."}
+      ]
+    },
+    {
+      id:"plaies-brulures", nom:"Pied diabétique, brûlures & pansements",
+      desc:"Mal perforant, degrés de brûlure, Parkland, familles de pansements",
+      questions:[
+        {type:"qcm", q:"Le mal perforant plantaire du diabétique associe quels mécanismes ?", o:[
+          M("Une neuropathie avec perte de sensibilité",1),
+          M("Une artériopathie ischémique",1),
+          M("Une susceptibilité accrue à l'infection",1),
+          M("Une allergie cutanée")],
+          exp:"Pied diabétique : neuropathie (la plaie passe inaperçue) + artériopathie (ischémie) + susceptibilité à l'infection (hyperglycémie)."},
+        {type:"vf", q:"Toute plaie du pied chez un diabétique est une urgence.", a:true,
+          exp:"Vrai. Toute plaie du pied diabétique est une urgence : décharge, avis médical rapide, bilan infectieux, ne pas banaliser."},
+        {type:"qcm", q:"Quelle mesure est essentielle en cas de plaie du pied diabétique ?", o:[
+          M("La décharge de l'appui par une chaussure adaptée",1),
+          M("La marche intensive"),
+          M("Les bains très chauds prolongés"),
+          M("Le port de chaussures serrées")],
+          exp:"La décharge de la zone d'appui est essentielle, avec équilibre glycémique, soins locaux et orientation spécialisée."},
+        {type:"qcm", q:"Sur quoi juge-t-on la gravité d'une brûlure ?", o:[
+          M("La surface et la profondeur",1),
+          M("La couleur des vêtements"),
+          M("L'heure de survenue"),
+          M("Le poids du patient uniquement")],
+          exp:"Gravité d'une brûlure = surface (règle des 9 de Wallace) × profondeur (degrés), avec l'âge et les lésions associées."},
+        {type:"qcm", q:"Quel outil évalue la SURFACE brûlée chez l'adulte ?", o:[
+          M("La règle des 9 de Wallace",1),
+          M("Le score de Glasgow"),
+          M("L'échelle de Braden"),
+          M("Le T-score")],
+          exp:"Règle des 9 de Wallace : tête+cou 9 %, chaque membre sup. 9 %, chaque membre inf. 18 %, tronc ant. 18 %, tronc post. 18 %, périnée 1 %. La paume du patient ≈ 1 %."},
+        {type:"qcm", q:"À quoi correspond une brûlure du 3e degré ?", o:[
+          M("Une atteinte de tout l'épiderme et du derme, peau blanche ou carbonisée, insensible, nécessitant une greffe",1),
+          M("Un simple érythème douloureux type coup de soleil"),
+          M("Des phlyctènes cicatrisant en une semaine"),
+          M("Une rougeur transitoire sans gravité")],
+          exp:"3e degré : destruction de l'épiderme et du derme, peau blanche/noire insensible → greffe nécessaire."},
+        {type:"qcm", q:"Quel est le premier geste devant une brûlure ?", o:[
+          M("Soustraire la victime à l'agent, puis refroidir",1),
+          M("Appliquer du beurre ou une pommade grasse"),
+          M("Percer immédiatement les phlyctènes"),
+          M("Frictionner énergiquement la zone")],
+          exp:"D'abord soustraire la victime (éteindre les flammes, couper le courant) puis refroidir : ~15 min si surface limitée, quelques secondes seulement si étendue (risque d'hypothermie)."},
+        {type:"qcm", q:"Quelle formule guide le remplissage du brûlé grave ?", o:[
+          M("La formule de Parkland",1),
+          M("La formule de Cockcroft"),
+          M("Le score de Baux"),
+          M("La règle des 9")],
+          exp:"Formule de Parkland : 4 mL × poids (kg) × % de surface brûlée de Ringer lactate (moitié sur les 8 premières heures, moitié sur les 16 h suivantes)."},
+        {type:"vf", q:"Chez le brûlé grave, l'infection (septicémie) est la principale cause de décès.", a:true,
+          exp:"Vrai. La rupture de la barrière cutanée expose à la septicémie, responsable de 60 à 80 % des décès."},
+        {type:"qcm", q:"Quel est le principe moderne de cicatrisation guidant le choix des pansements ?", o:[
+          M("La cicatrisation en milieu humide",1),
+          M("L'assèchement complet de la plaie"),
+          M("L'exposition systématique à l'air libre"),
+          M("La désinfection à l'alcool quotidienne")],
+          exp:"Principe moderne : cicatrisation en milieu humide. Le choix dépend de la phase, de la couleur de la plaie et du niveau d'exsudat."},
+        {type:"qcm", q:"Quel pansement est adapté à une plaie TRÈS exsudative ?", o:[
+          M("Un alginate ou une hydrofibre",1),
+          M("Un hydrogel"),
+          M("Un hydrocolloïde fin"),
+          M("Une interface / tulle gras")],
+          exp:"Plaies très exsudatives : alginates (aussi hémostatiques) ou hydrofibres. L'hydrogel sert plutôt à hydrater les plaies sèches."},
+        {type:"qcm", q:"Quel pansement est adapté à une plaie SÈCHE ou nécrotique (détersion) ?", o:[
+          M("Un hydrogel",1),
+          M("Un alginate"),
+          M("Une hydrofibre"),
+          M("Un film transparent seul")],
+          exp:"L'hydrogel (75 % d'eau) réhydrate les plaies sèches/nécrotiques et favorise la détersion."},
+        {type:"qcm", q:"Quel pansement choisir devant une plaie infectée ?", o:[
+          M("Un pansement à l'argent",1),
+          M("Un hydrocolloïde occlusif"),
+          M("Aucun pansement"),
+          M("Un simple film adhésif")],
+          exp:"Plaie infectée : pansement à l'argent (antibactérien, durée limitée), sur prescription, + prélèvement et avis médical."},
+        {type:"qcm", q:"Dans quel ordre se succèdent les couleurs d'une plaie, de la plus à traiter vers la cicatrisation ?", o:[
+          M("Noir, puis jaune, puis rouge, puis rose",1),
+          M("Rose, puis rouge, puis jaune, puis noir"),
+          M("Rouge, puis noir, puis rose, puis jaune"),
+          M("Blanc, puis bleu, puis vert, puis rouge")],
+          exp:"Échelle colorielle : noir (nécrose) → jaune (fibrine) → rouge (granulation) → rose (épidermisation). La couleur guide le choix du pansement."},
+        {type:"libre", q:"Avec quoi nettoie-t-on en routine une plaie lors d'un pansement (sauf prescription contraire) ?",
+          a:"Avec du sérum physiologique (antiseptique seulement si prescrit)",
+          exp:"Nettoyage au sérum physiologique ; l'antiseptique n'est utilisé que s'il est prescrit. Soin sur prescription, dans le respect de l'asepsie et de la traçabilité."}
+      ]
+    }
+  ]
+},
+/* ====================== OSTÉOPOROSE & ARTHROSE ====================== */
+{
+  id:"osteo", nom:"Ostéoporose & arthrose", ico:"🦴",
+  desc:"Fragilité osseuse, T-score, fractures ; arthrose, signes radiologiques, traitements.",
+  long:"Ostéoporose (définition OMS, ostéodensitométrie/T-score, facteurs de risque, fractures de fragilité, anti-résorbeurs) et arthrose (physiopathologie, douleur mécanique, signes radiologiques, prise en charge).",
+  quizzes:[
+    {
+      id:"osteoporose", nom:"L'ostéoporose",
+      desc:"Définition OMS, T-score, DXA, facteurs de risque, traitements",
+      questions:[
+        {type:"qcm", q:"Comment l'OMS définit-elle l'ostéoporose ?", o:[
+          M("Une maladie du squelette avec résistance osseuse diminuée prédisposant aux fractures",1),
+          M("Une inflammation chronique des articulations"),
+          M("Une infection de l'os"),
+          M("Une tumeur osseuse")],
+          exp:"Ostéoporose (OMS) : résistance osseuse diminuée → risque élevé de fracture. La résistance dépend de la densité (DMO) et de la qualité (microarchitecture) osseuses."},
+        {type:"qcm", q:"Quel seuil de T-score définit l'ostéoporose densitométrique ?", o:[
+          M("T-score inférieur ou égal à -2,5",1),
+          M("T-score supérieur à +1"),
+          M("T-score entre -1 et -2,5"),
+          M("T-score supérieur ou égal à 0")],
+          exp:"T-score ≤ -2,5 = ostéoporose. Entre -1 et -2,5 = ostéopénie ; ≥ -1 = normal."},
+        {type:"qcm", q:"Quel examen mesure la densité minérale osseuse ?", o:[
+          M("L'ostéodensitométrie (DXA)",1),
+          M("La radiographie standard"),
+          M("L'IRM"),
+          M("La scintigraphie osseuse")],
+          exp:"L'ostéodensitométrie par absorptiométrie biphotonique (DXA) mesure la DMO, sur au moins 2 sites (rachis lombaire, col fémoral, hanche)."},
+        {type:"vf", q:"L'ostéoporose est silencieuse tant qu'il n'y a pas de fracture.", a:true,
+          exp:"Vrai. Aucun symptôme spécifique avant la première fracture : la maladie est révélée par une fracture de fragilité."},
+        {type:"qcm", q:"Qu'est-ce qu'une fracture « de fragilité » (basse énergie) ?", o:[
+          M("Une fracture survenant après un traumatisme minime, comme une chute de sa hauteur",1),
+          M("Une fracture après un accident de la route"),
+          M("Une fracture du crâne"),
+          M("Une fracture provoquée chirurgicalement")],
+          exp:"Fracture de fragilité : survient pour un traumatisme de faible énergie (chute de sa hauteur), sur tout os sauf crâne, face, rachis cervical, doigts et orteils."},
+        {type:"qcm", q:"Quels sont des facteurs de risque NON modifiables d'ostéoporose ?", o:[
+          M("L'âge avancé",1),
+          M("Le sexe féminin",1),
+          M("Un antécédent personnel de fracture de fragilité",1),
+          M("Le tabagisme")],
+          exp:"Non modifiables : âge, sexe féminin, antécédent personnel/familial de fracture, ménopause précoce. Le tabac est un facteur modifiable."},
+        {type:"qcm", q:"Quels facteurs de risque d'ostéoporose sont MODIFIABLES ?", o:[
+          M("Le tabagisme et l'alcool",1),
+          M("La carence en vitamine D et un faible apport calcique",1),
+          M("La sédentarité",1),
+          M("Le sexe")],
+          exp:"Modifiables : tabac, alcool, carences calcique et en vitamine D, sédentarité, faible IMC."},
+        {type:"qcm", q:"Quel traitement est de 1re intention dans l'ostéoporose à risque élevé ?", o:[
+          M("Les bisphosphonates",1),
+          M("Les antibiotiques"),
+          M("Les corticoïdes"),
+          M("Les AINS")],
+          exp:"Les bisphosphonates (alendronate, risédronate per os ; zolédronate IV) sont le traitement de 1re intention si le risque fracturaire est élevé."},
+        {type:"qcm", q:"Quelle précaution est nécessaire AVANT de débuter des bisphosphonates ?", o:[
+          M("Un bilan bucco-dentaire",1),
+          M("Un fond d'œil"),
+          M("Un audiogramme"),
+          M("Une coloscopie")],
+          exp:"Bilan bucco-dentaire avant traitement : risque d'ostéonécrose de la mâchoire."},
+        {type:"qcm", q:"Comment prend-on un bisphosphonate par voie orale ?", o:[
+          M("À jeun, avec un grand verre d'eau, debout ou assis, sans se recoucher pendant 30 minutes",1),
+          M("Le soir au coucher, allongé"),
+          M("Pendant le repas"),
+          M("Écrasé dans un yaourt")],
+          exp:"Bisphosphonate PO : à jeun, eau peu minéralisée, en position debout/assise, sans se recoucher 30 min, à distance des repas (risque d'œsophagite)."},
+        {type:"vf", q:"Le dénosumab ne doit jamais être interrompu brutalement (risque de rebond fracturaire).", a:true,
+          exp:"Vrai. L'arrêt brutal du dénosumab expose à un rebond fracturaire vertébral : ne jamais l'interrompre sans relais."},
+        {type:"qcm", q:"Quelles mesures accompagnent SYSTÉMATIQUEMENT tout traitement de l'ostéoporose ?", o:[
+          M("Des apports calciques et en vitamine D",1),
+          M("Une activité physique régulière",1),
+          M("La prévention des chutes",1),
+          M("Un repos strict au lit")],
+          exp:"Mesures systématiques : calcium 1000-1200 mg/j + vitamine D, activité physique, sevrage tabac/alcool, prévention des chutes."},
+        {type:"libre", q:"Citez deux mesures de prévention des chutes au domicile d'une personne ostéoporotique.",
+          a:"Éclairage adapté, retrait des tapis, bon chaussage, révision des lunettes, allègement des médicaments sédatifs",
+          exp:"Aménagement du domicile : éclairage, suppression des tapis, chaussage adapté, révision des lunettes, réduction des benzodiazépines/polymédication."},
+        {type:"vf", q:"Une perte de taille de plus de 4 cm ou une cyphose doit faire évoquer une fracture vertébrale.", a:true,
+          exp:"Vrai. Les fractures vertébrales sont souvent peu douloureuses : une perte de taille ≥ 4 cm ou une cyphose doit les faire rechercher."}
+      ]
+    },
+    {
+      id:"arthrose", nom:"L'arthrose",
+      desc:"Cartilage, douleur mécanique, signes radiologiques POGS, traitements",
+      questions:[
+        {type:"qcm", q:"Qu'est-ce que l'arthrose ?", o:[
+          M("Une pathologie dégénérative chronique de l'articulation atteignant le cartilage et l'ensemble de ses structures",1),
+          M("Une maladie auto-immune inflammatoire"),
+          M("Une infection de l'articulation"),
+          M("Une fracture de l'os")],
+          exp:"L'arthrose est une arthropathie dégénérative (la plus fréquente) atteignant cartilage, os sous-chondral, membrane synoviale et capsule. C'est un processus actif, pas une simple usure."},
+        {type:"qcm", q:"Quel tissu, non vascularisé et non innervé, est principalement atteint dans l'arthrose ?", o:[
+          M("Le cartilage articulaire",1),
+          M("L'os cortical"),
+          M("La peau"),
+          M("Le tendon")],
+          exp:"Le cartilage articulaire (80 % d'eau + collagène + protéoglycanes) amortit les contraintes ; non vascularisé ni innervé."},
+        {type:"qcm", q:"La douleur de l'arthrose est de type :", o:[
+          M("Mécanique : présente à l'effort, soulagée par le repos",1),
+          M("Inflammatoire : présente au repos et la nuit"),
+          M("Permanente, sans rapport avec l'effort"),
+          M("Toujours absente")],
+          exp:"Douleur mécanique : déclenchée par l'effort, soulagée par le repos, s'aggrave en cours de journée, maximale le soir."},
+        {type:"qcm", q:"Quelle caractéristique oriente vers une douleur MÉCANIQUE (et non inflammatoire) ?", o:[
+          M("Un dérouillage matinal court, inférieur à 15 minutes",1),
+          M("Des réveils nocturnes systématiques"),
+          M("Une douleur maximale au lever"),
+          M("Un dérouillage matinal de plus de 45 minutes")],
+          exp:"Mécanique : dérouillage matinal court (< 15 min), pas de réveil nocturne, douleur max le soir. Inflammatoire : réveils nocturnes, dérouillage > 45 min, max au lever."},
+        {type:"qcm", q:"Quel est l'examen complémentaire de référence de l'arthrose ?", o:[
+          M("La radiographie standard bilatérale et comparative",1),
+          M("L'IRM systématique"),
+          M("La scintigraphie"),
+          M("Le scanner systématique")],
+          exp:"La radiographie bilatérale comparative est en règle le seul examen utile. Le diagnostic reste avant tout clinique."},
+        {type:"libre", q:"Citez les 4 signes radiologiques de l'arthrose (moyen mnémotechnique « POGS »).",
+          a:"Pincement de l'interligne articulaire, Ostéophytes, Géodes, Sclérose (condensation) sous-chondrale",
+          exp:"POGS : Pincement de l'interligne (perte de cartilage), Ostéophytes, Géodes sous-chondrales, Sclérose/condensation sous-chondrale."},
+        {type:"vf", q:"L'importance de l'atteinte radiologique est bien corrélée à l'intensité des douleurs.", a:false,
+          exp:"Faux. L'atteinte radiologique n'est PAS corrélée aux douleurs ni au retentissement fonctionnel : la décision repose sur la clinique."},
+        {type:"qcm", q:"Comment nomme-t-on l'arthrose du genou et celle de la hanche ?", o:[
+          M("Gonarthrose pour le genou, coxarthrose pour la hanche",1),
+          M("Coxarthrose pour le genou, gonarthrose pour la hanche"),
+          M("Rhizarthrose pour le genou"),
+          M("Spondylarthrose pour la hanche")],
+          exp:"Gonarthrose = genou, coxarthrose = hanche, rhizarthrose = base du pouce."},
+        {type:"qcm", q:"Quel est le socle du traitement de l'arthrose ?", o:[
+          M("Les mesures non pharmacologiques : activité physique, perte de poids, kinésithérapie",1),
+          M("Les antibiotiques"),
+          M("La chirurgie d'emblée"),
+          M("Le repos strict prolongé")],
+          exp:"Socle : mesures non pharmacologiques (activité physique, perte de poids, kiné « non-douleur », aides techniques), à privilégier."},
+        {type:"qcm", q:"Quel antalgique est recommandé en 1re intention lors des crises douloureuses d'arthrose ?", o:[
+          M("Le paracétamol",1),
+          M("La morphine d'emblée"),
+          M("Les corticoïdes oraux au long cours"),
+          M("Aucun traitement")],
+          exp:"Le paracétamol est recommandé en 1re intention lors des crises ; les AINS en cures courtes si besoin, sous surveillance."},
+        {type:"qcm", q:"Quand envisage-t-on une chirurgie (prothèse) dans l'arthrose ?", o:[
+          M("Devant un retentissement fonctionnel important malgré un traitement médical bien conduit",1),
+          M("Dès la découverte radiologique"),
+          M("Systématiquement après 60 ans"),
+          M("Jamais")],
+          exp:"Chirurgie si arthrose symptomatique avec retentissement fonctionnel important malgré un traitement bien conduit. L'imagerie seule ne pose pas l'indication (décision partagée)."},
+        {type:"qcm", q:"Quels nodules caractérisent l'arthrose digitale ?", o:[
+          M("Les nodules de Bouchard et d'Heberden",1),
+          M("Les tophus goutteux"),
+          M("Les nodules de Lisch"),
+          M("Les corps de Lewy")],
+          exp:"Arthrose digitale : nodules de Bouchard (interphalangiennes proximales) et d'Heberden (interphalangiennes distales), surtout chez la femme ménopausée."},
+        {type:"vf", q:"Sous AINS, il faut surveiller la tolérance digestive, rénale et la tension artérielle.", a:true,
+          exp:"Vrai. Les AINS imposent une surveillance digestive (épigastralgies, méléna), rénale et tensionnelle ; cures courtes."},
+        {type:"qcm", q:"Après une infiltration intra-articulaire, quel signe doit faire craindre une arthrite septique ?", o:[
+          M("Douleur, fièvre, rougeur et chaleur de l'articulation",1),
+          M("Une simple fatigue passagère"),
+          M("Une amélioration immédiate de la douleur"),
+          M("Une perte de poids")],
+          exp:"Après infiltration : douleur, fièvre, rougeur et chaleur articulaires doivent faire craindre une arthrite septique → avis urgent."}
+      ]
+    }
+  ]
+},
 /*INSERT_DOSSIERS*/
 ]};
 
@@ -2481,109 +2791,7 @@ function buildQuestions(quiz){
 }
 
 /* -------------------- ÉCRAN : MENU PRINCIPAL -------------------- */
-/* ============================================================
-   CLASSEMENT EN LIGNE (Supabase + pseudo)
-   ▼▼▼  À CONFIGURER (une seule fois)  ▼▼▼
-   1) Crée un projet gratuit sur https://supabase.com
-   2) Project Settings ▸ API : copie "Project URL" et la clé "anon public"
-   3) Remplace les deux valeurs ci-dessous
-   4) Crée la table avec le SQL fourni (voir le message d'accompagnement)
-   ============================================================ */
-const SUPABASE_URL      = "https://VOTRE-PROJET.supabase.co";
-const SUPABASE_ANON_KEY = "VOTRE_CLE_ANON_PUBLIC";
-
-let _sb = null;
-function sbReady(){
-  if(_sb) return true;
-  if(typeof window.supabase==='undefined') return false;
-  if(!SUPABASE_URL || SUPABASE_URL.indexOf('VOTRE-PROJET')>=0) return false;
-  if(!SUPABASE_ANON_KEY || SUPABASE_ANON_KEY.indexOf('VOTRE_CLE')>=0) return false;
-  try { _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); return true; }
-  catch(e){ return false; }
-}
-function getPseudo(){ return localStorage.getItem('ue27_pseudo')||''; }
-function setPseudo(p){ localStorage.setItem('ue27_pseudo', String(p).trim().slice(0,24)); }
 function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-const MODE_LABEL2 = { examen:'Examen', difficile:'Difficile', entrainement:'Entraînement' };
-
-const VALID_MODES = ['examen','difficile','entrainement'];
-/* Validation côté client (anti-saisie aberrante). La base applique les mêmes règles via CHECK. */
-function validateRec(rec){
-  if(!rec.pseudo || rec.pseudo.length<1 || rec.pseudo.length>24) return 'Pseudo invalide (1 à 24 caractères).';
-  if(VALID_MODES.indexOf(rec.mode)<0) return 'Mode invalide.';
-  if(!Number.isInteger(rec.total) || rec.total<1 || rec.total>40) return 'Nombre de questions invalide.';
-  if(!Number.isInteger(rec.score) || rec.score<0 || rec.score>rec.total) return 'Score invalide.';
-  if(!Number.isInteger(rec.pct) || rec.pct<0 || rec.pct>100) return 'Pourcentage invalide.';
-  return null;
-}
-async function submitScore(rec){
-  if(!sbReady()) throw new Error('Classement non configuré');
-  const err=validateRec(rec); if(err) throw new Error(err);
-  const { error } = await _sb.from('scores').insert(rec);
-  if(error) throw error;
-}
-async function fetchScores(quizFilter, modeFilter){
-  if(!sbReady()) throw new Error('Classement non configuré');
-  let q = _sb.from('scores').select('pseudo,quiz,mode,score,total,pct,created_at')
-            .order('pct',{ascending:false}).order('score',{ascending:false})
-            .order('created_at',{ascending:true}).limit(100);
-  if(quizFilter && quizFilter!=='__all__') q = q.eq('quiz', quizFilter);
-  if(modeFilter && modeFilter!=='__all__') q = q.eq('mode', modeFilter);
-  const { data, error } = await q;
-  if(error) throw error;
-  return data||[];
-}
-function quizListForFilter(){
-  const list=[{v:'Examen blanc global UE 2.7', l:'🌐 Examen blanc global'}];
-  DATA.dossiers.forEach(d=>{ list.push({v:'Examen blanc — '+d.nom, l:'🏆 Examen — '+d.nom}); });
-  return list;
-}
-function lbNotConfiguredHTML(){
-  return `<h2>Classement non configuré</h2>
-    <p class="lead">Le classement en ligne n'est pas encore activé. Pour l'activer, ouvre <code>index.html</code> et renseigne <code>SUPABASE_URL</code> et <code>SUPABASE_ANON_KEY</code> en haut du script (instructions fournies). En attendant, tous les autres modes fonctionnent normalement.</p>`;
-}
-
-/* -------------------- ÉCRAN : CLASSEMENT -------------------- */
-function renderLeaderboard(){
-  state=null; window.scrollTo(0,0); btnHome.style.display='flex'; timerEl.style.display='none';
-  brandSub.textContent='Classement';
-  const quizzes=quizListForFilter(); const pseudo=getPseudo();
-  app.innerHTML=`
-    <div class="card">
-      <button class="btn-home" style="display:inline-flex;margin-bottom:16px" id="lb-back">↩ Menu principal</button>
-      <span class="pill">🏆 Classement en ligne</span>
-      <h1>Classement</h1>
-      <p class="lead">${pseudo?('Ton pseudo : <strong>'+escapeHtml(pseudo)+'</strong>. '):''}Compare tes résultats à ceux des autres.</p>
-      <div class="lb-controls">
-        <label>Épreuve<select id="lb-quiz">${quizzes.map(q=>`<option value="${escapeHtml(q.v)}">${q.l}</option>`).join('')}</select></label>
-      </div>
-    </div>
-    <div class="card" id="lb-result"><p class="lead">Chargement…</p></div>`;
-  document.getElementById('lb-back').addEventListener('click', renderHome);
-  const reload=()=> loadLeaderboard(document.getElementById('lb-quiz').value);
-  document.getElementById('lb-quiz').addEventListener('change', reload);
-  if(!sbReady()){ document.getElementById('lb-result').innerHTML=lbNotConfiguredHTML(); }
-  else { reload(); }
-}
-async function loadLeaderboard(quizFilter){
-  const box=document.getElementById('lb-result'); if(!box) return;
-  box.innerHTML='<p class="lead">Chargement…</p>';
-  try{
-    const rows=await fetchScores(quizFilter);
-    if(!rows.length){ box.innerHTML='<h2>Top scores</h2><p class="lead">Aucun score publié pour cette épreuve. Sois le premier à publier le tien ! 🚀</p>'; return; }
-    const me=getPseudo();
-    let html='<h2>Top scores</h2><div class="lb-table"><div class="lb-row lb-head"><span>#</span><span>Pseudo</span><span>Score</span><span>%</span></div>';
-    rows.forEach((r,i)=>{
-      const mine = (me && r.pseudo===me) ? ' lb-me' : '';
-      const rank = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
-      html+=`<div class="lb-row${mine}"><span>${rank}</span><span>${escapeHtml(r.pseudo)}</span><span>${r.score}/${r.total}</span><span>${r.pct}%</span></div>`;
-    });
-    html+='</div>';
-    box.innerHTML=html;
-  }catch(e){
-    box.innerHTML='<h2>Top scores</h2><p class="lead">Impossible de charger le classement. Vérifie ta connexion internet ou la configuration Supabase.</p>';
-  }
-}
 
 function renderHome(){
   state=null; navContext={type:'home'}; stopTimer();
@@ -2637,16 +2845,6 @@ function renderHome(){
           <div class="meta">40 questions · minuté 10 min</div>
         </button>
       </div>
-    </div>
-    <div class="card">
-      <h2>🏆 Classement &amp; profil</h2>
-      <p class="lead" style="margin-bottom:14px">Choisis un pseudo, puis publie tes scores en fin de quiz pour te comparer aux autres étudiants.</p>
-      <div class="profile-row">
-        <input id="home-pseudo" placeholder="Ton pseudo" maxlength="24" value="${escapeHtml(getPseudo())}">
-        <button class="btn btn-ghost" id="home-pseudo-save" style="width:auto">💾 Enregistrer</button>
-        <button class="btn btn-primary" id="home-leaderboard" style="width:auto">🏆 Voir le classement</button>
-      </div>
-      <p class="lead" id="home-pseudo-msg" style="font-size:.78rem;margin-top:10px">${sbReady()?'':'⚙️ Classement en ligne pas encore activé — il suffit de renseigner la config Supabase en haut du fichier.'}</p>
     </div>`;
 
   document.querySelectorAll('[data-dossier]').forEach(b=>{
@@ -2655,13 +2853,6 @@ function renderHome(){
   document.getElementById('global-exam').addEventListener('click', ()=>{
     const quiz={ nom:'Examen blanc global UE 2.7', desc:'40 questions tirées dans tous les dossiers.', exam:true, scope:'global', count:40 };
     renderModeChoice(quiz);
-  });
-  document.getElementById('home-leaderboard').addEventListener('click', renderLeaderboard);
-  document.getElementById('home-pseudo-save').addEventListener('click', ()=>{
-    const v=document.getElementById('home-pseudo').value.trim();
-    const msg=document.getElementById('home-pseudo-msg');
-    if(!v){ msg.textContent='⚠️ Saisis un pseudo.'; return; }
-    setPseudo(v); msg.textContent='✅ Pseudo enregistré : '+v;
   });
 }
 
@@ -2736,7 +2927,7 @@ function renderModeChoice(quiz){
         <div class="mode-card exam" data-mode="examen">
           <div class="ic">⏱️🧠</div>
           <h3>Épreuve chronométrée</h3>
-          <p>10 minutes, <strong>tout en réponse libre</strong> : aucun choix proposé, tu dois tout écrire de mémoire. Aucune correction pendant l'épreuve ; auto-évaluation et corrigé complet à la fin. C'est ce score qui compte pour le classement.</p>
+          <p>10 minutes, <strong>tout en réponse libre</strong> : aucun choix proposé, tu dois tout écrire de mémoire. Aucune correction pendant l'épreuve ; auto-évaluation et corrigé complet à la fin.</p>
         </div>
       </div>
     </div>`;
@@ -3009,7 +3200,6 @@ function renderResults(byTimeout){
         <button class="btn btn-ghost" id="retry">↻ Recommencer</button>
         <button class="btn btn-primary" id="to-home">Menu principal</button>
       </div>
-      <div id="publish-zone" style="margin-top:14px"></div>
     </div>
     <div class="card">
       <h2>📋 Corrigé détaillé</h2>
@@ -3027,35 +3217,6 @@ function renderResults(byTimeout){
   document.getElementById('retry2').addEventListener('click', ()=> startQuiz(s.quiz, s.mode));
   document.getElementById('to-home').addEventListener('click', goBack);
   document.getElementById('to-home2').addEventListener('click', goBack);
-
-  /* ---- Publication du score au classement ---- */
-  const pubZone=document.getElementById('publish-zone');
-  function drawPublish(){
-    if(!pubZone) return;
-    if(!s.quiz.exam){ pubZone.innerHTML='<p class="lead" style="font-size:.8rem">🏆 Le classement ne concerne que les examens blancs.</p>'; return; }
-    if(!sbReady()){ pubZone.innerHTML='<p class="lead" style="font-size:.8rem">🏆 Classement en ligne non activé.</p>'; return; }
-    const pseudo=getPseudo();
-    pubZone.innerHTML = pseudo
-      ? `<button class="btn btn-primary" id="pub-go" style="width:auto">📤 Publier mon score (${escapeHtml(pseudo)})</button>`
-      : `<div class="pub-row"><input id="pub-pseudo" placeholder="Ton pseudo" maxlength="24"><button class="btn btn-primary" id="pub-go" style="width:auto">📤 Publier</button></div>`;
-    const go=document.getElementById('pub-go');
-    if(go) go.addEventListener('click', async ()=>{
-      let pseudo=getPseudo();
-      const inp=document.getElementById('pub-pseudo');
-      if(inp){ pseudo=inp.value.trim(); if(!pseudo){ inp.focus(); return; } setPseudo(pseudo); }
-      go.disabled=true; go.textContent='Publication…';
-      const r=computeScore(); const p=r.gradable?Math.round(r.score/r.gradable*100):0;
-      try{
-        await submitScore({ pseudo, quiz:s.quiz.nom, mode:s.mode, score:r.score, total:r.gradable, pct:p });
-        pubZone.innerHTML=`<p class="lead" style="color:var(--ok);font-weight:700">✅ Score publié au classement !</p><button class="btn btn-ghost" id="pub-see" style="width:auto;margin-top:8px">🏆 Voir le classement</button>`;
-        document.getElementById('pub-see').addEventListener('click', renderLeaderboard);
-      }catch(e){
-        go.disabled=false; go.textContent='📤 Réessayer';
-        if(!document.getElementById('pub-err')) pubZone.insertAdjacentHTML('beforeend','<p class="lead" id="pub-err" style="color:var(--bad);font-size:.8rem;margin-top:8px">Échec de la publication. Vérifie ta connexion.</p>');
-      }
-    });
-  }
-  drawPublish();
 
   document.querySelectorAll('.selfrate').forEach(div=>{
     const i=+div.dataset.i;
