@@ -207,7 +207,7 @@
       <span class="logo">+</span>
       <div>Révisions IFSI · UE 2.7<small id="brand-sub">Défaillances organiques</small></div>
     </div>
-    <div class="timer" id="timer">⏱ <span id="timer-val">10:00</span></div>
+    <div class="timer" id="timer">⏱ <span id="timer-val">20:00</span></div>
     <button class="btn-home" id="btn-home">↩ Menu principal</button>
   </div>
 </header>
@@ -2842,7 +2842,7 @@ function renderHome(){
         <button class="quiz-tile glob" id="global-exam">
           <div class="t">🌐 Examen blanc global</div>
           <div class="d">Toutes thématiques mélangées · conditions d'examen.</div>
-          <div class="meta">40 questions · minuté 10 min</div>
+          <div class="meta">40 questions · minuté 20 min</div>
         </button>
       </div>
     </div>`;
@@ -2877,7 +2877,7 @@ function renderDossier(di){
     <button class="quiz-tile exam" data-exam="1">
       <div class="t">🏆 Examen blanc — ${d.nom}</div>
       <div class="d">Questions tirées au sort sur tout le dossier · conditions d'examen.</div>
-      <div class="meta">${Math.min(40, poolFromDossier(d).length)} questions · minuté 10 min</div>
+      <div class="meta">${Math.min(40, poolFromDossier(d).length)} questions · minuté 20 min</div>
     </button>`;
 
   app.innerHTML = `
@@ -2927,7 +2927,7 @@ function renderModeChoice(quiz){
         <div class="mode-card exam" data-mode="examen">
           <div class="ic">⏱️🧠</div>
           <h3>Épreuve chronométrée</h3>
-          <p>10 minutes, <strong>tout en réponse libre</strong> : aucun choix proposé, tu dois tout écrire de mémoire. Aucune correction pendant l'épreuve ; auto-évaluation et corrigé complet à la fin.</p>
+          <p>20 minutes, <strong>tout en réponse libre</strong> : aucun choix proposé, tu dois tout écrire de mémoire. Aucune correction pendant l'épreuve ; auto-évaluation et corrigé complet à la fin.</p>
         </div>
       </div>
     </div>`;
@@ -2953,7 +2953,7 @@ function renderModeChoice(quiz){
         <div class="mode-card exam" data-mode="examen">
           <div class="ic">⏱️</div>
           <h3>Examen</h3>
-          <p>Chrono de 10 minutes, aucune correction pendant l'épreuve. Score et corrigé complet à la fin. Conditions réelles.</p>
+          <p>Chrono de 20 minutes, aucune correction pendant l'épreuve. Score et corrigé complet à la fin. Conditions réelles.</p>
         </div>
         <div class="mode-card hard" data-mode="difficile">
           <div class="ic">🧠</div>
@@ -2993,7 +2993,7 @@ function startQuiz(quiz, mode){
   const label = isExam ? 'Épreuve' : (MODE_LABEL[mode]||'Entraînement');
   brandSub.textContent = quiz.nom + ' · ' + label;
   btnHome.style.display='flex';
-  if(mode==='examen'){ startTimer(10*60); } else { timerEl.style.display='none'; }
+  if(mode==='examen'){ startTimer(20*60); } else { timerEl.style.display='none'; }
   renderQuestion();
 }
 
