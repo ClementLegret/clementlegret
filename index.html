@@ -322,6 +322,9 @@ const DATA = { dossiers: [
       id:"types", nom:"Généralités, DT1 & DT2",
       desc:"Définitions OMS, épidémiologie, mécanismes, facteurs de risque",
       questions:[
+        {type:"libre", q:"Donnez la définition officielle du diabète (OMS).",
+          a:"Maladie chronique caractérisée par une hyperglycémie chronique, liée à un défaut de sécrétion et/ou d'action de l'insuline ; définie par une glycémie à jeun ≥ 1,26 g/L (vérifiée à 2 reprises), une glycémie aléatoire ≥ 2 g/L avec signes, ou une HbA1c ≥ 6,5 %.",
+          exp:"L'OMS définit le diabète par une hyperglycémie chronique : glycémie à jeun ≥ 1,26 g/L (×2), ou ≥ 2 g/L avec signes cliniques, ou HbA1c ≥ 6,5 %."},
         {type:"qcm", q:"Quel est le seuil de glycémie à jeun pour diagnostiquer un diabète ?", o:[
           M("≥ 1,26 g/L à 2 reprises",1), M("≥ 1,10 g/L à 1 reprise"), M("≥ 2 g/L à jeun"), M("≥ 0,95 g/L")],
           exp:"Diabète : glycémie à jeun ≥ 1,26 g/L (7,0 mmol/L) vérifiée à 2 reprises."},
@@ -541,6 +544,9 @@ const DATA = { dossiers: [
       id:"parkinson", nom:"Maladie de Parkinson",
       desc:"Dopamine, triade motrice, L-Dopa, surveillance",
       questions:[
+        {type:"libre", q:"Donnez la définition de la maladie de Parkinson.",
+          a:"Maladie neurodégénérative liée à la dégénérescence des neurones dopaminergiques de la substance noire (corps de Lewy / alpha-synucléine), responsable d'une triade motrice : akinésie, rigidité et tremblement de repos.",
+          exp:"Parkinson : 2e maladie neurodégénérative après Alzheimer ; perte des neurones dopaminergiques du locus niger."},
         {type:"qcm", q:"Quelle est la lésion à l'origine de la maladie de Parkinson ?", o:[
           M("Dégénérescence des neurones dopaminergiques de la substance noire",1),
           M("Démyélinisation des nerfs périphériques"),
@@ -617,6 +623,9 @@ const DATA = { dossiers: [
       id:"sla", nom:"SLA (maladie de Charcot)",
       desc:"Motoneurones, déficit moteur pur, Riluzole, VNI",
       questions:[
+        {type:"libre", q:"Donnez la définition de la sclérose latérale amyotrophique (SLA).",
+          a:"Maladie neurodégénérative atteignant les motoneurones central et périphérique, responsable d'un déficit moteur pur progressif, sans trouble sensitif, sphinctérien ni cognitif.",
+          exp:"La SLA (maladie de Charcot) évolue vers l'insuffisance respiratoire ; déficit moteur pur."},
         {type:"qcm", q:"Quel autre nom porte la SLA ?", o:[
           M("La maladie de Charcot",1),
           M("La maladie de Parkinson"),
@@ -701,6 +710,9 @@ const DATA = { dossiers: [
       id:"sep", nom:"Sclérose en plaques (SEP)",
       desc:"Démyélinisation auto-immune, poussées, traitements",
       questions:[
+        {type:"libre", q:"Donnez la définition de la sclérose en plaques (SEP).",
+          a:"Maladie inflammatoire auto-immune démyélinisante chronique du système nerveux central, évoluant le plus souvent par poussées (forme rémittente-récurrente).",
+          exp:"La SEP détruit la gaine de myéline du SNC ; touche surtout la femme jeune de 20 à 40 ans."},
         {type:"qcm", q:"Quelle structure est la cible de la sclérose en plaques ?", o:[
           M("La gaine de myéline du système nerveux central",1),
           M("Les motoneurones de la moelle"),
@@ -874,6 +886,12 @@ const DATA = { dossiers: [
       id:"thyro-patho", nom:"Hypo/hyperthyroïdie, nodules & cancers",
       desc:"Hashimoto, Basedow, Lévothyrox, ATS, nodules, cancers",
       questions:[
+        {type:"libre", q:"Donnez la définition de l'hypothyroïdie.",
+          a:"Carence en hormones thyroïdiennes (souvent d'origine auto-immune), responsable d'un ralentissement métabolique ; biologiquement TSH élevée et T4 basse.",
+          exp:"Hypothyroïdie : asthénie, frilosité, prise de poids, bradycardie. Cause fréquente : thyroïdite de Hashimoto."},
+        {type:"libre", q:"Donnez la définition de l'hyperthyroïdie.",
+          a:"Excès d'hormones thyroïdiennes responsable d'un emballement métabolique ; biologiquement TSH basse et T4 élevée.",
+          exp:"Hyperthyroïdie : amaigrissement, tachycardie, nervosité, thermophobie. Cause fréquente : maladie de Basedow."},
         {type:"vf", q:"Dans l'hyperthyroïdie, la TSH est élevée.", a:false,
           exp:"Faux. Dans l'hyperthyroïdie, la TSH est BASSE (freinée par l'excès d'hormones T4)."},
         {type:"qcm", q:"Comment surveille-t-on l'efficacité d'un traitement par Lévothyrox ?", o:[
@@ -1203,6 +1221,9 @@ const DATA = { dossiers: [
       id:"resp-irc", nom:"Insuffisance respiratoire chronique (IRC)",
       desc:"Définitions, obstructive/restrictive, BPCO, OLD",
       questions:[
+        {type:"libre", q:"Donnez la définition de l'insuffisance respiratoire chronique.",
+          a:"Incapacité chronique de l'appareil respiratoire à assurer une hématose normale, définie par une PaO2 < 70 mmHg au repos, à l'état stable, depuis plus de 3 mois (sévère si < 60 mmHg).",
+          exp:"IRC : hypoxémie chronique > 3 mois. Trouble obstructif (VEMS/CVF < 0,70) ou restrictif (CPT < 80 %)."},
         {type:"libre", q:"Que signifie le sigle BPCO ?",
           a:"Bronchopneumopathie chronique obstructive",
           exp:"La BPCO est la principale cause d'insuffisance respiratoire chronique obstructive, liée surtout au tabac."},
@@ -1279,6 +1300,9 @@ const DATA = { dossiers: [
       id:"resp-ira", nom:"Insuffisance respiratoire aiguë (IRA)",
       desc:"Urgence, mécanismes, SDRA, oxygénothérapie, VNI",
       questions:[
+        {type:"libre", q:"Donnez la définition de l'insuffisance respiratoire aiguë.",
+          a:"Défaillance aiguë de la fonction respiratoire mettant en jeu le pronostic vital à court terme (urgence), par défaut de pompe, d'échange ou de transport de l'oxygène.",
+          exp:"IRA = urgence vitale ; premier signe d'alerte : la polypnée (FR > 20-25/min)."},
         {type:"libre", q:"Que signifie le sigle OAP ?",
           a:"Œdème aigu du poumon",
           exp:"L'OAP cardiogénique est une cause fréquente d'insuffisance respiratoire aiguë, traitée notamment par VNI."},
@@ -1528,6 +1552,9 @@ const DATA = { dossiers: [
       id:"audition-q", nom:"Anatomie, surdités & tests",
       desc:"Oreille, osselets, Weber/Rinne, presbyacousie, ototoxiques",
       questions:[
+        {type:"libre", q:"Donnez la définition de la presbyacousie.",
+          a:"Surdité de perception bilatérale et progressive liée au vieillissement (atteinte des cellules ciliées de la cochlée).",
+          exp:"La presbyacousie est la baisse d'audition liée à l'âge ; les cellules ciliées ne se régénèrent pas."},
         {type:"qcm", q:"Quelles sont les 3 parties de l'oreille ?", o:[
           M("Oreille externe, oreille moyenne, oreille interne",1),
           M("Pavillon, cochlée, cerveau"),
@@ -1607,6 +1634,9 @@ const DATA = { dossiers: [
       id:"incontinence-q", nom:"Incontinences urinaires & fécales",
       desc:"Mécanismes, types, bilan urodynamique, soins IDE",
       questions:[
+        {type:"libre", q:"Donnez la définition de l'incontinence urinaire.",
+          a:"Perte involontaire d'urine ; il s'agit d'un symptôme (et non d'une maladie en soi).",
+          exp:"On distingue l'incontinence d'effort, par impériosité, mixte, par regorgement et l'énurésie."},
         {type:"qcm", q:"L'incontinence urinaire se définit comme :", o:[
           M("Un symptôme : perte involontaire d'urine",1),
           M("Une maladie infectieuse"),
@@ -1830,6 +1860,9 @@ const DATA = { dossiers: [
       id:"min-q", nom:"MIN — prévention & prise en charge",
       desc:"Définition, triple risque, couchage, facteurs protecteurs",
       questions:[
+        {type:"libre", q:"Donnez la définition de la mort inattendue du nourrisson (MIN).",
+          a:"Décès subit et inattendu d'un nourrisson de moins d'1 an, jusqu'alors bien portant, survenant le plus souvent pendant le sommeil et que rien ne laissait prévoir.",
+          exp:"La MSN/SIDS désigne les MIN restant inexpliquées après enquête complète (~50 %). 1re cause de décès entre 28 jours et 1 an."},
         {type:"qcm", q:"Comment définit-on la mort inattendue du nourrisson (MIN) ?", o:[
           M("Le décès subit et inexpliqué d'un nourrisson de moins d'1 an, jusqu'alors bien portant",1),
           M("Le décès d'un enfant de plus de 2 ans atteint d'une maladie chronique"),
@@ -1915,6 +1948,15 @@ const DATA = { dossiers: [
       id:"oeil-anat", nom:"Anatomie & pathologies dégénératives",
       desc:"Œil, acuité visuelle, cataracte, DMLA, glaucome, décollement",
       questions:[
+        {type:"libre", q:"Donnez la définition de la cataracte.",
+          a:"Opacification partielle ou totale du cristallin, entraînant une baisse progressive et indolore de la vision.",
+          exp:"1re cause de cécité réversible dans le monde ; traitement chirurgical (phacoémulsification + implant)."},
+        {type:"libre", q:"Donnez la définition de la DMLA (dégénérescence maculaire liée à l'âge).",
+          a:"Dégénérescence de la macula liée à l'âge, atteignant la vision centrale (la vision périphérique est conservée) ; formes sèche et humide.",
+          exp:"1re cause de malvoyance après 50 ans ; la forme humide se traite par injections d'anti-VEGF."},
+        {type:"libre", q:"Donnez la définition du glaucome.",
+          a:"Neuropathie optique progressive, le plus souvent liée à une hypertonie oculaire (PIO élevée), détruisant les fibres du nerf optique.",
+          exp:"« Voleur silencieux de la vue » : le glaucome chronique à angle ouvert est longtemps asymptomatique."},
         {type:"qcm", q:"Quel est le rôle de la cornée ?", o:[
           M("Premier dioptre transparent et avasculaire : elle assure l'essentiel de la réfraction",1),
           M("Capter la lumière grâce aux photorécepteurs"),
@@ -2090,6 +2132,9 @@ const DATA = { dossiers: [
       id:"ic", nom:"Insuffisance cardiaque",
       desc:"IC gauche/droite, OAP, NYHA, décompensation, surveillance",
       questions:[
+        {type:"libre", q:"Donnez la définition de l'insuffisance cardiaque.",
+          a:"Incapacité du cœur à assurer un débit sanguin suffisant pour couvrir les besoins de l'organisme, par défaut de contraction et/ou de remplissage du muscle cardiaque.",
+          exp:"On distingue l'IC gauche (bas débit → poumon, OAP) et l'IC droite (congestion → œdèmes, hépatomégalie)."},
         {type:"qcm", q:"Quelles sont les 4 valves cardiaques ?", o:[
           M("Tricuspide, pulmonaire, mitrale, aortique",1),
           M("Mitrale, aortique, carotide, fémorale"),
@@ -2174,6 +2219,12 @@ const DATA = { dossiers: [
       id:"veine-artere", nom:"Insuffisances veineuse & artérielle",
       desc:"Varices, phlébite, AOMI, IPS, compression",
       questions:[
+        {type:"libre", q:"Donnez la définition de l'insuffisance veineuse.",
+          a:"Mauvais retour veineux des membres inférieurs vers le cœur, lié à une perte d'élasticité des veines et à un dysfonctionnement des valvules (reflux).",
+          exp:"Complication grave : thrombose veineuse (phlébite) pouvant se compliquer d'embolie pulmonaire."},
+        {type:"libre", q:"Donnez la définition de l'AOMI (artériopathie oblitérante des membres inférieurs).",
+          a:"Rétrécissement ou occlusion des artères des membres inférieurs (par athérosclérose), réduisant le débit sanguin du membre ; définie par un IPS < 0,9.",
+          exp:"FDR : tabac, HTA, diabète, hypercholestérolémie ; symptôme typique : la claudication intermittente."},
         {type:"libre", q:"Quelle complication grave peut compliquer une thrombose veineuse profonde (phlébite) ?",
           a:"L'embolie pulmonaire (urgence vitale)",
           exp:"Le caillot peut se détacher et migrer vers une artère pulmonaire : embolie pulmonaire, urgence vitale."},
@@ -2261,6 +2312,9 @@ const DATA = { dossiers: [
       id:"ira", nom:"Insuffisance rénale aiguë (IRA)",
       desc:"3 mécanismes, hyperkaliémie, surveillances IDE",
       questions:[
+        {type:"libre", q:"Donnez la définition de l'insuffisance rénale aiguë (IRA).",
+          a:"Perte brutale et habituellement réversible de la fonction rénale (chute du débit de filtration glomérulaire), avec rétention azotée (augmentation rapide de l'urée et de la créatinine).",
+          exp:"L'IRA est une urgence. 3 mécanismes : pré-rénal (hypoperfusion), rénal (atteinte du parenchyme), post-rénal (obstacle)."},
         {type:"qcm", q:"Quelles sont les deux grandes fonctions du rein ?", o:[
           M("Une fonction exocrine d'épuration et une fonction endocrine hormonale",1),
           M("Une fonction digestive et une fonction respiratoire"),
@@ -2343,6 +2397,9 @@ const DATA = { dossiers: [
       id:"irc", nom:"Insuffisance rénale chronique (IRC)",
       desc:"Stades, complications, néphroprotection, suppléance",
       questions:[
+        {type:"libre", q:"Donnez la définition de l'insuffisance rénale chronique (maladie rénale chronique).",
+          a:"Diminution permanente et irréversible des fonctions rénales (DFG < 60 mL/min/1,73 m² et/ou marqueurs d'atteinte rénale) persistant plus de 3 mois.",
+          exp:"Réduction progressive du nombre de néphrons ; 1re cause : la néphropathie diabétique."},
         {type:"qcm", q:"Quelle est la première cause d'insuffisance rénale chronique ?", o:[
           M("La néphropathie diabétique",1),
           M("La polykystose rénale"),
@@ -2435,6 +2492,9 @@ const DATA = { dossiers: [
       id:"plaies-cicat", nom:"Cicatrisation, escarres & ulcères",
       desc:"Phases, stades NPUAP, ulcère veineux vs artériel, IPS",
       questions:[
+        {type:"libre", q:"Donnez la définition d'une escarre.",
+          a:"Zone de nécrose ischémique des tissus mous due à une compression prolongée entre un relief osseux et un plan dur.",
+          exp:"Mécanisme : pression + cisaillement + frottement + macération. Classification NPUAP/EPUAP en 4 stades."},
         {type:"libre", q:"Citez, dans l'ordre, les 3 phases de la cicatrisation.",
           a:"Détersion, bourgeonnement (granulation), épidermisation",
           exp:"Cicatrisation en 3 phases imbriquées : détersion (J0-J4), bourgeonnement (J4-J21), épidermisation (J21 → mois)."},
@@ -2511,6 +2571,9 @@ const DATA = { dossiers: [
       id:"plaies-brulures", nom:"Pied diabétique, brûlures & pansements",
       desc:"Mal perforant, degrés de brûlure, Parkland, familles de pansements",
       questions:[
+        {type:"libre", q:"Donnez la définition d'une brûlure.",
+          a:"Destruction des cellules cutanées par la chaleur ou un produit corrosif ; sa gravité dépend de la surface et de la profondeur.",
+          exp:"Surface évaluée par la règle des 9 de Wallace ; profondeur classée en degrés (1er, 2e superficiel/profond, 3e)."},
         {type:"qcm", q:"Le mal perforant plantaire du diabétique associe quels mécanismes ?", o:[
           M("Une neuropathie avec perte de sensibilité",1),
           M("Une artériopathie ischémique",1),
@@ -2604,6 +2667,9 @@ const DATA = { dossiers: [
       id:"osteoporose", nom:"L'ostéoporose",
       desc:"Définition OMS, T-score, DXA, facteurs de risque, traitements",
       questions:[
+        {type:"libre", q:"Donnez la définition officielle de l'ostéoporose (OMS).",
+          a:"Maladie diffuse du squelette caractérisée par une diminution de la résistance osseuse (densité + qualité osseuses) prédisposant à un risque élevé de fractures.",
+          exp:"Définition densitométrique : T-score ≤ -2,5 chez la femme ménopausée / l'homme de plus de 50 ans."},
         {type:"qcm", q:"Comment l'OMS définit-elle l'ostéoporose ?", o:[
           M("Une maladie du squelette avec résistance osseuse diminuée prédisposant aux fractures",1),
           M("Une inflammation chronique des articulations"),
@@ -2679,6 +2745,9 @@ const DATA = { dossiers: [
       id:"arthrose", nom:"L'arthrose",
       desc:"Cartilage, douleur mécanique, signes radiologiques POGS, traitements",
       questions:[
+        {type:"libre", q:"Donnez la définition de l'arthrose.",
+          a:"Pathologie dégénérative chronique de l'articulation synoviale, touchant l'ensemble de ses structures (cartilage, os sous-chondral, membrane synoviale, capsule).",
+          exp:"C'est l'arthropathie la plus fréquente ; un processus actif, et non une simple usure mécanique."},
         {type:"qcm", q:"Qu'est-ce que l'arthrose ?", o:[
           M("Une pathologie dégénérative chronique de l'articulation atteignant le cartilage et l'ensemble de ses structures",1),
           M("Une maladie auto-immune inflammatoire"),
